@@ -1,5 +1,5 @@
 services:
   pm.twig.shop_cssversion:
-    class: PM\Bundle\TwigtoolBundle\Twig\CssVersionExtension
+    class: PM\TwigtoolBundle\Twig\CssVersionExtension
     tags:
       - { name: twig.extension }
