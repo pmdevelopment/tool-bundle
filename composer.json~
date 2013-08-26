@@ -15,7 +15,7 @@
         "php": ">=5.3.2"
     },
     "autoload": {
-        "psr-0": { "PM\\Bundle\\TwigtoolBundle": "" }
+        "psr-0": { "PM\\TwigtoolBundle": "" }
     },
-    "target-dir": "PM/Bundle/TwigtoolBundle"
+    "target-dir": "PM/TwigtoolBundle"
 }

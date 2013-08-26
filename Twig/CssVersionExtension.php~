@@ -1,6 +1,6 @@
 <?php
 
-namespace PM\Bundle\TwigtoolBundle\Twig;
+namespace PM\TwigtoolBundle\Twig;
 
 use Twig_Extension;
 
