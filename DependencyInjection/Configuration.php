@@ -1,6 +1,6 @@
 <?php
 
-namespace PM\Bundle\TwigtoolBundle\DependencyInjection;
+namespace PM\Bundle\ToolBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

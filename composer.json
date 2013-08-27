@@ -1,6 +1,6 @@
 {
-    "name": "pmdevelopment/twigtool-bundle",
-    "description": "Twig tools for Symfony2",
+    "name": "pmdevelopment/tool-bundle",
+    "description": "Tools for Symfony2",
     "require": {
         "twig/extensions": "~1.0.0"
     },
@@ -15,7 +15,7 @@
         "php": ">=5.3.2"
     },
     "autoload": {
-        "psr-0": { "PM\\Bundle\\TwigtoolBundle": "" }
+        "psr-0": { "PM\\Bundle\\ToolBundle": "" }
     },
-    "target-dir": "PM/Bundle/TwigtoolBundle"
+    "target-dir": "PM/Bundle/ToolBundle"
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace PM\Bundle\TwigtoolBundle;
+namespace PM\Bundle\ToolBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class PMTwigtoolBundle extends Bundle
+class PMToolBundle extends Bundle
 {
 }
