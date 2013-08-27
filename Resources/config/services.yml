@@ -3,3 +3,9 @@ services:
     class: PM\Bundle\ToolBundle\Twig\CssVersionExtension
     tags:
       - { name: twig.extension }
+      
+  pm.knpmenu.voter:
+    class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter
+    arguments: ["@service_container"]
+    tags:
+      - { name: knp_menu.voter }
