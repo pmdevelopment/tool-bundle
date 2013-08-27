@@ -1,4 +1,4 @@
-twigtool-bundle
+tool-bundle
 ===============
 
 Tools for Symfony2
