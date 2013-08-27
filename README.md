@@ -14,7 +14,7 @@ Add to composer:
 Add to kernel:
 
 ```php
-  new PM\Bundle\ToolBundle()
+  new PM\Bundle\ToolBundle\PMToolBundle()
 ```
 
 ## Tools
