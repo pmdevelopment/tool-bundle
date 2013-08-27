@@ -21,7 +21,7 @@ class CssVersionExtension extends Twig_Extension {
       if (file_exists($file))
          $string = "?v=" . substr(md5_file($file), 0, 5);
       else
-         return '';
+         return '?v=' . substr(sha1(microtime()), 0, 6);
 
       return $string;
    }
