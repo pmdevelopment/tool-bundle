@@ -22,3 +22,4 @@ Add to kernel:
 * [Twig](Resources/doc/twig.md)
 * [KNPMenu](Resources/doc/knpmenu.md)
 * [Font-Awesome](Resources/doc/fontawesome.md)
+* [DOMPDF](Resources/doc/dompdf.md)
