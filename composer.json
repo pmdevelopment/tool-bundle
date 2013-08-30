@@ -3,7 +3,6 @@
     "description": "Tools for Symfony2",
     "require": {
         "twig/extensions": "~1.0.0",
-        "fortawesome/font-awesome": "3.2.*",
         "dompdf/dompdf" : "dev-master"
     },
     "license": "MIT",
