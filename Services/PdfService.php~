@@ -1,0 +1,55 @@
+<?php
+
+namespace PM\Bundle\ToolBundle\Services;
+
+use DOMPDF;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Description of PdfService
+ *
+ * @author sjoder
+ */
+class PdfService {
+
+   /**
+    * 
+    * @param string $kerneldir
+    */
+   private $kerneldir;
+
+   /**
+    *
+    * @var DOMPDF
+    */
+   private $pdf;
+
+   public function __construct($kerneldir) {
+      $this->kerneldir = $kerneldir;
+   }
+
+   /**
+    * Get PDF By HTML
+    * 
+    * @param string $html
+    * @return Response
+    */
+   public function get($html) {
+      require "{$this->kerneldir}/../vendor/dompdf/dompdf/dompdf_config.inc.php";
+
+      $this->pdf = new DOMPDF;
+      
+      $this->pdf->load_html($html);
+      $this->pdf->set_paper("a4", 'portrait');
+      $this->pdf->render();
+
+      $response = new Response();
+      
+      $response->setContent($this->pdf->output());
+      $response->setStatusCode(200);
+      $response->headers->set('Content-Type', 'application/pdf');
+
+      return $response;
+   }
+
+}
