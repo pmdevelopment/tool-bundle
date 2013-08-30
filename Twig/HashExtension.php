@@ -9,7 +9,7 @@ use Twig_Filter_Method;
  *
  * @author sjoder
  */
-class ShaExtension extends Twig_Extension {
+class HashExtension extends Twig_Extension {
 
    public function getFilters() {
       return array(
