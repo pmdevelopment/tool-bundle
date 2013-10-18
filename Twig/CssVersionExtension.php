@@ -19,9 +19,9 @@ class CssVersionExtension extends Twig_Extension {
 
    public function cssVersion($file) {
       if (file_exists($file))
-         $string = "?v=" . substr(md5_file($file), 0, 5);
+         $string = "$file?v=" . substr(md5_file($file), 0, 5);
       else
-         return '?v=' . substr(sha1(microtime()), 0, 6);
+         return "$file?v=" . substr(sha1(microtime()), 0, 6);
 
       return $string;
    }

@@ -31,9 +31,6 @@ class HashExtension extends Twig_Extension {
       
       return md5($string);
    }
-   
-   
-   
 
    public function getName() {
       return 'plugin_pm_hash';
