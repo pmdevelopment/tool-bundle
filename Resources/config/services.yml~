@@ -7,10 +7,6 @@ services:
     class: PM\Bundle\ToolBundle\Twig\HashExtension
     tags:
       - { name: twig.extension }
-  pm.twig.icon:
-    class: PM\Bundle\ToolBundle\Twig\IconExtension
-    tags:
-      - { name: twig.extension }
       
   pm.knpmenu.voter:
     class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter
@@ -21,6 +17,4 @@ services:
   pm.pdf:
     class: PM\Bundle\ToolBundle\Services\PdfService
     arguments: ["%kernel.root_dir%"]
-
-
 
