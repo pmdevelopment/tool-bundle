@@ -1,4 +1,4 @@
-{% extends 'BcBootstrapBundle:Form:form_div_layout.html.twig' %}
+{% extends 'BraincraftedBootstrapBundle:Form:bootstrap.html.twig' %}
 
 {% block button_widget %}
 {% spaceless %}
@@ -7,7 +7,7 @@
     {% endif %}
     {% if type is defined and type == 'submit' %}
         {% set attr = attr|merge({ 'class': (attr.class|default('') ~ ' btn btn-primary')|trim }) %}
-        {% set icon = "ok" %}
+        {% set icon = "check" %}
     {% else %}
         {% set attr = attr|merge({ 'class': (attr.class|default('') ~ ' btn btn-default')|trim }) %}
     {% endif %}
