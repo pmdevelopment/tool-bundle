@@ -11,3 +11,4 @@ config.yml:
       form:
          resources:
             - "PMToolBundle::form_div_layout.html.twig"
+```
