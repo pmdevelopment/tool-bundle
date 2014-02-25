@@ -24,8 +24,24 @@ class PdfService {
     */
    private $pdf;
 
+   /**
+    *
+    * @var array
+    */
+   private $options;
+
    public function __construct($kerneldir) {
       $this->kerneldir = $kerneldir;
+      $this->options = array();
+   }
+
+   /**
+    * 
+    * @param string $key
+    * @param string $value
+    */
+   public function setOption($key, $value) {
+      $this->options[$key] = $value;
    }
 
    /**
@@ -39,13 +55,17 @@ class PdfService {
       require __DIR__ . "/../Resources/config/dompdf.php";
 
       $this->pdf = new DOMPDF;
-      
+
+      foreach ($this->options as $optionKey => $optionValue) {
+         $this->pdf->set_option($optionKey, $optionValue);
+      }
+
       $this->pdf->load_html($html);
       $this->pdf->set_paper("a4", 'portrait');
       $this->pdf->render();
 
       $response = new Response();
-      
+
       $response->setContent($this->pdf->output());
       $response->setStatusCode(200);
       $response->headers->set('Content-Type', 'application/pdf');
