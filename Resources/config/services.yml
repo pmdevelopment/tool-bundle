@@ -11,6 +11,10 @@ services:
     class: PM\Bundle\ToolBundle\Twig\IconExtension
     tags:
       - { name: twig.extension }
+  pm.twig.flag:
+    class: PM\Bundle\ToolBundle\Twig\FlagExtension
+    tags:
+      - { name: twig.extension }
       
   pm.knpmenu.voter:
     class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter

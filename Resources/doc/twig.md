@@ -28,3 +28,12 @@ Works with images and JavaScript files too.
 ```
 
 Returns random Sha1 and MD5 Hash. If not empty the value will be hashed.
+
+
+## Flag
+
+```js
+   {{ "DE"|flag }}
+```
+
+Returns the HTML Image code to the given flag name (ISO 3166-1 alpha-2). FamFamFam Flag icons are used.
