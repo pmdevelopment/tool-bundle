@@ -12,47 +12,65 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
  *
  * @author sjoder
  */
-class RouteVoter implements VoterInterface
-{
-    /**
-     * @var Request
-     */
-    private $request;
-    
-    public function __construct(Container $container) {
-       $request = $container->get('request');
-       
-       $this->setRequest($request);
-    }
+class RouteVoter implements VoterInterface {
 
-    public function setRequest(Request $request)
-    {
-        $this->request = $request;
-    }
+   /**
+    * @var Request
+    */
+   private $request;
 
-    public function matchItem(ItemInterface $item)
-    {
-        if (null === $this->request) {
-            return null;
-        }
+   public function __construct(Container $container) {
+      $request = $container->get('request');
 
-        $route = $this->request->attributes->get('_route');
-        if (null === $route) {
-            return null;
-        }
+      $this->setRequest($request);
+   }
 
-        $routes = (array) $item->getExtra('routes', array());
-        
-        // $parameters = (array) $item->getExtra('routesParameters', array());
-        
-        foreach ($routes as $testedRoute) {
-            if ($route == $testedRoute['route']) {
-                return true;
+   public function setRequest(Request $request) {
+      $this->request = $request;
+   }
+
+   public function matchItem(ItemInterface $item) {
+      if (null === $this->request) {
+         return null;
+      }
+
+      $route = $this->request->attributes->get('_route');
+      $routeParameters = $this->request->attributes->get('_route_params');
+
+      if (null === $route) {
+         return null;
+      }
+
+
+      $routes = (array) $item->getExtra('routes', array());
+
+
+      foreach ($routes as $testedRoute) {
+         if ($route == $testedRoute['route']) {
+
+            if (is_array($routeParameters) && 0 < count($routeParameters)) {
+               if (isset($testedRoute['parameters']) && is_array($testedRoute['parameters'])) {
+                  $matching = true;
+
+                  foreach ($routeParameters as $index => $value) {
+                     if ('_' != substr($index, 0, 1)) {
+                        if (!isset($testedRoute['parameters'][$index]) || $testedRoute['parameters'][$index] != $value) {
+                           $matching = false;
+                        }
+                     }
+                  }
+
+                  if ($matching) {
+                     return true;
+                  }
+               }
+            } else {
+               return true;
             }
-            
-            
-        }
+         }
+      }
 
-        return null;
-    }
+      return null;
+   }
+
 }
