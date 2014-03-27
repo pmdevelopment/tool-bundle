@@ -54,7 +54,7 @@ class RouteVoter implements VoterInterface {
 
                   foreach ($routeParameters as $index => $value) {
                      if ('_' != substr($index, 0, 1)) {
-                        if (!isset($testedRoute['parameters'][$index]) || $testedRoute['parameters'][$index] != $value) {
+                        if (!isset($testedRoute['parameters'][$index]) || ($testedRoute['parameters'][$index] != $value && 0 < $testedRoute['parameters'][$index])) {
                            $matching = false;
                         }
                      }
