@@ -17,8 +17,8 @@ class PMController extends Controller {
     * 
     * @return Response
     */
-   public function denied($route, $routeParameters = array()) {
-      $this->get('session')->getFlashBag()->add('error', 'Access denied.');
+   public function denied($route, $routeParameters = array(), $message = "Access denied.") {
+      $this->get('session')->getFlashBag()->add('error', $message);
 
       return $this->redirect($this->generateUrl($route, $routeParameters));
    }
@@ -28,8 +28,8 @@ class PMController extends Controller {
     * 
     * @return Response
     */
-   public function saved($route, $routeParameters = array()) {
-      $this->get('session')->getFlashBag()->add('success', 'Changes saved.');
+   public function saved($route, $routeParameters = array(), $message = "Changes saved.") {
+      $this->get('session')->getFlashBag()->add('success', $message);
 
       return $this->redirect($this->generateUrl($route, $routeParameters));
    }
