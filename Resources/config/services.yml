@@ -15,6 +15,10 @@ services:
     class: PM\Bundle\ToolBundle\Twig\FlagExtension
     tags:
       - { name: twig.extension }
+  pm.twig.country:
+    class: PM\Bundle\ToolBundle\Twig\CountryExtension
+    tags:
+      - { name: twig.extension }
       
   pm.knpmenu.voter:
     class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter
