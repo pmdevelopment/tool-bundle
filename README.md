@@ -24,3 +24,4 @@ Add to kernel:
 * [Font-Awesome](Resources/doc/fontawesome.md)
 * [DOMPDF](Resources/doc/dompdf.md)
 * [BcBootstrap](Resources/doc/bcbootstrap.md)
+* [Framework](Resources/doc/framework.md)
