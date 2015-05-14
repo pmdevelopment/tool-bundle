@@ -8,7 +8,7 @@ Tools for Symfony2
 Add to composer:
 
 ```js
-  "pmdevelopment/tool-bundle": "1.2.*"
+  composer require "pmdevelopment/tool-bundle" "1.3.*"
 ```
 
 Add to kernel:
