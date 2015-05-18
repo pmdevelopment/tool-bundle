@@ -117,6 +117,10 @@ abstract class Image
      */
     public function getContent()
     {
+        if (null === $this->content) {
+            return null;
+        }
+
         return stream_get_contents($this->content);
     }
 
