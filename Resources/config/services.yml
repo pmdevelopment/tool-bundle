@@ -30,5 +30,6 @@ services:
     class: PM\Bundle\ToolBundle\Services\PdfService
     arguments: ["%kernel.root_dir%"]
 
-
+  pm.image:
+    class: PM\Bundle\ToolBundle\Services\ImageService
 

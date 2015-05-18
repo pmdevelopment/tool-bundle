@@ -9,65 +9,59 @@ namespace PM\Bundle\ToolBundle\Framework\Utilities;
  */
 class SeoUtility
 {
+    const PATH_FILTER_NONE = 0;
+    const PATH_FILTER_GERMAN = 1;
+
     /**
      * Get Uri Path
      *
      * @param string $input
+     * @param int    $filter
      *
-     * @return mixed
+     * @return string
      */
-    public static function getPath($input)
+    public static function getPath($input, $filter = self::PATH_FILTER_GERMAN)
     {
-        $t = strtolower($input);
+        // Basic normalization
+        $text = strtolower($input);
+        $text = strip_tags($text);
+        $text = stripslashes($text);
+        $text = html_entity_decode($text);
 
-        $t = str_replace("Ö", "Oe", $t);
-        $t = str_replace("Ü", "Ue", $t);
-        $t = str_replace("Ä", "Ae", $t);
-        $t = str_replace("ö", "oe", $t);
-        $t = str_replace("ü", "ue", $t);
-        $t = str_replace("ä", "ae", $t);
-        $t = str_replace("'", "", $t);
-        $t = str_replace('"', "", $t);
-        $t = str_replace("ß", "ss", $t);
-        $t = str_replace(" ", "-", $t);
-        $t = str_replace(".", "-", $t);
-        $t = str_replace(",", "-", $t);
-        $t = str_replace("%", "prozent", $t);
-        $t = str_replace("/", "-", $t);
-        $t = str_replace("_", "-", $t);
-        $t = str_replace("!", "", $t);
-        $t = str_replace("`", "-", $t);
-        $t = str_replace("´", "-", $t);
-        $t = str_replace("<", "-unter-", $t);
-        $t = str_replace(">", "-ueber-", $t);
-        $t = str_replace("+", "-", $t);
-        $t = str_replace("&", "und", $t);
-        $t = str_replace("é", "e", $t);
-        $t = str_replace("È", "e", $t);
-        $t = str_replace("è", "e", $t);
-        $t = str_replace("à", "a", $t);
-        $t = str_replace("ô", "o", $t);
-        $t = str_replace("(", "-", $t);
-        $t = str_replace(")", "-", $t);
-        $t = str_replace(":", "-", $t);
-        $t = str_replace('²', "2", $t);
-        $t = str_replace('*', "", $t);
-        $t = str_replace('|', '-', $t);
-        $t = str_replace('€', "euro", $t);
+        // Remove quotes (can't, etc.)
+        $text = str_replace('\'', '', $text);
 
-        while (strpos($t, '--') > 0) {
-            $t = str_replace('--', '-', $t);
+        if (self::PATH_FILTER_GERMAN === $filter) {
+            // Some replaces (german)
+            $text = str_replace("Ö", "Oe", $text);
+            $text = str_replace("Ü", "Ue", $text);
+            $text = str_replace("Ä", "Ae", $text);
+            $text = str_replace("ö", "oe", $text);
+            $text = str_replace("ü", "ue", $text);
+            $text = str_replace("ä", "ae", $text);
+            $text = str_replace("ß", "ss", $text);
+            $text = str_replace("%", " prozent ", $text);
+            $text = str_replace("&", " und ", $text);
+            $text = str_replace('€', " euro ", $text);
         }
 
-        if (substr($t, -1) == '-') {
-            $t = substr($t, 0, -1);
-        }
-        if (substr($t, 0, 1) == '-') {
-            $t = substr($t, 1);
-        }
+        $text = str_replace("é", "e", $text);
+        $text = str_replace("È", "e", $text);
+        $text = str_replace("è", "e", $text);
+        $text = str_replace("à", "a", $text);
+        $text = str_replace("ô", "o", $text);
+        $text = str_replace('²', "2", $text);
 
-        $t = urlencode($t);
+        // Only alphanumeric and spaces allowed
+        $text = preg_replace('/[^a-zA-Z0-9\s]/', '', strtolower($text));
+        // Spaces to dash
+        $text = preg_replace('!\s+!', '-', $text);
+        // Trim dashes
+        $text = trim($text, '-');
 
-        return $t;
+        // To be sure: url encode
+        $text = urlencode($text);
+
+        return $text;
     }
 }
