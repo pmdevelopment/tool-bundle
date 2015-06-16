@@ -41,4 +41,31 @@ class ImageService
         ));
     }
 
+    /**
+     * Get Thumbnail Response
+     *
+     * @param integer $width
+     * @param Image   $image
+     *
+     * @return Response
+     */
+    public function getThumbnailResponse($width, $image)
+    {
+        if (!$image instanceof Image) {
+            throw new \LogicException("Not a valid image");
+        }
+
+        $core = explode(";", $image->getContent());
+        $content = base64_decode(substr($core[1], 7));
+
+        $thumbnail = new \Imagick();
+        $thumbnail->readImageBlob($content);
+        $thumbnail->scaleImage($width, 0);
+
+
+        return new Response($thumbnail->getImageBlob(), 200, array(
+            'Content-Type' => $image->getMimeType()
+        ));
+    }
+
 }
