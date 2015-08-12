@@ -1,8 +1,10 @@
 services:
   pm.twig.cssversion:
     class: PM\Bundle\ToolBundle\Twig\CssVersionExtension
+    arguments: ["%kernel.root_dir%"]
     tags:
       - { name: twig.extension }
+
   pm.twig.hash:
     class: PM\Bundle\ToolBundle\Twig\HashExtension
     tags:
