@@ -27,6 +27,7 @@ services:
     arguments: ["@service_container"]
     tags:
       - { name: knp_menu.voter }
+    scope: request
       
   pm.pdf:
     class: PM\Bundle\ToolBundle\Services\PdfService
