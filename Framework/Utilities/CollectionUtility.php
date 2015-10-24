@@ -17,36 +17,76 @@ use Doctrine\Common\Collections\Collection;
  */
 class CollectionUtility
 {
+    /**
+     * Is Valid Collection
+     *
+     * @param mixed $collection
+     *
+     * @return bool
+     */
+    public static function isValid($collection)
+    {
+        if (false === is_array($collection) && false === ($collection instanceof Collection)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get Property
+     *
+     * @param string                 $property
+     * @param array|mixed|Collection $collection
+     *
+     * @return array
+     */
+    public static function get($property, $collection)
+    {
+        if (false === self::isValid($collection)) {
+            return array();
+        }
+
+        $getter = sprintf("get%s", ucfirst($property));
+        $result = [];
+        foreach ($collection as $entity) {
+            $function = array(
+                $entity,
+                $getter
+            );
+
+            if (false === is_callable($function)) {
+                throw new \LogicException("Missing getter");
+            }
+
+            $result[] = $entity->$getter();
+        }
+
+        return $result;
+    }
 
     /**
      * Get Ids From Collection
      *
-     * @param array|mixed[]|Collection $collection
+     * @param array|mixed|Collection $collection
      *
      * @return array
      */
     public static function getIds($collection)
     {
-        $ids = array();
+        return self::get("id", $collection);
+    }
 
-        if (false === is_array($collection) && false === ($collection instanceof Collection)) {
-            return array();
-        }
-
-        foreach ($collection as $entity) {
-            $function = array(
-                $entity,
-                "getId"
-            );
-
-            if (false === is_callable($function)) {
-                throw new \LogicException("Missing ID getter");
-            }
-
-            $ids[] = $entity->getId();
-        }
-
-        return $ids;
+    /**
+     * Get Names From Collection
+     *
+     * @param array|mixed|Collection $collection
+     *
+     * @return array
+     */
+    public static function getNames($collection)
+    {
+        return self::get("name", $collection);
     }
 
 }
