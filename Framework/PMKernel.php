@@ -9,7 +9,7 @@
 namespace PM\Bundle\ToolBundle\Framework;
 
 
-use Guzzle\Http\Message\Request;
+use Symfony\Component\HttpFoundation\Request;
 use LogicException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
