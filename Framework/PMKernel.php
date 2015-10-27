@@ -93,7 +93,10 @@ class PMKernel extends Kernel
      */
     private function getBaseTmpDir()
     {
-        $tempDir = array(sys_get_temp_dir());
+        $tempDir = array(
+            sys_get_temp_dir(),
+            "sf2"
+        );
 
         $folders = explode(DIRECTORY_SEPARATOR, $this->getRootDir());
         $foldersCount = count($folders);
