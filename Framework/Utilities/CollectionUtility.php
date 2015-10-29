@@ -89,4 +89,23 @@ class CollectionUtility
         return self::get("name", $collection);
     }
 
+    /**
+     * Find By Id
+     *
+     * @param Collection $collection
+     * @param int        $id
+     *
+     * @return null|object
+     */
+    public static function find($collection, $id)
+    {
+        $id = intval($id);
+        foreach ($collection as $entity) {
+            if ($id === $entity->getId()) {
+                return $entity;
+            }
+        }
+
+        return null;
+    }
 }
