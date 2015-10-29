@@ -101,6 +101,9 @@ class PMKernel extends Kernel
         $folders = explode(DIRECTORY_SEPARATOR, $this->getRootDir());
         $foldersCount = count($folders);
 
+        /**
+         * Base Path
+         */
         if (true === isset($folders[$foldersCount - 3])) {
             $tempDir[] = $folders[$foldersCount - 3];
         }
@@ -108,6 +111,10 @@ class PMKernel extends Kernel
         if (true === isset($folders[$foldersCount - 2])) {
             $tempDir[] = $folders[$foldersCount - 2];
         }
+        /**
+         * Environment
+         */
+        $tempDir[] = $this->getEnvironment();
 
         $tempDirPath = implode(DIRECTORY_SEPARATOR, $tempDir);
 
