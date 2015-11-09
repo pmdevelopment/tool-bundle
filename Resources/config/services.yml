@@ -26,6 +26,11 @@ services:
       class: PM\Bundle\ToolBundle\Twig\SeoExtension
       tags:
         - { name: twig.extension }
+
+  pm.twig.time:
+      class: PM\Bundle\ToolBundle\Twig\TimeExtension
+      tags:
+        - { name: twig.extension }
       
   pm.knpmenu.voter:
     class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter
