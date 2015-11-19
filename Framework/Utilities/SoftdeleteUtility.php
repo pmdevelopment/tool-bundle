@@ -36,15 +36,15 @@ class SoftdeleteUtility
         }
 
         foreach ($objects as $object) {
-            $functionDeletedOld = array(
+            $functionDeletedOld = [
                 $object,
                 "getDeleted"
-            );
+            ];
 
-            $functionDeletedNew = array(
+            $functionDeletedNew = [
                 $object,
                 "isDeleted"
-            );
+            ];
 
             if (true === is_callable($functionDeletedOld) && true === $object->getDeleted()) {
                 $objects->removeElement($object);
@@ -54,5 +54,47 @@ class SoftdeleteUtility
         }
 
         return $objects;
+    }
+
+    /**
+     * Soft delete given object and relations
+     *
+     * @param mixed $object
+     */
+    public static function delete($object)
+    {
+        if (null === $object) {
+            throw new \LogicException("No object");
+        }
+
+        $setterDelete = [
+            $object,
+            "setDeleted"
+        ];
+
+        if (false === is_callable($setterDelete)) {
+            throw new \LogicException(sprintf("%s is not softdeletable", get_class($object)));
+        }
+
+        $object->setDeleted(true);
+
+        $oReflectionClass = new \ReflectionClass($object);
+        foreach ($oReflectionClass->getProperties() as $property) {
+            $property->setAccessible(true);
+            $propertyValue = $property->getValue($object);
+
+            if ($propertyValue instanceof Collection || true === is_array($propertyValue)) {
+                foreach ($propertyValue as $propertyValueRelation) {
+                    $setterDelete = [
+                        $propertyValueRelation,
+                        "setDeleted"
+                    ];
+
+                    if (true === is_callable($setterDelete)) {
+                        $propertyValueRelation->setDeleted(true);
+                    }
+                }
+            }
+        }
     }
 }
