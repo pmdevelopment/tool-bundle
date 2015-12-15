@@ -1,27 +1,1 @@
-tool-bundle
-===============
-
-Tools for Symfony2
-
-## Install
-
-Add to composer:
-
-```js
-  composer require "pmdevelopment/tool-bundle" "1.3.*"
-```
-
-Add to kernel:
-
-```php
-  new PM\Bundle\ToolBundle\PMToolBundle()
-```
-
-## Tools
-
-* [Twig](Resources/doc/twig.md)
-* [KNPMenu](Resources/doc/knpmenu.md)
-* [Font-Awesome](Resources/doc/fontawesome.md)
-* [DOMPDF](Resources/doc/dompdf.md)
-* [BcBootstrap](Resources/doc/bcbootstrap.md)
-* [Framework](Resources/doc/framework.md)
+tool-bundle===============Tools for Symfony2## InstallAdd to composer:```js  composer require "pmdevelopment/tool-bundle" "1.6.*"```Add to kernel:```php  new PM\Bundle\ToolBundle\PMToolBundle()```## Tools* [Twig](Resources/doc/twig.md)* [KNPMenu](Resources/doc/knpmenu.md)* [Font-Awesome](Resources/doc/fontawesome.md)* [DOMPDF](Resources/doc/dompdf.md)* [BcBootstrap](Resources/doc/bcbootstrap.md)* [Framework](Resources/doc/framework.md)## Credits* [JQuery](https://github.com/jquery/jquery)* [TWBS/Bootstrap](https://github.com/twbs/bootstrap)* [Eternicode/Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker)* [MakeUsABrew/Bootbox](https://github.com/makeusabrew/bootbox)* [Summernote](https://github.com/summernote/summernote/)* [Font-Awesome](https://github.com/FortAwesome/Font-Awesome)
