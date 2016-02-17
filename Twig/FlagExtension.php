@@ -58,7 +58,7 @@ class FlagExtension extends Twig_Extension {
     */
    public function flagFilter($flag) {
       $flag = strtolower($flag);
-      return sprintf('<img src="%s" />', $this->asset("/bundles/pmtool/image/flags/$flag.png"));
+      return sprintf('<img src="%s" />', $this->asset("/bundles/pmtool/img/flags/$flag.png"));
    }
 
    /**
