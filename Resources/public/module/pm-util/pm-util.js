@@ -36,7 +36,7 @@ var pmUtilLoading = function () {
                 var spinner = $('<div id="' + _self.config.spinner.id + '" class="modal fade in text-center" style="' + _self.config.spinner.style + '"></div>');
                 var icon = $('<i></i>').attr('class', _self.config.spinner.icon).css('color', _self.config.spinner.color);
 
-                spinner.css("top", (body.height() / 2) + "px");
+                spinner.css("top", ($(window).height() / 2) + "px");
 
                 spinner.append(icon);
 
