@@ -6,6 +6,7 @@ use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Voter\VoterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Description of RouteVoter
@@ -16,9 +17,9 @@ class RouteVoter implements VoterInterface
 {
 
     /**
-     * @var Request
+     * @var RequestStack
      */
-    private $request;
+    private $requestStack;
 
     /**
      * Constructor
@@ -27,7 +28,7 @@ class RouteVoter implements VoterInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->request = $container->get("request");
+        $this->requestStack = $container->get("request_stack");
     }
 
     /**
@@ -35,7 +36,7 @@ class RouteVoter implements VoterInterface
      */
     public function getRequest()
     {
-        return $this->request;
+        return $this->requestStack->getCurrentRequest();
     }
 
     /**
