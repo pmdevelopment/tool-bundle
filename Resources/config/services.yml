@@ -34,7 +34,7 @@ services:
       
   pm.knpmenu.voter:
     class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter
-    arguments: ["@service_container"]
+    arguments: ["@request_stack"]
     tags:
       - { name: knp_menu.voter }
 

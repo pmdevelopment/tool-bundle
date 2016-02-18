@@ -18,12 +18,24 @@ class HashExtension extends Twig_Extension
      */
     public function getFilters()
     {
-        return array(
-            'hash'  => new Twig_Filter_Method($this, 'hash'),
-            'sha1'  => new Twig_Filter_Method($this, 'hashSHA1'),
-            'md5'   => new Twig_Filter_Method($this, 'hashMD5'),
-            'crc32' => new Twig_Filter_Method($this, 'hashCRC'),
-        );
+        return [
+            new \Twig_SimpleFilter("hash", [
+                $this,
+                "hash"
+            ]),
+            new \Twig_SimpleFilter("sha1", [
+                $this,
+                "hashSHA1"
+            ]),
+            new \Twig_SimpleFilter("md5", [
+                $this,
+                "hashMD5"
+            ]),
+            new \Twig_SimpleFilter("crc32", [
+                $this,
+                "hashCRC"
+            ]),
+        ];
     }
 
     /**
@@ -84,7 +96,7 @@ class HashExtension extends Twig_Extension
      */
     public function getName()
     {
-        return 'plugin_pm_hash';
+        return 'pm_hash_extension';
     }
 
 }

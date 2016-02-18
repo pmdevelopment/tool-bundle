@@ -24,11 +24,11 @@ class RouteVoter implements VoterInterface
     /**
      * Constructor
      *
-     * @param $request
+     * @param RequestStack $requestStack
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->requestStack = $container->get("request_stack");
+        $this->requestStack = $requestStack;
     }
 
     /**

@@ -35,9 +35,12 @@ class CssVersionExtension extends Twig_Extension
      */
     public function getFilters()
     {
-        return array(
-            'cssversion' => new \Twig_Filter_Method($this, 'cssVersion'),
-        );
+        return [
+            new \Twig_SimpleFilter("cssversion", [
+                $this,
+                "cssVersion"
+            ])
+        ];
     }
 
     /**
@@ -51,11 +54,11 @@ class CssVersionExtension extends Twig_Extension
     {
         $filePath = sprintf("%s/../web%s", $this->kernelRootDir, $fileName);
 
-        if (file_exists($filePath)) {
-            return "$fileName?v=" . substr(md5_file($filePath), 0, 5);
+        if (true === file_exists($filePath)) {
+            return sprintf("%s?v=%s", $fileName, substr(md5_file($filePath), 0, 5));
         }
 
-        return "$fileName?v=" . substr(sha1(microtime()), 0, 6);
+        return sprintf("%s?v=%s", $fileName, substr(sha1(microtime()), 0, 6));
     }
 
     /**
@@ -65,7 +68,7 @@ class CssVersionExtension extends Twig_Extension
      */
     public function getName()
     {
-        return 'plugin_pm_cssversion';
+        return 'pm_cssversion_extension';
     }
 
 }

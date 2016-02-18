@@ -8,7 +8,7 @@
 namespace PM\Bundle\ToolBundle\Twig;
 
 use Twig_Extension;
-use Twig_Filter_Method;
+use Twig_SimpleFilter;
 
 /**
  * BootstrapIconExtension
@@ -28,10 +28,16 @@ class IconExtension extends Twig_Extension
      */
     public function getFilters()
     {
-        return array(
-            'parse_icons'   => new Twig_Filter_Method($this, 'parseIconsFilter', array('is_safe' => array('html'))),
-            'icon'          => new Twig_Filter_Method($this, 'iconFilter', array('is_safe' => array('html')))
-        );
+        return [
+            new Twig_SimpleFilter("parse_icons", [
+                $this,
+                "parseIconsFilter"
+            ], ["is_safe" => ["html"]]),
+            new Twig_SimpleFilter("icon", [
+                $this,
+                "iconFilter"
+            ], ["is_safe" => ["html"]])
+        ];
     }
 
     /**
