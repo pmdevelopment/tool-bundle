@@ -61,7 +61,7 @@ class PMKernel extends Kernel
      */
     public function getCacheDir()
     {
-        if ('prod' === $this->getEnvironment()) {
+        if ('dev' !== $this->getEnvironment()) {
             return parent::getCacheDir();
         }
 
@@ -76,7 +76,7 @@ class PMKernel extends Kernel
      */
     public function getLogDir()
     {
-        if ('prod' === $this->getEnvironment()) {
+        if ('dev' !== $this->getEnvironment()) {
             return parent::getLogDir();
         }
 
