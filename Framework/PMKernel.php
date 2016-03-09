@@ -62,7 +62,7 @@ class PMKernel extends Kernel
     public function getCacheDir()
     {
         if ('dev' !== $this->getEnvironment()) {
-            return sprintf("%s/../var/cache/%s", __DIR__, $this->getEnvironment());
+            return sprintf("%s/../var/cache/%s", $this->getRootDir(), $this->getEnvironment());
         }
 
         return implode(DIRECTORY_SEPARATOR, array(
@@ -77,7 +77,7 @@ class PMKernel extends Kernel
     public function getLogDir()
     {
         if ('dev' !== $this->getEnvironment()) {
-            return sprintf("%s/../var/logs", __DIR__);
+            return sprintf("%s/../var/logs", $this->getRootDir());
         }
 
         return implode(DIRECTORY_SEPARATOR, array(
