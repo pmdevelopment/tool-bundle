@@ -1,5 +1,6 @@
 /**
- * Additional Bootbox Features
+ * Bootbox
+ * @type {{dialog, form, formCreate, init}}
  */
 var pmBootbox = function () {
     "use strict";
