@@ -6,7 +6,7 @@ var pmBootbox = function () {
     "use strict";
 
     return {
-        dialog: function (element, size, callback = function(){}) {
+        dialog: function (element, size, callback) {
             pmUtilLoading.start();
             if (!size) {
                 size = "small";
@@ -25,7 +25,9 @@ var pmBootbox = function () {
                     }
                 });
 
-                callback();
+                if (typeof callback === "function") {
+                    callback();
+                }
 
                 pmUtilLoading.stop();
             }, 'html');
