@@ -87,7 +87,13 @@ var pmUtil = function () {
 
             $('a.delete').on('click', function () {
                 var elem = $(this);
-                bootbox.confirm("Den Eintrag wirklich löschen?", function (result) {
+
+                var title = "Den Eintrag wirklich löschen?";
+                if (elem.attr('title')) {
+                    title = elem.attr('title');
+                }
+
+                bootbox.confirm(title, function (result) {
                     if (true === result) {
                         pmUtilLoading.start();
                         window.location.href = elem.attr('href');
