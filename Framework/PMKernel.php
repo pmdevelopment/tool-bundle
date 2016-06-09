@@ -41,21 +41,6 @@ class PMKernel extends Kernel
         throw new LogicException("Missing container configuration");
     }
 
-
-    /**
-     * Init
-     */
-    protected function initializeContainer()
-    {
-        parent::initializeContainer();
-        if (PHP_SAPI === 'cli') {
-            $request = new Request();
-            $request->create('/');
-            $this->getContainer()->enterScope('request');
-            $this->getContainer()->set('request', $request, 'request');
-        }
-    }
-
     /**
      * @inheritDoc
      */
