@@ -1,3 +1,6 @@
+imports:
+    - { resource: "services/google.yml" }
+
 services:
   pm.twig.cssversion:
     class: PM\Bundle\ToolBundle\Twig\CssVersionExtension
