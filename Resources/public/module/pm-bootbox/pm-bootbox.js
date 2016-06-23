@@ -70,13 +70,35 @@ var pmBootbox = function () {
                         className: "btn-success",
                         callback: function () {
                             pmUtilLoading.start();
-                            $.post($(element).attr('href'), $('.bootbox-form-dialog form').serialize(), function (result) {
-                                if ("" !== result) {
-                                    _self.formCreate(element, result);
-                                } else {
-                                    window.location.reload(true);
-                                }
-                            });
+
+                            var form = $('.bootbox-form-dialog form');
+
+                            if(0<form.find('input[type="file"]').length){
+                                $.ajax({
+                                    url: $(element).attr('href'),
+                                    type: "POST",
+                                    data: new FormData(form[0]),
+                                    contentType: false,
+                                    cache: false,
+                                    processData:false,
+                                    success: function(data) {
+                                        if ("" !== result) {
+                                            _self.formCreate(element, result);
+                                        } else {
+                                            window.location.reload(true);
+                                        }
+                                    }
+                                });
+
+                            } else {
+                                $.post($(element).attr('href'), form.serialize(), function (result) {
+                                    if ("" !== result) {
+                                        _self.formCreate(element, result);
+                                    } else {
+                                        window.location.reload(true);
+                                    }
+                                });
+                            }
                         }
                     },
                     close: {
