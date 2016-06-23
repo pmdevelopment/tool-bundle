@@ -81,7 +81,7 @@ var pmBootbox = function () {
                                     contentType: false,
                                     cache: false,
                                     processData:false,
-                                    success: function(data) {
+                                    success: function(result) {
                                         if ("" !== result) {
                                             _self.formCreate(element, result);
                                         } else {
