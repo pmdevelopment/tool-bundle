@@ -9,6 +9,7 @@
 namespace PM\Bundle\ToolBundle\Framework\Traits\Entities;
 
 use DateTime;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Class EditableEntityTrait
@@ -18,23 +19,35 @@ use DateTime;
 trait EditableEntityTrait
 {
     /**
+     * Created
+     *
      * @var DateTime
      *
      * @ORM\Column(name="created",type="datetime")
+     *
+     * @Exclude()
      */
     private $created;
 
     /**
+     * Last Update
+     *
      * @var DateTime
      *
      * @ORM\Column(name="updated",type="datetime")
+     *
+     * @Exclude()
      */
     private $updated;
 
     /**
+     * Deleted
+     *
      * @var bool
      *
      * @ORM\Column(name="deleted", type="boolean")
+     *
+     * @Exclude()
      */
     private $deleted;
 
