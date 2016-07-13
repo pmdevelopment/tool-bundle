@@ -63,7 +63,7 @@ var pmBootbox = function () {
             if ($(element).data('size')) {
                 size = $(element).data('size');
             } else {
-                size = 'small';
+                size = null;
             }
 
             bootbox.dialog({
