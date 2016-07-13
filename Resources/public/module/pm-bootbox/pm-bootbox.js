@@ -52,7 +52,7 @@ var pmBootbox = function () {
          * @param content
          */
         formCreate: function (element, content) {
-            var _self = this, title;
+            var _self = this, title, size;
 
             if ($(element).attr('title')) {
                 title = $(element).attr('title');
@@ -60,9 +60,16 @@ var pmBootbox = function () {
                 title = $(element).text();
             }
 
+            if ($(element).data('size')) {
+                size = $(element).data('size');
+            } else {
+                size = 'small';
+            }
+
             bootbox.dialog({
                 className: "bootbox-form-dialog",
                 title: title,
+                size: size,
                 message: content,
                 buttons: {
                     save: {
@@ -73,15 +80,15 @@ var pmBootbox = function () {
 
                             var form = $('.bootbox-form-dialog form');
 
-                            if(0<form.find('input[type="file"]').length){
+                            if (0 < form.find('input[type="file"]').length) {
                                 $.ajax({
                                     url: $(element).attr('href'),
                                     type: "POST",
                                     data: new FormData(form[0]),
                                     contentType: false,
                                     cache: false,
-                                    processData:false,
-                                    success: function(result) {
+                                    processData: false,
+                                    success: function (result) {
                                         if ("" !== result) {
                                             _self.formCreate(element, result);
                                         } else {
