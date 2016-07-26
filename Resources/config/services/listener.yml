@@ -1,0 +1,6 @@
+services:
+  pm_tool.event_listener.unique_id_annotation_event_listener:
+    class: PM\Bundle\ToolBundle\EventListener\UniqueIdAnnotationEventListener
+    arguments: ['@annotations.reader']
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
