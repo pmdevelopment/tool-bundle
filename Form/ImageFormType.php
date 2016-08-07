@@ -10,6 +10,8 @@ namespace PM\Bundle\ToolBundle\Form;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -21,28 +23,20 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class ImageFormType extends AbstractType
 {
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return "image";
-    }
-
-    /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add("name", "text", array(
+            ->add("name", TextType::class, array(
                 'label'       => 'Name:',
                 'constraints' => array(new NotBlank())
             ))
-            ->add("fileName", "hidden", array(
+            ->add("fileName", HiddenType::class, array(
                 'attr' => array('class' => 'pm-imageupload-name')
             ))
-            ->add("content", "hidden", array(
+            ->add("content", HiddenType::class, array(
                 'error_bubbling' => true,
                 'constraints'    => array(new NotBlank(array("message" => "Es muss ein Bild hinzugefügt werden."))),
                 'attr'           => array('class' => 'pm-imageupload-input')
