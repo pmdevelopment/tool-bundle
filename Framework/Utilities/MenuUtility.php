@@ -21,11 +21,18 @@ class MenuUtility
     /**
      * @param ItemInterface $parent
      * @param array         $routes
-     * @param string        $basePath
+     * @param string|null   $basePath
      */
-    public static function addHiddenItems($parent, $routes, $basePath)
+    public static function addHiddenItems($parent, $routes, $basePath = null)
     {
         $parent->setDisplayChildren(false);
+
+        if (null === $basePath && null !== $parent->getExtra('routes') && isset($parent->getExtra('routes')[0]['route'])) {
+            $basePathArray = explode("_", $parent->getExtra('routes')[0]['route']);
+            $basePathArray[count($basePathArray) - 1] = '%s';
+
+            $basePath = implode("_", $basePathArray);
+        }
 
         foreach ($routes as $routeIndex => $routeParameters) {
             $parent->addChild($routeIndex, [
