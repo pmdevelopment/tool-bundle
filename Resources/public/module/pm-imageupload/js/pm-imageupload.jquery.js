@@ -24,7 +24,7 @@ var pmImageUpload = function () {
         init: function () {
             var upload = $('form').find('input.pm-imageupload-input');
             if (upload) {
-                this.getStyle("/bundles/pmtool/pm-imageupload/css/pm-imageupload.css");
+                this.getStyle("/bundles/pmtool/module/pm-imageupload/css/pm-imageupload.css");
                 var holder = $('<div id="pm-imageupload-holder"></div>');
 
                 if (0 < upload.parent().find('.form-group').length) {
