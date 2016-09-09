@@ -25,4 +25,19 @@ trait HasDoctrineCommandTrait
     {
         return $this->getContainer()->get('doctrine');
     }
+
+    /**
+     * Persist and Flush
+     *
+     * @param mixed $entity
+     *
+     * @return $this
+     */
+    public function persistAndFlush($entity)
+    {
+        $this->getDoctrine()->getManager()->persist($entity);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this;
+    }
 }
