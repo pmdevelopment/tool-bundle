@@ -1,7 +1,7 @@
 /**
- * Utilities: Loading
+ * Loading
  *
- * @type {{start, stop}}
+ * @type {{config, count, getSpinner, start, stop, startInline}}
  */
 var pmUtilLoading = function () {
     "use strict";

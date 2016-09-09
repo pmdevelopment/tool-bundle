@@ -15,7 +15,7 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
  *
  * @package PM\Bundle\ToolBundle\Framework\Traits\Command
  */
-class HasDoctrineCommandTrait
+trait HasDoctrineCommandTrait
 {
 
     /**
