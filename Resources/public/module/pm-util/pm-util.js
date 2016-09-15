@@ -88,14 +88,26 @@ var pmUtilLoading = function () {
 }();
 
 /**
- * Utilities
+ * pmUtil
  *
- * @type {{initBootbox, init}}
+ * @type {{config, debug, initBootbox, init}}
  */
 var pmUtil = function () {
     "use strict";
 
     return {
+        config: {
+            debugging: false
+        },
+        /**
+         * Debug
+         * @param message
+         */
+        debug: function (message) {
+            if (true === this.config.debugging) {
+                console.log(message);
+            }
+        },
         /**
          * Init Bootbox
          */
