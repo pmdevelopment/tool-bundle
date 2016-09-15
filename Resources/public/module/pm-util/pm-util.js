@@ -1,7 +1,7 @@
 /**
- * Utilities: Loading
+ * Loading
  *
- * @type {{start, stop}}
+ * @type {{config, count, getSpinner, start, stop, startInline}}
  */
 var pmUtilLoading = function () {
     "use strict";
@@ -14,7 +14,11 @@ var pmUtilLoading = function () {
                 icon: "fa fa-spinner fa-spin fa-4x",
                 style: "display:block;overflow: visible!important;"
             },
-            showModal: true
+            showModal: true,
+            inline: {
+                color: "#3bc9d7",
+                init: false
+            }
         },
         count: 0,
         /**
@@ -66,6 +70,19 @@ var pmUtilLoading = function () {
 
                 _self.getSpinner().remove();
             }
+        },
+        /**
+         * Start inline
+         * @param target
+         */
+        startInline: function (target) {
+            if (false === this.config.inline.init) {
+                this.config.inline.init = true;
+
+                $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', '/bundles/pmtool/module/pm-util/css/loading.css'));
+            }
+
+            target.html('<div class="pm-util-loading-inline"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke="' + this.config.inline.color + '" stroke-width="2" stroke-miterlimit="10" /></svg>Lädt...</div>');
         }
     }
 }();
