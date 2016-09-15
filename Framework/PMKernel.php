@@ -80,7 +80,8 @@ class PMKernel extends Kernel
     {
         $tempDir = array(
             sys_get_temp_dir(),
-            "sf2"
+	    get_current_user(),
+            "sf2",
         );
 
         $folders = explode(DIRECTORY_SEPARATOR, $this->getRootDir());
