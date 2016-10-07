@@ -80,7 +80,7 @@ class PMKernel extends Kernel
     {
         $tempDir = array(
             sys_get_temp_dir(),
-	    get_current_user(),
+            $this->getCurrentUser(),
             "sf2",
         );
 
@@ -109,5 +109,21 @@ class PMKernel extends Kernel
         }
 
         return $tempDirPath;
+    }
+
+    /**
+     * Get Current User
+     *
+     * @return string
+     */
+    private function getCurrentUser()
+    {
+        $processUser = posix_getpwuid(posix_geteuid());
+
+        if (true === isset($processUser['name'])) {
+            return $processUser['name'];
+        }
+
+        return get_current_user();
     }
 }
