@@ -74,15 +74,26 @@ var pmUtilLoading = function () {
         /**
          * Start inline
          * @param target
+         * @param size
          */
-        startInline: function (target) {
+        startInline: function (target, size) {
             if (false === this.config.inline.init) {
                 this.config.inline.init = true;
 
-                $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', '/bundles/pmtool/module/pm-util/css/loading.css'));
+                $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', '/bundles/pmtool/module/pm-util/css/loading.css?v=1.0.1'));
             }
 
-            target.html('<div class="pm-util-loading-inline"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke="' + this.config.inline.color + '" stroke-width="2" stroke-miterlimit="10" /></svg>Lädt...</div>');
+            var divClass = 'pm-util-loading-inline';
+            var text = 'Lädt...';
+            var style = 'width:80px;margin: 60px auto;';
+
+            if ('small' === size) {
+                text = '';
+                divClass += ' small';
+                style = 'width:40px;margin: 5px auto;';
+            }
+
+            target.html('<div class="' + divClass + '" style="' + style + '"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke="' + this.config.inline.color + '" stroke-width="2" stroke-miterlimit="10" /></svg>' + text + '</div>');
         }
     }
 }();
