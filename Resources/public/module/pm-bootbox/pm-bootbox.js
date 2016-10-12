@@ -36,13 +36,14 @@ var pmBootbox = function () {
          * Form
          *
          * @param element
+         * @param onSuccess
          */
-        form: function (element) {
+        form: function (element, onSuccess) {
             var _self = this;
 
             pmUtilLoading.start();
             $.get($(element).attr('href'), {}, function (result) {
-                _self.formCreate(element, result);
+                _self.formCreate(element, result, onSuccess);
             });
         },
         /**
@@ -50,9 +51,16 @@ var pmBootbox = function () {
          *
          * @param element
          * @param content
+         * @param onSuccess
          */
-        formCreate: function (element, content) {
+        formCreate: function (element, content, onSuccess) {
             var _self = this, title, size;
+
+            var defaultOnSuccess = function () {
+                window.location.reload(true);
+            };
+
+            onSuccess = onSuccess || defaultOnSuccess;
 
             if ($(element).attr('title')) {
                 title = $(element).attr('title');
@@ -90,9 +98,9 @@ var pmBootbox = function () {
                                     processData: false,
                                     success: function (result) {
                                         if ("" !== result) {
-                                            _self.formCreate(element, result);
+                                            _self.formCreate(element, result, onSuccess);
                                         } else {
-                                            window.location.reload(true);
+                                            onSuccess();
                                         }
                                     }
                                 });
@@ -102,7 +110,7 @@ var pmBootbox = function () {
                                     if ("" !== result) {
                                         _self.formCreate(element, result);
                                     } else {
-                                        window.location.reload(true);
+                                        onSuccess();
                                     }
                                 });
                             }
