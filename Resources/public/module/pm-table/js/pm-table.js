@@ -1,0 +1,136 @@
+(function ($) {
+    $.fn.pmTable = function (options) {
+
+        var settings = {
+            modules: {
+                action: false,
+                sortable: false
+            },
+            paths: {
+                self: "",
+                action: ""
+            },
+            sorting: {
+                index: "",
+                direction: ""
+            },
+            icons: {
+                sorting: {
+                    asc: 'fa fa-caret-up text-muted',
+                    desc: 'fa fa-caret-down text-muted'
+                }
+            }
+        };
+
+        settings = $.extend({}, settings, options);
+
+        this.each(function () {
+            var _element = this;
+
+            var sorting = function () {
+                "use strict";
+
+                return {
+                    /**
+                     * Update
+                     * @param key
+                     * @param direction
+                     */
+                    update: function (key, direction) {
+                        core.debug('sorting.update(' + key + ',' + direction + ')');
+
+                        settings.sorting.index = key;
+                        settings.sorting.direction = direction;
+
+                        core.reload();
+                    },
+                    /**
+                     * Init
+                     */
+                    init: function () {
+                        core.debug('sorting.init()');
+
+                        $(_element).find('th').each(function () {
+                            if (true !== $(this).data('sortable')) {
+                                return;
+                            }
+
+                            var key = $(this).data('key');
+
+                            var link = $('<a></a>', {
+                                href: 'javascript:void(0)'
+                            }).text($(this).text()).on('click', function () {
+                                var direction = 'asc';
+
+                                if (key === settings.sorting.index && 'asc' === settings.sorting.direction) {
+                                    direction = 'desc';
+                                }
+
+                                sorting.update(key, direction);
+                            });
+
+                            $(this).html(link);
+
+                            if (settings.sorting.index === key) {
+                                $(this).prepend($('<i></i>', {
+                                    style: 'padding-right:10px;',
+                                    class: settings.icons.sorting[settings.sorting.direction]
+                                }));
+                            }
+                        });
+                    }
+                };
+            }();
+
+            var core = function () {
+                "use strict";
+
+                return {
+                    /**
+                     * Debug
+                     */
+                    debug: function () {
+                        for (var i = 0; i < arguments.length; i++) {
+                            pmUtil.debug('{pmTable} ' + arguments[i]);
+                        }
+                    },
+                    /**
+                     * Reload
+                     */
+                    reload: function () {
+                        core.debug('core.reload()');
+
+                        pmUtilLoading.start();
+                        var queryString = [];
+
+                        if (true === settings.modules.sortable) {
+                            queryString.push("order_by=" + settings.sorting.index);
+                            queryString.push("order_dir=" + settings.sorting.direction);
+                        }
+
+                        window.location.href = settings.paths.self + "?" + queryString.join("&");
+                    },
+                    /**
+                     * Init
+                     */
+                    init: function () {
+                        core.debug('core.init()');
+
+                        if (true === settings.modules.action) {
+                            $(_element).pmTableAction({
+                                editable: true,
+                                path: settings.paths.action
+                            });
+                        }
+
+                        if (true === settings.modules.sortable) {
+                            sorting.init();
+                        }
+                    }
+                };
+            }();
+
+            core.init();
+        });
+    };
+}(jQuery));

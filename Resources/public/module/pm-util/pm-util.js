@@ -112,11 +112,12 @@ var pmUtil = function () {
         },
         /**
          * Debug
-         * @param message
          */
-        debug: function (message) {
+        debug: function () {
             if (true === this.config.debugging) {
-                console.log(message);
+                for (var i = 0; i < arguments.length; i++) {
+                    console.log(arguments[i]);
+                }
             }
         },
         /**
