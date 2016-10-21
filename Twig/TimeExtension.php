@@ -24,10 +24,30 @@ class TimeExtension extends Twig_Extension
     public function getFilters()
     {
         return array(
-            new Twig_SimpleFilter("secondsAsText", array(
-                $this,
-                "getSecondsAsText"
-            ))
+            new Twig_SimpleFilter(
+                "secondsAsText",
+                [
+                    $this,
+                    "getSecondsAsText",
+                ],
+                [
+                    'deprecated' => true,
+                ]
+            ),
+            new Twig_SimpleFilter(
+                "time_seconds_as_text",
+                [
+                    $this,
+                    "getSecondsAsText",
+                ]
+            ),
+            new Twig_SimpleFilter(
+                "time_minutes_as_hours",
+                [
+                    $this,
+                    "getMinutesAsHours",
+                ]
+            ),
         );
     }
 
@@ -59,7 +79,21 @@ class TimeExtension extends Twig_Extension
         $minutes = $minutes - ($hours * 60);
 
         return sprintf("%sh %sm %ss", $hours, $minutes, number_format($seconds - ($minutes * 60) - ($hours * 3600), 0, $decPoint, $thousandsSep));
+    }
 
+    /**
+     * Get Minutes as Minutes (hh:ii)
+     *
+     * @param int $minutes
+     *
+     * @return string
+     */
+    public function getMinutesAsHours($minutes)
+    {
+        $hours = floor($minutes / 60);
+        $minutes = $minutes - ($hours * 60);
+
+        return sprintf('%s:%s', $hours, str_pad($minutes, 2, "0", STR_PAD_LEFT));
     }
 
     /**
