@@ -4,7 +4,8 @@
         var settings = {
             modules: {
                 action: false,
-                sortable: false
+                sortable: false,
+                limitable: false
             },
             paths: {
                 self: "",
@@ -13,6 +14,10 @@
             sorting: {
                 index: "",
                 direction: ""
+            },
+            limit: {
+                select: 'select.pm-table-limit',
+                value: 50
             },
             icons: {
                 sorting: {
@@ -27,6 +32,10 @@
         this.each(function () {
             var _element = this;
 
+            /**
+             * Sorting
+             * @type {{update, init}}
+             */
             var sorting = function () {
                 "use strict";
 
@@ -82,6 +91,25 @@
                 };
             }();
 
+            var limit = function () {
+                "use strict";
+
+                return {
+                    /**
+                     * Init
+                     */
+                    init: function () {
+                        core.debug('limit.init()');
+
+                        $(_element).parent().find(settings.limit.select).unbind('change').on('change', function () {
+                            settings.limit.value = $(this).val();
+
+                            core.reload();
+                        });
+                    }
+                };
+            }();
+
             var core = function () {
                 "use strict";
 
@@ -108,6 +136,10 @@
                             queryString.push("order_dir=" + settings.sorting.direction);
                         }
 
+                        if (true === settings.modules.limitable) {
+                            queryString.push("limit=" + settings.limit.value);
+                        }
+
                         window.location.href = settings.paths.self + "?" + queryString.join("&");
                     },
                     /**
@@ -125,6 +157,10 @@
 
                         if (true === settings.modules.sortable) {
                             sorting.init();
+                        }
+
+                        if (true === settings.modules.limitable) {
+                            limit.init();
                         }
                     }
                 };

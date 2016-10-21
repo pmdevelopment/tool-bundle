@@ -19,10 +19,34 @@ class TableModel
 {
     const SESSION_KEY = 'java_script_table';
 
+    const DEFAULT_LIMIT = 50;
+
     /**
      * @var SortingModel
      */
     private $sorting;
+
+    /**
+     * @var int|null
+     */
+    private $limit;
+
+    /**
+     * @var int|null
+     */
+    private $page;
+
+    /**
+     * TableModel constructor.
+     *
+     * @param SortingModel $sorting
+     * @param null|int     $limit
+     */
+    public function __construct(SortingModel $sorting, $limit = null)
+    {
+        $this->sorting = $sorting;
+        $this->limit = $limit;
+    }
 
     /**
      * @return SortingModel
@@ -43,6 +67,55 @@ class TableModel
 
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getLimit()
+    {
+        if (false === is_numeric($this->limit) || 0 === $this->limit) {
+            return self::DEFAULT_LIMIT;
+        }
+
+        return $this->limit;
+    }
+
+    /**
+     * @param int|null $limit
+     *
+     * @return TableModel
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPage()
+    {
+        if (null === $this->page) {
+            return 1;
+        }
+
+        return $this->page;
+    }
+
+    /**
+     * @param int|null $page
+     *
+     * @return TableModel
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
 
     /**
      * Build Session Path

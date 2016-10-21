@@ -47,6 +47,31 @@ trait JavaScriptTableTrait
     }
 
     /**
+     * Add Limit
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param Request      $request
+     * @param TableModel   $table
+     *
+     * @return QueryBuilder
+     */
+    public function addLimit(QueryBuilder $queryBuilder, Request $request, TableModel $table)
+    {
+        $limit = $request->query->getInt('limit', $table->getLimit());
+        $page = $request->query->getInt('page', $table->getPage());
+
+        $table->setLimit($limit);
+
+        if (0 < $limit) {
+            $queryBuilder
+                ->setFirstResult(($page - 1) * $limit)
+                ->setMaxResults($limit);
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
      * Save Table To Session
      *
      * @param Request    $request
