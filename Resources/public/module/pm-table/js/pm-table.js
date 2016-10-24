@@ -5,11 +5,13 @@
             modules: {
                 action: false,
                 sortable: false,
-                limitable: false
+                limitable: false,
+                filters: false
             },
             paths: {
                 self: "",
-                action: ""
+                action: "",
+                filter: ""
             },
             sorting: {
                 index: "",
@@ -18,6 +20,13 @@
             limit: {
                 select: 'select.pm-table-limit',
                 value: 50
+            },
+            filter: {
+                selectors: {
+                    menu: 'ul.pm-table-filter',
+                    labels: '.pm-table-filter-selected'
+                },
+                active: {}
             },
             icons: {
                 sorting: {
@@ -152,6 +161,13 @@
                             $(_element).pmTableAction({
                                 editable: true,
                                 path: settings.paths.action
+                            });
+                        }
+
+                        if (true === settings.modules.filters) {
+                            $(_element).pmTableFilter({
+                                path: settings.paths.filter,
+                                selectors: settings.filter.selectors
                             });
                         }
 
