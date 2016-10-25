@@ -1,0 +1,7 @@
+.pm-table-filter-selected {
+    line-height: 34px;
+}
+
+.pm-table-filter-selected > .label {
+    margin-left: 10px;
+}

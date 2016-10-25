@@ -36,6 +36,15 @@ class TableModel
      */
     private $page;
 
+
+    /**
+     * Key=>Value Array for filters
+     *
+     * @var array|FilterItemModel[]
+     */
+    private $filters;
+
+
     /**
      * TableModel constructor.
      *
@@ -116,6 +125,74 @@ class TableModel
         return $this;
     }
 
+
+    /**
+     * @return array|FilterItemModel[]|mixed
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * Add Filter
+     *
+     * @param string          $key
+     * @param FilterItemModel $filter
+     *
+     * @return $this
+     */
+    public function addFilter($key, $filter)
+    {
+        if (false === isset($this->filters[$key])) {
+            $this->filters[$key] = [];
+        }
+
+        $this->filters[$key][] = $filter;
+
+        return $this;
+    }
+
+    /**
+     * Get Filters as JSON
+     *
+     * @return string
+     */
+    public function getFiltersJson()
+    {
+        $result = [];
+
+        if (false === is_array($this->getFilters())) {
+            return "{}";
+        }
+
+        foreach ($this->getFilters() as $filterIndex => $items) {
+            foreach ($items as $item) {
+                $result[$filterIndex][] = [
+                    'id'   => $item->getId(),
+                    'text' => $item->getText(),
+                ];
+            }
+        }
+
+        return json_encode($result);
+    }
+
+    /**
+     * Reset Filter
+     *
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function resetFilter($key)
+    {
+        if (true === isset($this->filters[$key])) {
+            unset($this->filters[$key]);
+        }
+
+        return $this;
+    }
 
     /**
      * Build Session Path

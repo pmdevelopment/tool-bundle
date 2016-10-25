@@ -96,5 +96,4 @@ class SortingModel
         return $this;
     }
 
-
 }
