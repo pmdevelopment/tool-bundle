@@ -6,7 +6,8 @@
                 action: false,
                 sortable: false,
                 limitable: false,
-                filter: false
+                filter: false,
+                search: false
             },
             paths: {
                 self: "",
@@ -27,6 +28,11 @@
                     labels: '.pm-table-filter-selected'
                 },
                 active: {}
+            },
+            search: {
+                selectors: {
+                    input: 'input.pm-table-search'
+                }
             },
             icons: {
                 sorting: {
@@ -307,6 +313,38 @@
                 }
             }();
 
+            var search = function () {
+                "use strict";
+
+                return {
+                    /**
+                     * Get Input
+                     * @returns {*|HTMLElement}
+                     */
+                    getInput: function () {
+                        return $(settings.search.selectors.input);
+                    },
+                    /**
+                     * Get Term
+                     * @returns {*}
+                     */
+                    getTerm: function () {
+                        return this.getInput().val();
+                    },
+                    /**
+                     * Init
+                     */
+                    init: function () {
+                        core.debug("search.init()");
+
+                        this.getInput().on('change', function () {
+                            core.reload();
+                        }).parent().removeClass('hidden');
+
+                    }
+                }
+            }();
+
 
             var core = function () {
                 "use strict";
@@ -355,6 +393,10 @@
                             }
                         }
 
+                        if (true === settings.modules.search) {
+                            queryString.push("search=" + search.getTerm());
+                        }
+
                         core.debug(" => " + queryString.join("&"));
 
                         window.location.href = settings.paths.self + "?" + queryString.join("&");
@@ -382,6 +424,10 @@
 
                         if (true === settings.modules.limitable) {
                             limit.init();
+                        }
+
+                        if (true === settings.modules.search) {
+                            search.init();
                         }
                     }
                 };

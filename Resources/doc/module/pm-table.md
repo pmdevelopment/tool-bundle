@@ -12,15 +12,18 @@
             </div>
             <div class="portlet-body">
                 <div class="row">
-                    <div class="col-xs-7">
+                    <div class="col-xs-7 col-lg-9">
                         <div class="dropdown pull-left hidden">
                             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Filter {{ "filter"|icon }}</button>
                             <ul class="dropdown-menu pm-table-filter"></ul>
                         </div>
                         <div class="pm-table-filter-selected pull-left"></div>
                     </div>
-                    <div class="col-xs-5">
-    
+                    <div class="col-xs-5 col-lg-3 text-right">
+                        <div class="input-group hidden">
+                            <input type="text" class="form-control input-circle-left pm-table-search" placeholder="Suche..." value="{{ search }}"/>
+                            <span class="input-group-btn"><button class="btn btn-circle-right btn-default" type="submit">{{ "search"|icon }}</button></span>
+                        </div>
                     </div>
                 </div>
                 <br/>
@@ -92,7 +95,8 @@
                             action: true,
                             sortable: true,
                             limitable: true,
-                            filter: true
+                            filter: true,
+                            search: true
                         },
                         paths: {
                             self: "{{ path(app.request.get('_route'), app.request.get('_route_params')) }}",
@@ -167,11 +171,28 @@
             $table = new TableModel($sorting, 100);
         }
 
-
+        /*
+         * Base query
+         */
         $dataQb = $this->getDoctrine()->getRepository("PMCoreDomainBundle:Domain")->createQueryBuilder('domain');
         $dataQb
             ->where('domain.deleted = 0');
 
+        /*
+         * Search
+         */
+        $search = $request->query->get('search', null);
+        if (null !== $search && 2 < strlen($search)) {
+            $dataQb
+                ->andWhere($dataQb->expr()->like('domain.name', ':term'))
+                ->setParameter('term', sprintf('%%%s%%', $search));
+        } else {
+            $search = "";
+        }
+
+        /*
+         * Filters
+         */
         $filters = $request->query->get('filter', []);
         foreach ($filters as $filterKey => $filterValues) {
             if (false === in_array($filterKey, $this->filters)) {
@@ -230,6 +251,9 @@
             $dataQb->andWhere($dataQb->expr()->in(sprintf('domain.%s', $filterKey), CollectionUtility::getIds($filterItems)));
         }
 
+        /*
+         * ORder and Limit
+         */
         $this->addOrderBy($dataQb, $request, $table);
         $this->addLimit($dataQb, $request, $table);
 
@@ -245,7 +269,8 @@
 
         return [
             'pagination' => $pagination,
-            'table'      => $table
+            'table'      => $table,
+            'search'     => $search,
         ];
     }
 
