@@ -1,0 +1,49 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        var textareas = $('.pm-summernote');
+
+        if (0 < textareas.length) {
+            $.ajaxSetup({
+                cache: true
+            });
+
+            pmUtilLoading.start();
+
+            if (undefined === pmSummernoteConfig) {
+                var pmSummernoteConfig = {
+                    focus: true,
+                    theme: 'flatly',
+                    lang: 'de-DE',
+                    toolbar: [
+                        ['first', ['style']],
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        ['font', ['strikethrough']],
+                        ['fontsize', ['fontsize']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['height', ['height']],
+                        ['insert', ['link', 'table', 'hr', 'picture']],
+                        ['misc', ['fullscreen', 'codeview']],
+                        ['fct', ['undo', 'redo', 'help']]
+                    ]
+                };
+            }
+
+            var style = "{{ asset("bundles/pmtool/vendor/summernote/0.8.2/summernote.css") }}";
+            if (document.createStyleSheet) {
+                document.createStyleSheet(style);
+            }
+            else {
+                $("head").append("<link rel='stylesheet' href='" + style + "' type='text/css' media='screen' />");
+            }
+
+            $.getScript('{{ asset("bundles/pmtool/vendor/summernote/0.8.2/summernote.min.js") }}', function () {
+                $.getScript('{{ asset("bundles/pmtool/vendor/summernote/0.8.2/lang/summernote-de-DE.js") }}'.replace('de-DE', pmSummernoteConfig.lang), function () {
+                    textareas.summernote(pmSummernoteConfig);
+                    pmUtilLoading.stop();
+                });
+
+            });
+        }
+    });
+</script>
