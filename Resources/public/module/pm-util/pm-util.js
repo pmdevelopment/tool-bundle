@@ -154,7 +154,7 @@ var pmUtil = function () {
                 });
 
                 return false;
-            });
+            }).removeClass('hidden');
         },
         /**
          * Init
