@@ -94,6 +94,18 @@ var pmUtilLoading = function () {
             }
 
             target.html('<div class="' + divClass + '" style="' + style + '"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke="' + this.config.inline.color + '" stroke-width="2" stroke-miterlimit="10" /></svg>' + text + '</div>');
+        },
+        /**
+         * Start Dialog
+         */
+        startDialog: function(){
+            var element = $('<div></div>');
+
+            bootbox.dialog({
+                message: element
+            });
+
+            this.startInline(element);
         }
     }
 }();
