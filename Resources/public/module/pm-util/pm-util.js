@@ -98,7 +98,7 @@ var pmUtilLoading = function () {
         /**
          * Start Dialog
          */
-        startDialog: function(){
+        startDialog: function () {
             var element = $('<div></div>');
 
             bootbox.dialog({
@@ -120,7 +120,14 @@ var pmUtil = function () {
 
     return {
         config: {
-            debugging: false
+            debugging: false,
+            module: {
+                select2: {
+                    enabled: false,
+                    callback: function(){},
+                    version: '4.0.3'
+                }
+            }
         },
         /**
          * Debug
@@ -161,6 +168,16 @@ var pmUtil = function () {
          */
         init: function () {
             this.initBootbox();
+
+            $.ajaxSetup({
+                cache: true
+            });
+
+            if (true === this.config.module.select2.enabled) {
+                $.getScript('/bundles/pmtool/module/pm-util/parcels/jquery.pm-select2.js', function(){
+                     pmUtil.config.module.select2.callback();
+                });
+            }
         }
     };
 }();
