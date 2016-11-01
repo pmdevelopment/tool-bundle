@@ -2,8 +2,10 @@
 
     $.fn.pmSelect2 = function () {
 
+        var _target = this;
+
         var pmSelect2Init = function () {
-            this.each(function () {
+            _target.each(function () {
                 var _element = $(this);
 
                 /**
@@ -19,7 +21,7 @@
                          * @param url
                          * @returns {{language: string, ajax: {url: *, dataType: string, delay: number, data: Function, processResults: Function, cache: boolean}, minimumInputLength: number, escapeMarkup: Function, templateResult: Function, templateSelection: Function, closeOnSelect: boolean, allowClear: boolean, dropdownParent: (*|HTMLElement)}}
                          */
-                        get: function (url) {
+                        getAjax: function (url) {
                             var limit = 30;
 
                             return {
@@ -57,7 +59,6 @@
                                 },
                                 closeOnSelect: true,
                                 allowClear: true,
-                                dropdownParent: $(".bootbox-body")
                             };
                         }
                     }
@@ -82,7 +83,11 @@
 
                             var url = $(_element).data('path');
 
-                            $(_element).select2(config.get(url));
+                            if (url) {
+                                $(_element).select2(config.getAjax(url));
+                            } else {
+                                $(_element).select2();
+                            }
                         }
                     };
                 }();
@@ -92,7 +97,11 @@
         };
 
         if (undefined === jQuery().select2) {
-            $.get('/bundles/pmtool/vendor/select2/' + pmUtil.config.module.select2.version + '/select2.min.js', function () {
+            $("head")
+                .append("<link rel='stylesheet' href='/bundles/pmtool/vendor/select2/" + pmUtil.config.module.select2.version + "/css/select2.min.css' type='text/css' media='screen' />")
+                .append("<link rel='stylesheet' href='/bundles/pmtool/vendor/select2-bootstrap-theme/" + pmUtil.config.module.select2.theme + "/select2-bootstrap.min.css' type='text/css' media='screen' />");
+
+            $.get('/bundles/pmtool/vendor/select2/' + pmUtil.config.module.select2.version + '/js/select2.full.min.js', function () {
                 pmSelect2Init();
             });
         } else {

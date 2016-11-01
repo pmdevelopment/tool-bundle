@@ -124,8 +124,11 @@ var pmUtil = function () {
             module: {
                 select2: {
                     enabled: false,
-                    callback: function(){},
-                    version: '4.0.3'
+                    callback: function () {
+                        $('.pm-select2').pmSelect2();
+                    },
+                    version: '4.0.3',
+                    theme: '0.1.0-beta.9'
                 }
             }
         },
@@ -174,8 +177,8 @@ var pmUtil = function () {
             });
 
             if (true === this.config.module.select2.enabled) {
-                $.getScript('/bundles/pmtool/module/pm-util/parcels/jquery.pm-select2.js', function(){
-                     pmUtil.config.module.select2.callback();
+                $.getScript('/bundles/pmtool/module/pm-util/parcels/jquery.pm-select2.js', function () {
+                    pmUtil.config.module.select2.callback();
                 });
             }
         }
