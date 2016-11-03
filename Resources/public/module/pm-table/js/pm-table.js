@@ -24,10 +24,11 @@
             },
             filter: {
                 selectors: {
-                    menu: 'ul.pm-table-filter',
+                    menu: '.pm-table-filter',
                     labels: '.pm-table-filter-selected'
                 },
-                active: {}
+                active: {},
+                preload: false
             },
             search: {
                 selectors: {
@@ -131,9 +132,7 @@
 
 
             /**
-             * Core
-             *
-             * @type {{log, init}}
+             * Filter
              */
             var filter = function () {
                 "use strict";
@@ -143,7 +142,7 @@
                      * Get Select2 Config
                      * @returns {{ajax: {url: *, dataType: string, delay: number, data: Function, processResults: Function, cache: boolean}, minimumInputLength: number, escapeMarkup: Function, templateResult: Function, templateSelection: Function, closeOnSelect: boolean}}
                      */
-                    getSelect2Config: function (key) {
+                    getSelect2Config: function (key, preload) {
                         return {
                             language: 'de',
                             ajax: {
@@ -184,6 +183,42 @@
                         };
                     },
                     /**
+                     * Init Extended Data Adapter
+                     */
+                    initSelect2DataAdapter: function () {
+                        core.debug("filter.initSelect2DataAdapter()");
+
+                        $.fn.select2.amd.define('select2/data/extended-ajax', ['./ajax', '../utils', 'jquery'], function (AjaxAdapter, Utils, $) {
+
+                            function ExtendedAjaxAdapter($element, options) {
+                                //we need explicitly process minimumInputLength value
+                                //to decide should we use AjaxAdapter or return defaultResults,
+                                //so it is impossible to use MinimumLength decorator here
+                                this.minimumInputLength = options.get('minimumInputLength');
+                                this.defaultResults = options.get('defaultResults');
+
+                                ExtendedAjaxAdapter.__super__.constructor.call(this, $element, options);
+                            }
+
+                            Utils.Extend(ExtendedAjaxAdapter, AjaxAdapter);
+
+                            //override original query function to support default results
+                            var originQuery = AjaxAdapter.prototype.query;
+
+                            ExtendedAjaxAdapter.prototype.query = function (params, callback) {
+                                var defaultResults = (typeof this.defaultResults == 'function') ? this.defaultResults.call(this) : this.defaultResults;
+                                if (undefined !== defaultResults && (!params.term || params.term.length < this.minimumInputLength)) {
+                                    var processedResults = this.processResults(defaultResults, params);
+                                    callback(processedResults);
+                                } else {
+                                    originQuery.call(this, params, callback);
+                                }
+                            };
+
+                            return ExtendedAjaxAdapter;
+                        });
+                    },
+                    /**
                      * Get List
                      * @returns {*}
                      */
@@ -193,7 +228,7 @@
                     /**
                      * Show
                      */
-                    show: function (key, title) {
+                    show: function (key, title, preload) {
                         core.debug('filter.show(' + key + ',' + title + ')');
 
                         var input = $('<select></select>', {
@@ -225,7 +260,20 @@
 
                         $.fn.modal.Constructor.prototype.enforceFocus = function () {
                         };
-                        $('.pm-table-filter-dialog').find('select').select2(filter.getSelect2Config(key));
+
+                        var select = $('.pm-table-filter-dialog').find('select');
+
+                        var selectConfig = filter.getSelect2Config(key);
+                        if (true === settings.filter.preload) {
+                            selectConfig.defaultResults = preload;
+                            selectConfig.dataAdapter = $.fn.select2.amd.require('select2/data/extended-ajax');
+                        }
+
+                        select.select2(selectConfig);
+
+                        window.setTimeout(function () {
+                            select.select2("open");
+                        }, 300);
                     },
                     /**
                      * Apply
@@ -284,10 +332,24 @@
                             var entry = $('<a></a>', {
                                 href: 'javascript:void(0)'
                             }).text(title).on('click', function () {
-                                filter.show(key, title);
+                                if (true === settings.filter.preload) {
+                                    $.get(settings.paths.filter, {key: key, preload: true}, function (result) {
+                                        filter.show(key, title, result);
+                                    }, 'json');
+                                } else {
+                                    filter.show(key, title);
+                                }
                             });
 
-                            filter.getList().append($('<li></li>').append(entry));
+                            var filterList = filter.getList();
+                            if (true === filterList.hasClass('btn-group')) {
+                                entry.addClass('btn btn-default');
+
+                                filterList.append(entry);
+                            } else {
+                                filterList.append($('<li></li>').append(entry));
+                            }
+
                             filterCount++;
                         });
 
@@ -309,6 +371,10 @@
                                 $(settings.filter.selectors.labels).append(label);
                             });
                         });
+
+                        if (true === settings.filter.preload) {
+                            filter.initSelect2DataAdapter();
+                        }
                     }
                 }
             }();
@@ -407,6 +473,10 @@
                     init: function () {
                         core.debug('core.init()');
 
+                        $.ajaxSetup({
+                            cache: true
+                        });
+
                         if (true === settings.modules.action) {
                             $(_element).pmTableAction({
                                 editable: true,
@@ -435,7 +505,6 @@
 
             core.init();
         });
-
 
     };
 }(jQuery));

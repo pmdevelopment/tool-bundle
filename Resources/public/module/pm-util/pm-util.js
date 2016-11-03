@@ -176,8 +176,10 @@ var pmUtil = function () {
                 cache: true
             });
 
+            var path_parcels = '/bundles/pmtool/module/pm-util/parcels';
+
             if (true === this.config.module.select2.enabled) {
-                $.getScript('/bundles/pmtool/module/pm-util/parcels/jquery.pm-select2.js', function () {
+                $.getScript(path_parcels + '/jquery.pm-select2.js', function () {
                     pmUtil.config.module.select2.callback();
                 });
             }

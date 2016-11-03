@@ -126,6 +126,21 @@
     {% endblock %}
 ```
 
+### Filters ###
+
+The filter selection can be a dropdown
+
+```html
+<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Filter {{ "filter"|icon }}</button>
+<ul class="dropdown-menu pm-table-filter"></ul>
+```
+
+Or a button group
+
+```html
+<div class="btn-group"></div>
+```
+
 ## Controller
 
 ```php
