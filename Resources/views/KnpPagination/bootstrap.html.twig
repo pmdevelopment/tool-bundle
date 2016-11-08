@@ -1,0 +1,32 @@
+{% if limit is not defined %}
+    {% set limit=false %}
+{% endif %}
+<div class="row">
+    <div class="col-md-6 hidden-xs">
+        <div class="dataTables_info pagination form-inline">
+            {% if limit %}
+                {% set steps = [50,100,250,500,1000,2000,3000,5000] %}
+                <select class="form-control pm-pagination-limit">
+                    {% for step in steps %}
+                        <option{% if pagination.paginationData.numItemsPerPage == step %} selected="selected"{% endif %}>{{ step }}</option>
+                    {% endfor %}
+                </select> Einträge pro Seite. Zeigt
+            {% endif %}
+
+            {% if pagination.totalItemCount < pagination.itemNumberPerPage %}
+                {% if 1==pagination.totalItemCount %}1 Eintrag{% else %}{{ pagination.totalItemCount }} Einträge{% endif %}.
+            {% else %}
+                {% set multipliedItemCount = (pagination.currentPageNumber*pagination.itemNumberPerPage) %}
+                {% if multipliedItemCount > pagination.totalItemCount %}
+                    {% set multipliedItemCount = pagination.totalItemCount %}
+                {% endif %}
+                {{ ((pagination.currentPageNumber-1)*pagination.itemNumberPerPage)+1 }} bis {{ multipliedItemCount }} von {{ pagination.totalItemCount }} Einträgen.
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="dataTables_paginate paging_full_numbers pull-right">
+            {{ knp_pagination_render(pagination, "", {}, {"class":"pagination-split"}) }}
+        </div>
+    </div>
+</div>
