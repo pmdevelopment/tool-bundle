@@ -3,8 +3,19 @@
 
         var settings = {
             editable: true,
-            path: null
+            path: null,
+            custom: []
         };
+
+        /*
+         * Custom action:
+         * {
+         *    id: 'foobar',
+         *    title: 'Title',
+         *    path: '...',
+         *    color: 'btn-primary'
+         * }
+         */
 
         settings = $.extend({}, settings, options);
 
@@ -17,8 +28,7 @@
 
             /**
              * Form
-             *
-             * @type {{getTitle, load, show}}
+             * @type {{getTitle, getPath, load, show}}
              */
             var form = function () {
                 "use strict";
@@ -33,6 +43,34 @@
                         if ('edit' === action) {
                             return "Bearbeiten";
                         }
+
+                        for (var index = 0; index < settings.custom.length; index++) {
+                            if (action === settings.custom[index].id) {
+                                return settings.custom[index].title;
+                            }
+                        }
+
+                        bootbox.alert('Unbekannte Aktion: ' + action);
+
+                        return "";
+                    },
+                    /**
+                     * Get Path
+                     * @param action
+                     * @returns {*}
+                     */
+                    getPath: function (action) {
+                        if ('edit' === action) {
+                            return settings.path;
+                        }
+
+                        for (var index = 0; index < settings.custom.length; index++) {
+                            if (action === settings.custom[index].id) {
+                                return settings.custom[index].path;
+                            }
+                        }
+
+                        bootbox.alert('Unbekannte Aktion: ' + action);
 
                         return "";
                     },
@@ -49,7 +87,8 @@
                             selectedIds.push($(this).val());
                         });
 
-                        var path = settings.path + "?action=" + action + "&ids=" + selectedIds.join(",");
+                        var path = form.getPath(action) + "?action=" + action + "&ids=" + selectedIds.join(',');
+
 
                         $.get(path, {}, function (result) {
                             form.show(action, path, result);
@@ -97,12 +136,18 @@
             /**
              * Buttons
              *
-             * @type {{getAll, getEdit, addEdit}}
+             * @type {{classes, getAll, getEdit, getCustom, addEdit, addCustom, addCount}}
              */
             var buttons = function () {
                 "use strict";
 
                 return {
+                    classes: {
+                        button: 'btn btn-circle btn-sm',
+                        colors: {
+                            edit: 'yellow-saffron'
+                        }
+                    },
                     /**
                      * Get
                      * @param filter
@@ -125,16 +170,55 @@
                         return this.getAll('a.pm-button-edit');
                     },
                     /**
+                     * Get Customs
+                     * @returns {*}
+                     */
+                    getCustom: function () {
+                        return this.getAll('a.pm-button-custom');
+                    },
+                    /**
                      * Add Edit
                      */
                     addEdit: function () {
                         core.log('buttons.addEdit()');
 
-                        this.getAll().append('<a href="javascript:void(0)" class="btn btn-circle yellow-saffron btn-sm pm-button-edit"><span></span>x Bearbeiten</a>');
+                        this.getAll().append('<a href="javascript:void(0)" class="' + buttons.classes.button + ' ' + buttons.classes.colors.edit + ' pm-button-edit">Bearbeiten</a>');
 
                         this.getEdit().on('click', function () {
                             form.load("edit");
                         });
+                    },
+                    /**
+                     * Add Custom
+                     */
+                    addCustom: function () {
+                        core.log('buttons.addCustom()');
+
+                        if (0 < settings.custom.length && 0 === buttons.getCustom().length) {
+                            $(settings.custom).each(function () {
+                                buttons.getAll().append('&nbsp;<a href="javascript:void(0)" class="' + buttons.classes.button + ' ' + this.color + ' pm-button-custom" data-id="' + this.id + '">' + this.title + '</a>');
+                            });
+
+                            buttons.getCustom().on('click', function () {
+                                form.load($(this).data('id'));
+                            });
+                        }
+                    },
+                    /**
+                     * Add Count
+                     *
+                     * @param count
+                     */
+                    addCount: function (count) {
+                        core.log('buttons.addCount()');
+
+                        var counter = buttons.getAll('a.counter');
+
+                        if (0 === counter.length) {
+                            buttons.getAll().prepend('<a href="javascript:void(0)" class="' + buttons.classes.button + ' disabled counter">' + count + 'x</a>');
+                        } else {
+                            counter.text(count + 'x');
+                        }
                     }
                 };
             }();
@@ -190,20 +274,21 @@
                         var rowSelectedCount = checkboxes.getCountSelect();
                         core.log(" - " + rowSelectedCount + " elements selected");
 
+                        if (0 === rowSelectedCount) {
+                            core.log('  - removed button, no selection');
+                            buttons.getAll('a').remove();
+
+                            return;
+                        }
+
                         if (true === settings.editable) {
-                            if (0 === rowSelectedCount) {
-                                core.log('  - removed button, no selection');
-                                buttons.getEdit().remove();
-
-                                return;
-                            }
-
                             if (0 === buttons.getEdit().length) {
                                 buttons.addEdit();
                             }
-
-                            buttons.getEdit().find('span').text(rowSelectedCount);
                         }
+
+                        buttons.addCustom();
+                        buttons.addCount(rowSelectedCount);
                     },
                     /**
                      * Init
@@ -246,6 +331,9 @@
                     log: function (message) {
                         pmUtil.debug("{pmTableAction} " + message);
                     },
+                    /**
+                     * Init
+                     */
                     init: function () {
                         core.log("core.init()");
 

@@ -2,6 +2,7 @@
     $.fn.pmTable = function (options) {
 
         var settings = {
+            version: 0,
             modules: {
                 action: false,
                 sortable: false,
@@ -11,8 +12,11 @@
             },
             paths: {
                 self: "",
-                action: "",
                 filter: ""
+            },
+            action: {
+                editable: false,
+                path: null,
             },
             sorting: {
                 index: "",
@@ -478,10 +482,16 @@
                         });
 
                         if (true === settings.modules.action) {
-                            $(_element).pmTableAction({
-                                editable: true,
-                                path: settings.paths.action
-                            });
+                            if (settings.version < 161109) {
+                                $(_element).pmTableAction({
+                                    editable: true,
+                                    path: settings.paths.action
+                                });
+                            } else {
+                                $(_element).pmTableAction(settings.action);
+                            }
+
+
                         }
 
                         if (true === settings.modules.filter) {
