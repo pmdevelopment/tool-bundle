@@ -79,7 +79,7 @@ class DnsUtility
     {
         return [
             'label'             => $label,
-            'choices'           => array_flip(self::getRecordTypes()),
+            'choices'           => array_combine(self::getRecordTypes(), self::getRecordTypes()),
             'choices_as_values' => true,
             'required'          => true,
             'constraints'       => [
