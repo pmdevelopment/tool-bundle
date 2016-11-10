@@ -258,13 +258,7 @@ Or a button group
             }
         }
 
-        foreach ($table->getFilters() as $filterKey => $filterItems) {
-            if (false === is_array($filterItems) || 0 === count($filterItems)) {
-                continue;
-            }
-
-            $dataQb->andWhere($dataQb->expr()->in(sprintf('domain.%s', $filterKey), CollectionUtility::getIds($filterItems)));
-        }
+        $this->addFilters($dataQb, $table);
 
         /*
          * ORder and Limit

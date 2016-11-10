@@ -5,6 +5,7 @@ namespace PM\Bundle\ToolBundle\Framework\Traits\Controller;
 use Doctrine\ORM\QueryBuilder;
 use PM\Bundle\ToolBundle\Framework\Model\JavaScriptTable\SortingModel;
 use PM\Bundle\ToolBundle\Framework\Model\JavaScriptTable\TableModel;
+use PM\Bundle\ToolBundle\Framework\Utilities\CollectionUtility;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -15,6 +16,31 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 trait JavaScriptTableTrait
 {
+    /**
+     * Add Filters
+     *
+     * @param QueryBuilder $queryBuilder
+     * @param TableModel   $table
+     *
+     * @return QueryBuilder
+     */
+    public function addFilters(QueryBuilder $queryBuilder, TableModel $table)
+    {
+        $rootAlias = $this->getRootAlias($queryBuilder);
+
+        if (true === is_array($table->getFilters())) {
+            foreach ($table->getFilters() as $filterKey => $filterItems) {
+                if (false === is_array($filterItems) || 0 === count($filterItems)) {
+                    continue;
+                }
+
+                $queryBuilder->andWhere($queryBuilder->expr()->in(sprintf('%s.%s', $rootAlias, $filterKey), CollectionUtility::getIds($filterItems)));
+            }
+        }
+
+        return $queryBuilder;
+    }
+
     /**
      * Add Order By
      *

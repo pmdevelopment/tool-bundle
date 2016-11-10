@@ -22,6 +22,11 @@ class TableModel
     const DEFAULT_LIMIT = 50;
 
     /**
+     * @var int
+     */
+    private $version;
+
+    /**
      * @var SortingModel
      */
     private $sorting;
@@ -50,11 +55,14 @@ class TableModel
      *
      * @param SortingModel $sorting
      * @param null|int     $limit
+     * @param int          $version
      */
-    public function __construct(SortingModel $sorting, $limit = null)
+    public function __construct(SortingModel $sorting, $limit = null, $version = 161110)
     {
         $this->sorting = $sorting;
         $this->limit = $limit;
+
+        $this->version = $version;
     }
 
     /**
@@ -133,6 +141,15 @@ class TableModel
     {
         return $this->filters;
     }
+
+    /**
+     * @return int
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
 
     /**
      * Add Filter
