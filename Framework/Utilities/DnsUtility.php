@@ -8,6 +8,11 @@
 
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 /**
  * Class DnsUtility
  *
@@ -60,6 +65,26 @@ class DnsUtility
         return [
             self::RECORD_TYPE_SRV,
             self::RECORD_TYPE_MX,
+        ];
+    }
+
+    /**
+     * Get Record Type Form Choice Options
+     *
+     * @param string $label
+     *
+     * @return array
+     */
+    public static function getRecordTypeFormChoiceOptions($label = 'Typ:')
+    {
+        return [
+            'label'             => $label,
+            'choices'           => array_flip(self::getRecordTypes()),
+            'choices_as_values' => true,
+            'required'          => true,
+            'constraints'       => [
+                new NotBlank(),
+            ],
         ];
     }
 
