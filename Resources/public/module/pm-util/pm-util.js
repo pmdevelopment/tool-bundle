@@ -164,7 +164,7 @@ var pmUtil = function () {
                 });
 
                 return false;
-            }).removeClass('hidden');
+            }).removeClass('disabled');
         },
         /**
          * Init

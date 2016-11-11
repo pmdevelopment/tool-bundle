@@ -1,11 +1,19 @@
 /**
  * Bootbox
+ *
  * @type {{dialog, form, formCreate, init}}
  */
 var pmBootbox = function () {
     "use strict";
 
     return {
+        /**
+         * Dialog
+         *
+         * @param element
+         * @param size
+         * @param callback
+         */
         dialog: function (element, size, callback) {
             pmUtilLoading.start();
             if (!size) {
@@ -139,7 +147,7 @@ var pmBootbox = function () {
                 }
 
                 return false;
-            });
+            }).removeClass('disabled');
         }
     };
 }();
