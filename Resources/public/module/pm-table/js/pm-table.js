@@ -16,6 +16,7 @@
             },
             action: {
                 editable: false,
+                deletable: false,
                 path: null,
             },
             sorting: {

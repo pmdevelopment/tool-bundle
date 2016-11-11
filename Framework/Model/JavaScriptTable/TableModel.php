@@ -21,6 +21,9 @@ class TableModel
 
     const DEFAULT_LIMIT = 50;
 
+    const ACTION_EDIT = 'edit';
+    const ACTION_DELETE = 'delete';
+
     /**
      * @var int
      */

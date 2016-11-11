@@ -3,6 +3,7 @@
 
         var settings = {
             editable: true,
+            deletable: false,
             path: null,
             custom: []
         };
@@ -44,6 +45,10 @@
                             return "Bearbeiten";
                         }
 
+                        if ('delete' === action) {
+                            return "Löschen";
+                        }
+
                         for (var index = 0; index < settings.custom.length; index++) {
                             if (action === settings.custom[index].id) {
                                 return settings.custom[index].title;
@@ -60,7 +65,7 @@
                      * @returns {*}
                      */
                     getPath: function (action) {
-                        if ('edit' === action) {
+                        if ('edit' === action || 'delete' === action) {
                             return settings.path;
                         }
 
@@ -89,11 +94,20 @@
 
                         var path = form.getPath(action) + "?action=" + action + "&ids=" + selectedIds.join(',');
 
-
                         $.get(path, {}, function (result) {
-                            form.show(action, path, result);
+                            if ("delete" === action) {
+                                if ("" === result) {
+                                    window.location.reload(true);
+                                } else {
+                                    pmCore.loadingEnd();
+                                    bootbox.alert("Es ist ein Problem aufgetreten.");
+                                }
 
-                            pmCore.loadingEnd();
+                            } else {
+                                form.show(action, path, result);
+
+                                pmCore.loadingEnd();
+                            }
                         }, 'html');
                     },
                     /**
@@ -135,8 +149,7 @@
 
             /**
              * Buttons
-             *
-             * @type {{classes, getAll, getEdit, getCustom, addEdit, addCustom, addCount}}
+             * @type {{classes, getAll, getEdit, getDelete, getCustom, addEdit, addDelete, addCustom, addCount}}
              */
             var buttons = function () {
                 "use strict";
@@ -145,7 +158,8 @@
                     classes: {
                         button: 'btn btn-circle btn-sm',
                         colors: {
-                            edit: 'yellow-saffron'
+                            edit: 'yellow-saffron',
+                            delete: 'red'
                         }
                     },
                     /**
@@ -170,6 +184,13 @@
                         return this.getAll('a.pm-button-edit');
                     },
                     /**
+                     * Get Edit
+                     * @returns {*}
+                     */
+                    getDelete: function () {
+                        return this.getAll('a.pm-button-delete');
+                    },
+                    /**
                      * Get Customs
                      * @returns {*}
                      */
@@ -186,6 +207,23 @@
 
                         this.getEdit().on('click', function () {
                             form.load("edit");
+                        });
+                    },
+                    /**
+                     * Add Delete
+                     */
+                    addDelete: function () {
+                        core.log('buttons.addDelete()');
+
+                        this.getAll().append('<a href="javascript:void(0)" class="' + buttons.classes.button + ' ' + buttons.classes.colors.delete + ' pm-button-delete">Löschen</a>');
+
+                        this.getDelete().on('click', function () {
+                            bootbox.confirm('Sollen die Einträge wirklich gelöscht werden?', function (result) {
+                                if (true === result) {
+                                    form.load("delete");
+                                }
+                            });
+
                         });
                     },
                     /**
@@ -284,6 +322,12 @@
                         if (true === settings.editable) {
                             if (0 === buttons.getEdit().length) {
                                 buttons.addEdit();
+                            }
+                        }
+
+                        if (true === settings.deletable) {
+                            if (0 === buttons.getDelete().length) {
+                                buttons.addDelete();
                             }
                         }
 
