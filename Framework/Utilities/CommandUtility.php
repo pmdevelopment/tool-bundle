@@ -32,6 +32,15 @@ class CommandUtility
             return 1;
         }
 
+        /*
+         * Remove Crontab sh calls
+         */
+        foreach ($output as $lineIndex => $line) {
+            if (false !== strpos($line, '/bin/sh -c')) {
+                unset($output[$lineIndex]);
+            }
+        }
+
         return count($output);
     }
 
