@@ -1,7 +1,7 @@
 /**
  * Loading
  *
- * @type {{config, count, getSpinner, start, stop, startInline}}
+ * @type {{config, count, getSpinner, start, stop, startInline, startDialog}}
  */
 var pmUtilLoading = function () {
     "use strict";
@@ -112,8 +112,7 @@ var pmUtilLoading = function () {
 
 /**
  * pmUtil
- *
- * @type {{config, debug, initBootbox, init}}
+ * @type {{config, debug, initBootbox, initAjax, init}}
  */
 var pmUtil = function () {
     "use strict";
@@ -129,6 +128,14 @@ var pmUtil = function () {
                     },
                     version: '4.0.3',
                     theme: '0.1.0-beta.9'
+                },
+                bootbox: {
+                    enabled: false,
+                    callback: function () {
+                        $('.pm-bootbox').pmBootbox({
+                            version: 161114
+                        });
+                    }
                 }
             }
         },
@@ -146,6 +153,7 @@ var pmUtil = function () {
          * Init Bootbox
          */
         initBootbox: function () {
+            this.debug('pmUtil.initBootbox()');
             var _self = this;
 
             $('a.delete').on('click', function () {
@@ -167,20 +175,46 @@ var pmUtil = function () {
             }).removeClass('disabled');
         },
         /**
-         * Init
+         * Init Ajax
          */
-        init: function () {
-            this.initBootbox();
-
+        initAjax: function () {
             $.ajaxSetup({
                 cache: true
             });
+
+            $(document).ajaxComplete(function (event, xhr) {
+                if (undefined !== xhr.status && 500 === xhr.status) {
+                    var message = 'Es ist ein schwerwiegender Fehler aufgetreten. Bitte lade die Seite erneut.';
+                    if (undefined !== bootbox) {
+                        bootbox.hideAll();
+                        bootbox.alert(message);
+                    } else {
+                        alert(message);
+                    }
+
+                }
+            });
+        },
+        /**
+         * Init
+         */
+        init: function () {
+            this.debug('pmUtil.init()');
+
+            this.initBootbox();
+            this.initAjax();
 
             var path_parcels = '/bundles/pmtool/module/pm-util/parcels';
 
             if (true === this.config.module.select2.enabled) {
                 $.getScript(path_parcels + '/jquery.pm-select2.js', function () {
                     pmUtil.config.module.select2.callback();
+                });
+            }
+
+            if (true === this.config.module.bootbox.enabled) {
+                $.getScript(path_parcels + '/jquery.pm-bootbox.js', function () {
+                    pmUtil.config.module.bootbox.callback();
                 });
             }
         }
