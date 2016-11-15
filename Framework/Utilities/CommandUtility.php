@@ -8,6 +8,8 @@
 
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
+use Symfony\Component\Console\Style\SymfonyStyle;
+
 /**
  * Class CommandUtility
  *
@@ -42,6 +44,22 @@ class CommandUtility
         }
 
         return count($output);
+    }
+
+    /**
+     * Write Finished Message
+     *
+     * @param SymfonyStyle $helper
+     * @param string       $commandName
+     */
+    public static function writeFinishedMessage(SymfonyStyle $helper, $commandName)
+    {
+        $helper->note(
+            [
+                sprintf('Executed %s', $commandName),
+                sprintf('Done within %s seconds', round((microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"]), 4)),
+            ]
+        );
     }
 
 }
