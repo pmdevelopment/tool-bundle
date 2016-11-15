@@ -140,6 +140,8 @@ var pmBootbox = function () {
             var _self = this;
 
             $('a.bootbox-dialog').on('click', function () {
+                pmUtil.debug(' -- pmBootbox is deprecated! --');
+
                 if ($(this).hasClass("bootbox-form")) {
                     _self.form(this, $(this).data("size"));
                 } else {
