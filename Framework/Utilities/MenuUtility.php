@@ -35,8 +35,10 @@ class MenuUtility
         }
 
         foreach ($routes as $routeIndex => $routeParameters) {
-            $parent->addChild($routeIndex, [
-                'route'           => sprintf($basePath, $routeIndex),
+            $route = sprintf($basePath, $routeIndex);
+
+            $parent->addChild($route, [
+                'route'           => $route,
                 'routeParameters' => $routeParameters,
             ]);
         }
