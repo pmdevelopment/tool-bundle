@@ -1,6 +1,16 @@
 {% if limit is not defined %}
     {% set limit=false %}
 {% endif %}
+
+{% if app.request is defined and app.request.get('_route_params') %}
+    {% set renderQuery=app.request.get('_route_params') %}
+{% else %}
+    {% set renderQuery={} %}
+{% endif %}
+
+{% if renderClass is not defined %}
+    {% set renderClass="pagination-split" %}
+{% endif %}
 <div class="row">
     <div class="col-md-6 hidden-xs">
         <div class="dataTables_info pagination form-inline">
@@ -26,7 +36,7 @@
     </div>
     <div class="col-md-6">
         <div class="dataTables_paginate paging_full_numbers pull-right">
-            {{ knp_pagination_render(pagination, "", {}, {"class":"pagination-split"}) }}
+            {{ knp_pagination_render(pagination, "", renderQuery, {"class":renderClass}) }}
         </div>
     </div>
 </div>
