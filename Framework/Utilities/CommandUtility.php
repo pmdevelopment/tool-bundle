@@ -54,6 +54,8 @@ class CommandUtility
      */
     public static function writeFinishedMessage(SymfonyStyle $helper, $commandName)
     {
+        $helper->newLine(2);
+
         $helper->note(
             [
                 sprintf('Executed %s', $commandName),
