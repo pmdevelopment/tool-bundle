@@ -28,7 +28,7 @@ class CommandUtility
      */
     public static function getCommandRunningCount($name)
     {
-        exec(sprintf("ps auxwww|grep %s|grep -v grep", $name), $output);
+        exec(sprintf("ps auxwww|grep '%s'|grep -v grep", $name), $output);
 
         if (false === is_array($output)) {
             return 1;
