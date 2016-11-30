@@ -55,7 +55,7 @@ class FOSUserExtension extends \Twig_Extension
                 'enabled' => true,
             ],
             [
-                'username' => 'asc',
+                'id' => 'asc',
             ]
         );
 
