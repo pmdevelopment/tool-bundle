@@ -1,46 +1,9 @@
 imports:
     - { resource: "services/google.yml" }
     - { resource: "services/listener.yml" }
+    - { resource: "services/twig.yml" }
 
 services:
-  pm.twig.cssversion:
-    class: PM\Bundle\ToolBundle\Twig\CssVersionExtension
-    arguments: ["%kernel.root_dir%"]
-    tags:
-      - { name: twig.extension }
-
-  pm.twig.hash:
-    class: PM\Bundle\ToolBundle\Twig\HashExtension
-    tags:
-      - { name: twig.extension }
-  pm.twig.icon:
-    class: PM\Bundle\ToolBundle\Twig\IconExtension
-    tags:
-      - { name: twig.extension }
-  pm.twig.flag:
-    class: PM\Bundle\ToolBundle\Twig\FlagExtension
-    tags:
-      - { name: twig.extension }
-  pm.twig.country:
-    class: PM\Bundle\ToolBundle\Twig\CountryExtension
-    tags:
-      - { name: twig.extension }
-
-  pm.twig.seo:
-      class: PM\Bundle\ToolBundle\Twig\SeoExtension
-      tags:
-        - { name: twig.extension }
-
-  pm.twig.time:
-      class: PM\Bundle\ToolBundle\Twig\TimeExtension
-      tags:
-        - { name: twig.extension }
-
-  pm.twig.json:
-    class: PM\Bundle\ToolBundle\Twig\JsonExtension
-    tags:
-        - { name: twig.extension }
-      
   pm.knpmenu.voter:
     class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter
     arguments: ["@request_stack"]
