@@ -43,4 +43,25 @@ class FileUtility
         return $files;
     }
 
+
+    /**
+     * Get User Based Cache dir (e.g. /tmp/www-data/your-folder)
+     *
+     * @param string $folder
+     *
+     * @return string
+     */
+    public static function getUserBasedCachedDir($folder = null)
+    {
+        $path = [
+            sys_get_temp_dir(),
+            SystemUtility::getCurrentUser(),
+        ];
+
+        if (null !== $folder) {
+            $path[] = $folder;
+        }
+
+        return implode(DIRECTORY_SEPARATOR, $path);
+    }
 }

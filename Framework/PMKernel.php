@@ -9,6 +9,7 @@
 namespace PM\Bundle\ToolBundle\Framework;
 
 
+use PM\Bundle\ToolBundle\Framework\Utilities\FileUtility;
 use Symfony\Component\HttpFoundation\Request;
 use LogicException;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -78,52 +79,23 @@ class PMKernel extends Kernel
      */
     private function getBaseTmpDir()
     {
-        $tempDir = array(
-            sys_get_temp_dir(),
-            $this->getCurrentUser(),
-            "sf2",
-        );
-
         $folders = explode(DIRECTORY_SEPARATOR, $this->getRootDir());
         $foldersCount = count($folders);
 
         /**
          * Base Path
          */
-        if (true === isset($folders[$foldersCount - 3])) {
-            $tempDir[] = $folders[$foldersCount - 3];
-        }
-
+        $projectDir = "";
         if (true === isset($folders[$foldersCount - 2])) {
-            $tempDir[] = $folders[$foldersCount - 2];
+            $projectDir = $folders[$foldersCount - 2];
         }
-        /**
-         * Environment
-         */
-        $tempDir[] = $this->getEnvironment();
 
-        $tempDirPath = implode(DIRECTORY_SEPARATOR, $tempDir);
+        $tempDirPath = FileUtility::getUserBasedCachedDir(sprintf('%s-%s', $projectDir, $this->getEnvironment()));
 
         if (false === file_exists($tempDirPath)) {
             mkdir($tempDirPath, 0777, true);
         }
 
         return $tempDirPath;
-    }
-
-    /**
-     * Get Current User
-     *
-     * @return string
-     */
-    private function getCurrentUser()
-    {
-        $processUser = posix_getpwuid(posix_geteuid());
-
-        if (true === isset($processUser['name'])) {
-            return $processUser['name'];
-        }
-
-        return get_current_user();
     }
 }
