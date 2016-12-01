@@ -33,12 +33,14 @@ Add to kernel:
 * [TWBS/Bootstrap](https://github.com/twbs/bootstrap) by Twitter, Inc
 * [Eternicode/Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker) by eternicode 
 * [MakeUsABrew/Bootbox](https://github.com/makeusabrew/bootbox) by Nick Payne
+* [nostalgiaz/bootstrap-switch](https://github.com/nostalgiaz/bootstrap-switch) by Mattia Larentis
 * [Summernote](https://github.com/summernote/summernote/) by summernote
 * [Font-Awesome](https://github.com/FortAwesome/Font-Awesome) by Dave Gandy
 * [Material-Design-Iconic-Font](http://zavoloklom.github.io/material-design-iconic-font/) by zavoloklom
 * [Material-Design-Lite](https://github.com/google/material-design-lite) by Google
 * [jquery-plugin-query-object](https://github.com/alrusdi/jquery-plugin-query-object) by alrusdi
 * [select2](https://github.com/select2/select2) by select2
+
 
 
 

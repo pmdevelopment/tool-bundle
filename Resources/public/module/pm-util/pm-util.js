@@ -136,6 +136,15 @@ var pmUtil = function () {
                             version: 161114
                         });
                     }
+                },
+                bootstrapSwitch: {
+                    enabled: false,
+                    version: '3.3.2',
+                    callback: function () {
+                        $('.pm-bootstrap-switch').pmBootstrapSwitch({
+                            version: 161201
+                        });
+                    }
                 }
             }
         },
@@ -215,6 +224,12 @@ var pmUtil = function () {
             if (true === this.config.module.bootbox.enabled) {
                 $.getScript(path_parcels + '/jquery.pm-bootbox.js', function () {
                     pmUtil.config.module.bootbox.callback();
+                });
+            }
+
+            if (true === this.config.module.bootstrapSwitch.enabled) {
+                $.getScript(path_parcels + '/jquery.pm-bootstrap-switch.js', function () {
+                    pmUtil.config.module.bootstrapSwitch.callback();
                 });
             }
         }
