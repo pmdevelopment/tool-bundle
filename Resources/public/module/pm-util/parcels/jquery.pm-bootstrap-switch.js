@@ -49,8 +49,15 @@
 
                             if ($(_element).data('path')) {
                                 $(_element).on('switchChange.bootstrapSwitch', function (event, state) {
-                                    console.log(event);
-                                    console.log(state);
+                                    pmUtilLoading.start();
+
+                                    $.get($(_element).data('path'), {"value": $(_element).val(), "checked": state}, function (result) {
+                                        pmUtilLoading.stop();
+
+                                        if ("" !== result) {
+                                            bootbox.alert('Es ist ein Fehler aufgetreten. Bitte lade die Seite neu.');
+                                        }
+                                    });
                                 });
                             }
                         }
