@@ -66,6 +66,8 @@ class FileUtility
             $path[] = sprintf("%s_%s", $folder, self::getCurrentSetupHash());
         }
 
+
+
         $path[] = SystemUtility::getCurrentUser();
 
         return implode(DIRECTORY_SEPARATOR, $path);

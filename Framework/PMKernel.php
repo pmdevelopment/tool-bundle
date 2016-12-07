@@ -76,7 +76,7 @@ class PMKernel extends Kernel
      *
      * @return string
      */
-    private function getBaseTmpDir()
+    public function getBaseTmpDir()
     {
         $folders = explode(DIRECTORY_SEPARATOR, $this->getRootDir());
         $foldersCount = count($folders);
