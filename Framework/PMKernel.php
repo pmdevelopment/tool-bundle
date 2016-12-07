@@ -51,10 +51,10 @@ class PMKernel extends Kernel
             return sprintf("%s/../var/cache/%s", $this->getRootDir(), $this->getEnvironment());
         }
 
-        return implode(DIRECTORY_SEPARATOR, array(
+        return implode(DIRECTORY_SEPARATOR, [
             $this->getBaseTmpDir(),
-            "cache"
-        ));
+            "cache",
+        ]);
     }
 
     /**
@@ -66,10 +66,9 @@ class PMKernel extends Kernel
             return sprintf("%s/../var/logs", $this->getRootDir());
         }
 
-        return implode(DIRECTORY_SEPARATOR, array(
+        return implode(DIRECTORY_SEPARATOR, [
             $this->getBaseTmpDir(),
-            "logs"
-        ));
+        ]);
     }
 
     /**

@@ -45,7 +45,7 @@ class FileUtility
 
 
     /**
-     * Get User Based Cache dir (e.g. /tmp/www-data/your-folder)
+     * Get User Based Cache dir (e.g. /tmp/symfony2/yourfolder_uniquehash/www-data)
      *
      * @param string $folder
      *
@@ -55,13 +55,31 @@ class FileUtility
     {
         $path = [
             sys_get_temp_dir(),
-            SystemUtility::getCurrentUser(),
+            "symfony2",
         ];
 
-        if (null !== $folder) {
-            $path[] = $folder;
+        if (false === file_exists(implode(DIRECTORY_SEPARATOR, $path))) {
+            mkdir($path, 0777, true);
         }
 
+        if (null !== $folder) {
+            $path[] = sprintf("%s_%s", $folder, self::getCurrentSetupHash());
+        }
+
+        $path[] = SystemUtility::getCurrentUser();
+
         return implode(DIRECTORY_SEPARATOR, $path);
+    }
+
+    /**
+     * Get unique Setup hash based on __DIR__
+     *
+     * @param int $precision
+     *
+     * @return string
+     */
+    public static function getCurrentSetupHash($precision = 8)
+    {
+        return substr(sha1(__DIR__), 0, $precision);
     }
 }
