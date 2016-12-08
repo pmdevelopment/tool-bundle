@@ -92,8 +92,8 @@ class CollectionUtility
     /**
      * Find By Id
      *
-     * @param Collection $collection
-     * @param int        $id
+     * @param Collection|array $collection
+     * @param int              $id
      *
      * @return null|object
      */
