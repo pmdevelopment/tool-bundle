@@ -64,4 +64,23 @@ class CommandUtility
         );
     }
 
+    /**
+     * Write associative array as table
+     *
+     * @param SymfonyStyle $helper
+     * @param array        $array
+     */
+    public static function writeAssociativeArrayTable(SymfonyStyle $helper, $array)
+    {
+        $rows = [];
+        foreach ($array as $index => $value) {
+            $rows[] = [
+                $index,
+                $value,
+            ];
+        }
+
+        $helper->table([], $rows);
+    }
+
 }
