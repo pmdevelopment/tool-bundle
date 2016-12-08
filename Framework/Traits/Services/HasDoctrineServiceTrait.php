@@ -10,6 +10,7 @@ namespace PM\Bundle\ToolBundle\Framework\Traits\Services;
 
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * Class HasDoctrineTrait
@@ -43,4 +44,35 @@ trait HasDoctrineServiceTrait
         return $this;
     }
 
+    /**
+     * Get Doctrine Manager
+     *
+     * @return ObjectManager|object
+     */
+    public function getDoctrineManager()
+    {
+        return $this->getDoctrine()->getManager();
+    }
+
+    /**
+     * Persist and flush
+     *
+     * @param mixed|object|array $entities
+     *
+     * @return $this
+     */
+    public function persistAndFlush($entities)
+    {
+        if (false === is_array($entities)) {
+            $entities = [$entities];
+        }
+
+        foreach ($entities as $entity) {
+            $this->getDoctrineManager()->persist($entity);
+        }
+
+        $this->getDoctrineManager()->flush();
+
+        return $this;
+    }
 }
