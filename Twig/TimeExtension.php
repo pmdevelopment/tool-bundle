@@ -48,6 +48,13 @@ class TimeExtension extends Twig_Extension
                     "getMinutesAsHours",
                 ]
             ),
+            new Twig_SimpleFilter(
+                "time_month_number_to_name",
+                [
+                    $this,
+                    "getMonthName",
+                ]
+            ),
         );
     }
 
@@ -94,6 +101,20 @@ class TimeExtension extends Twig_Extension
         $minutes = $minutes - ($hours * 60);
 
         return sprintf('%s:%s', $hours, str_pad($minutes, 2, "0", STR_PAD_LEFT));
+    }
+
+    /**
+     * Get Month Name
+     *
+     * @param int $monthIndex
+     *
+     * @return string
+     */
+    public function getMonthName($monthIndex)
+    {
+        $date = new DateTime(sprintf('%d-%s-01', date('Y'), $monthIndex));
+
+        return $date->format('F');
     }
 
     /**
