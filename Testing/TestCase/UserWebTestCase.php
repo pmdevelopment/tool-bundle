@@ -23,41 +23,34 @@ class UserWebTestCase extends AnonymousWebTestCase
     /**
      * Create Logged In Client
      *
+     * Requires FOSUserBundle!
      *
+     * @param string      $userName
      * @param Client|null $client
-     * @param object      $user
-     * @param array       $roles
-     * @param array       $firewalls
      *
      * @return Client
      */
-    public static function logIn($user, $roles, $firewalls = [], $client = null)
+    public static function logIn($userName, $client = null)
     {
         if (null === $client) {
             $client = self::createClientFollowingRedirects();
         }
 
         $session = $client->getContainer()->get('session');
+        /** @var $userManager \FOS\UserBundle\Doctrine\UserManager */
+        $userManager = $client->getContainer()->get('fos_user.user_manager');
+        /** @var $loginManager \FOS\UserBundle\Security\LoginManager */
+        $loginManager = $client->getContainer()->get('fos_user.security.login_manager');
 
-        if (0 === count($firewalls)) {
-            $firewalls = SecurityUtility::getFirewallWithAccessListenerNames($client->getContainer());
-        }
+        $firewallName = $client->getContainer()->getParameter('fos_user.firewall_name');
 
-        foreach ($firewalls as $firewallName) {
-            $token = new UsernamePasswordToken(
-                $user,
-                null,
-                $firewallName,
-                $roles
-            );
+        $user = $userManager->findUserByUsername($userName);
+        $loginManager->loginUser($firewallName, $user);
 
-            $session->set(sprintf('_security_%s', $firewallName), serialize($token));
-        };
-
+        $session->set(sprintf('_security_%s', $firewallName), serialize($client->getContainer()->get('security.token_storage')->getToken()));
         $session->save();
 
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $client->getCookieJar()->set($cookie);
+        $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
 
         return $client;
     }
