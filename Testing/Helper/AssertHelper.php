@@ -25,6 +25,13 @@ class AssertHelper
      */
     public static function saveResponseForFailedAssert($client, $prefix = "")
     {
+        if (true === empty($prefix)) {
+            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            if (true === isset($trace[1]['class'])) {
+                $prefix = $trace[1]['class'];
+            }
+        }
+
         $prefix = str_replace("\\", "_", $prefix);
         $prefix = sprintf("%s-", $prefix);
 
