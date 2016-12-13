@@ -47,6 +47,6 @@ class TextHelper
 
         $uri = array_merge($uri, $settings);
 
-        return file_get_contents(implode('/', $uri));
+        return trim(file_get_contents(implode('/', $uri)));
     }
 }
