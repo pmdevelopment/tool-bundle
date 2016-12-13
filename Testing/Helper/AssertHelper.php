@@ -8,6 +8,10 @@
 
 namespace PM\Bundle\ToolBundle\Testing\Helper;
 
+use PM\Bundle\ToolBundle\Constants\HttpStatusCode;
+use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
 /**
  * Class AssertHelper
  *
@@ -16,10 +20,22 @@ namespace PM\Bundle\ToolBundle\Testing\Helper;
 class AssertHelper
 {
     /**
+     * Assert Empty Response
+     *
+     * @param WebTestCase $case
+     * @param Client      $client
+     */
+    public static function assertEmptyResponse(WebTestCase $case, Client $client)
+    {
+        $case->assertEquals(HttpStatusCode::OK, $client->getResponse()->getStatusCode());
+        $case->assertEmpty($client->getResponse()->getContent());
+    }
+
+    /**
      * Save Response For Failed Asserts
      *
-     * @param \Symfony\Bundle\FrameworkBundle\Client $client
-     * @param string                                 $prefix
+     * @param Client $client
+     * @param string $prefix
      *
      * @return string
      */
@@ -32,8 +48,8 @@ class AssertHelper
             }
         }
 
-        $prefix = str_replace("\\", "_", $prefix);
-        $prefix = sprintf("%s-", $prefix);
+        $prefix = str_replace('\\', '_', $prefix);
+        $prefix = sprintf('%s-', $prefix);
 
         $tempFileName = tempnam(sys_get_temp_dir(), $prefix);
 
@@ -50,4 +66,16 @@ class AssertHelper
         return sprintf('Get your full response body here: %s', $tempFileName);
     }
 
+    /**
+     * Get Filter contains
+     *
+     * @param string $element
+     * @param string $value
+     *
+     * @return string
+     */
+    public static function getFilterContains($element, $value)
+    {
+        return sprintf('%s:contains("%s")', $element, $value);
+    }
 }
