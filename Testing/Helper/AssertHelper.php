@@ -36,7 +36,16 @@ class AssertHelper
         $prefix = sprintf("%s-", $prefix);
 
         $tempFileName = tempnam(sys_get_temp_dir(), $prefix);
-        file_put_contents($tempFileName, $client->getResponse()->getContent());
+
+        $debug = [
+            $client->getRequest()->getUri(),
+            $client->getResponse()->getStatusCode(),
+            '',
+            '',
+            $client->getResponse()->getContent(),
+        ];
+
+        file_put_contents($tempFileName, implode(PHP_EOL, $debug));
 
         return sprintf('Get your full response body here: %s', $tempFileName);
     }

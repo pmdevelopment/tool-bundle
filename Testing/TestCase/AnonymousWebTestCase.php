@@ -35,4 +35,15 @@ class AnonymousWebTestCase extends WebTestCase
         return $client;
     }
 
+    /**
+     * Get doctrine
+     *
+     * @param Client $client
+     *
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     */
+    public function getDoctrine(Client $client)
+    {
+        return $client->getContainer()->get('doctrine');
+    }
 }
