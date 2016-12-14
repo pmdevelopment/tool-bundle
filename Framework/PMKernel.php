@@ -66,9 +66,7 @@ class PMKernel extends Kernel
             return sprintf("%s/../var/logs", $this->getRootDir());
         }
 
-        return implode(DIRECTORY_SEPARATOR, [
-            $this->getBaseTmpDir(),
-        ]);
+        return $this->getBaseTmpDir();
     }
 
     /**
@@ -90,10 +88,7 @@ class PMKernel extends Kernel
         }
 
         $tempDirPath = FileUtility::getUserBasedCachedDir(sprintf('%s-%s', $projectDir, $this->getEnvironment()));
-
-        if (false === file_exists($tempDirPath)) {
-            mkdir($tempDirPath, 0777, true);
-        }
+        FileUtility::mkdir($tempDirPath);
 
         return $tempDirPath;
     }

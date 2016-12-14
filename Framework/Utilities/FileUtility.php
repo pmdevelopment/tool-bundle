@@ -58,19 +58,15 @@ class FileUtility
             "symfony2",
         ];
 
-        if (false === file_exists(implode(DIRECTORY_SEPARATOR, $path))) {
-            mkdir($path, 0777, true);
-        }
-
         if (null !== $folder) {
             $path[] = sprintf("%s_%s", $folder, self::getCurrentSetupHash());
         }
 
-
-
         $path[] = SystemUtility::getCurrentUser();
 
-        return implode(DIRECTORY_SEPARATOR, $path);
+        $folder = implode(DIRECTORY_SEPARATOR, $path);
+
+        return $folder;
     }
 
     /**
@@ -83,5 +79,44 @@ class FileUtility
     public static function getCurrentSetupHash($precision = 8)
     {
         return substr(sha1(__DIR__), 0, $precision);
+    }
+
+    /**
+     * MKDIR recursive (sets chmod recursive as well)
+     *
+     * @param string $path
+     * @param int    $chmod
+     *
+     * @return bool
+     */
+    public static function mkdir($path, $chmod = 0777)
+    {
+        if (true === file_exists($path)) {
+            return true;
+        }
+
+        $path = explode(DIRECTORY_SEPARATOR, $path);
+        $folderCount = count($path);
+
+
+        for ($folderIndex = 1; $folderIndex <= $folderCount; $folderIndex++) {
+            $subFolder = implode(DIRECTORY_SEPARATOR, array_slice($path, 0, $folderIndex));
+
+            if (true === empty($subFolder)) {
+                continue;
+            }
+
+            if (true === file_exists($subFolder)) {
+                continue;
+            }
+
+            if (false === mkdir($subFolder, $chmod, true)) {
+                return false;
+            }
+
+            chmod($subFolder, 0777);
+        }
+
+        return true;
     }
 }
