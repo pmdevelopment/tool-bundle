@@ -16,7 +16,10 @@ namespace PM\Bundle\ToolBundle\Testing\Helper;
 class DummyHelper
 {
     const VALUE_STRING = 'Stark Industries';
+    const VALUE_STRING_USERNAME = 'tony@stark.com';
+    const VALUE_STRING_NAME = 'Tony';
+
     const VALUE_INTEGER = 1312;
-    
+
     const VALUE_NOT_EXISTING_ID = 1337;
 }
