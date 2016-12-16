@@ -8,10 +8,8 @@
 
 namespace PM\Bundle\ToolBundle\Testing\TestCase;
 
-use PM\Bundle\ToolBundle\Framework\Utilities\SecurityUtility;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Class UserWebTestCase

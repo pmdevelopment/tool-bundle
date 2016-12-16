@@ -27,8 +27,8 @@ class AssertHelper
      */
     public static function assertEmptyResponse(WebTestCase $case, Client $client)
     {
-        $case->assertEquals(HttpStatusCode::OK, $client->getResponse()->getStatusCode());
-        $case->assertEmpty($client->getResponse()->getContent());
+        $case->assertEquals(HttpStatusCode::OK, $client->getResponse()->getStatusCode(), self::saveResponseForFailedAssert($client));
+        $case->assertEmpty($client->getResponse()->getContent(), self::saveResponseForFailedAssert($client));
     }
 
     /**
