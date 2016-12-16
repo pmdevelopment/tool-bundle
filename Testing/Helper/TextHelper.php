@@ -25,6 +25,8 @@ class TextHelper
     const FORMAT_PLAIN = 'plaintext';
     const FORMAT_HTML = null;
 
+    const VALUE_ID_NOT_EXISTING = 1337;
+
     /**
      * Get lorem Ipsum Text
      *
