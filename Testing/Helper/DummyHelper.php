@@ -22,4 +22,6 @@ class DummyHelper
     const VALUE_INTEGER = 1312;
 
     const VALUE_NOT_EXISTING_ID = 1337;
+
+    const VALUE_IP_V4 = '127.0.0.1';
 }
