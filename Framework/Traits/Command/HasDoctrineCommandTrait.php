@@ -29,13 +29,22 @@ trait HasDoctrineCommandTrait
     /**
      * Persist and Flush
      *
-     * @param mixed $entity
+     * @param object|object[] $entities
      *
      * @return $this
      */
-    public function persistAndFlush($entity)
+    public function persistAndFlush($entities)
     {
-        $this->getDoctrine()->getManager()->persist($entity);
+        if (false === is_array($entities)) {
+            $entities = [
+                $entities,
+            ];
+        }
+
+        foreach ($entities as $entity) {
+            $this->getDoctrine()->getManager()->persist($entity);
+        }
+
         $this->getDoctrine()->getManager()->flush();
 
         return $this;
