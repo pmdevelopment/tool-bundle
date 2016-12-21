@@ -8,6 +8,8 @@
 
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * Class FileUtility
  *
@@ -15,6 +17,17 @@ namespace PM\Bundle\ToolBundle\Framework\Utilities;
  */
 class FileUtility
 {
+    /**
+     * Get Base64 Encoded Data Uri
+     *
+     * @param UploadedFile $file
+     *
+     * @return string
+     */
+    public static function getDataUriFromUploadedFile(UploadedFile $file)
+    {
+        return sprintf('data:%s;base64,%s', $file->getMimeType(), base64_encode(file_get_contents($file->getPathname())));
+    }
 
     /**
      * Get Files
