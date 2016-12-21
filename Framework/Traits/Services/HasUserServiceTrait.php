@@ -11,6 +11,11 @@ namespace PM\Bundle\ToolBundle\Framework\Traits\Services;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
+/**
+ * Class HasUserServiceTrait
+ *
+ * @package PM\Bundle\ToolBundle\Framework\Traits\Services
+ */
 trait HasUserServiceTrait
 {
     /**
