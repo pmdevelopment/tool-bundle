@@ -24,4 +24,10 @@ class DummyHelper
     const VALUE_NOT_EXISTING_ID = 1337;
 
     const VALUE_IP_V4 = '127.0.0.1';
+
+    const VALUE_FQDN = 'stark.com';
+
+    const VALUE_PATH = '/suits/mark-4';
+
+    const VALUE_URI = 'http://pepper.de/welcome.html';
 }
