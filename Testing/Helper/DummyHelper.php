@@ -16,6 +16,8 @@ namespace PM\Bundle\ToolBundle\Testing\Helper;
 class DummyHelper
 {
     const VALUE_STRING = 'Stark Industries';
+    const VALUE_STRING_SLUG = 'stark-industries';
+
     const VALUE_STRING_USERNAME = 'tony@stark.com';
     const VALUE_STRING_NAME = 'Tony';
 
@@ -30,4 +32,5 @@ class DummyHelper
     const VALUE_PATH = '/suits/mark-4';
 
     const VALUE_URI = 'http://pepper.de/welcome.html';
+    const VALUE_URI_2 = 'http://pepper.de/hello.html';
 }
