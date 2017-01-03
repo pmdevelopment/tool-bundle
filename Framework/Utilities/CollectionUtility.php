@@ -9,6 +9,7 @@
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
 use Doctrine\Common\Collections\Collection;
+use LogicException;
 
 /**
  * Class CollectionUtility
@@ -44,19 +45,19 @@ class CollectionUtility
     public static function get($property, $collection)
     {
         if (false === self::isValid($collection)) {
-            return array();
+            return [];
         }
 
-        $getter = sprintf("get%s", ucfirst($property));
+        $getter = sprintf('get%s', ucfirst($property));
         $result = [];
         foreach ($collection as $entity) {
-            $function = array(
+            $function = [
                 $entity,
                 $getter
-            );
+            ];
 
             if (false === is_callable($function)) {
-                throw new \LogicException("Missing getter");
+                throw new LogicException('Missing getter');
             }
 
             $result[] = $entity->$getter();
@@ -74,7 +75,7 @@ class CollectionUtility
      */
     public static function getIds($collection)
     {
-        return self::get("id", $collection);
+        return self::get('id', $collection);
     }
 
     /**
@@ -86,7 +87,41 @@ class CollectionUtility
      */
     public static function getNames($collection)
     {
-        return self::get("name", $collection);
+        return self::get('name', $collection);
+    }
+
+    /**
+     * Find One By
+     *
+     * @param Collection|array $collection
+     * @param string           $fieldName
+     * @param mixed            $searchValue
+     *
+     * @return null|object
+     */
+    public static function findOneBy($collection, $fieldName, $searchValue)
+    {
+        if (false === self::isValid($collection)) {
+            return null;
+        }
+
+        $getter = sprintf('get%s', ucfirst($fieldName));
+        foreach ($collection as $entity) {
+            $function = [
+                $entity,
+                $getter
+            ];
+
+            if (false === is_callable($function)) {
+                throw new LogicException('Missing getter');
+            }
+
+            if ($entity->$getter() === $searchValue) {
+                return $entity;
+            }
+        }
+
+        return null;
     }
 
     /**
