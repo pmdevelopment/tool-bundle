@@ -74,6 +74,14 @@ class CommandUtility
     {
         $rows = [];
         foreach ($array as $index => $value) {
+            if (true === is_bool($value)) {
+                if (true === $value) {
+                    $value = 'TRUE';
+                } else {
+                    $value = 'FALSE';
+                }
+            }
+
             $rows[] = [
                 $index,
                 $value,
