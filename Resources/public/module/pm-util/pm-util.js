@@ -85,12 +85,12 @@ var pmUtilLoading = function () {
 
             var divClass = 'pm-util-loading-inline';
             var text = 'Lädt...';
-            var style = 'width:80px;margin: 60px auto;';
+            var style = 'width:80px;margin: 60px auto;height:80px;';
 
             if ('small' === size) {
                 text = '';
                 divClass += ' small';
-                style = 'width:40px;margin: 5px auto;';
+                style = 'width:40px;margin: 5px auto;height:40px;';
             }
 
             target.html('<div class="' + divClass + '" style="' + style + '"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke="' + this.config.inline.color + '" stroke-width="2" stroke-miterlimit="10" /></svg>' + text + '</div>');
