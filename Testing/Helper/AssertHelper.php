@@ -39,7 +39,7 @@ class AssertHelper
      *
      * @return string
      */
-    public static function saveResponseForFailedAssert($client, $prefix = "")
+    public static function saveResponseForFailedAssert($client, $prefix = '')
     {
         if (true === empty($prefix)) {
             $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
@@ -64,6 +64,33 @@ class AssertHelper
         file_put_contents($tempFileName, implode(PHP_EOL, $debug));
 
         return sprintf('Get your full response body here: %s', $tempFileName);
+    }
+
+    /**
+     * Save String for Failed Assert
+     *
+     * @param string $string
+     * @param string $prefix
+     *
+     * @return string
+     */
+    public static function saveStringForFailedAssert($string, $prefix = '')
+    {
+        if (true === empty($prefix)) {
+            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            if (true === isset($trace[1]['class'])) {
+                $prefix = $trace[1]['class'];
+            }
+        }
+
+        $prefix = str_replace('\\', '_', $prefix);
+        $prefix = sprintf('%s-', $prefix);
+
+        $tempFileName = tempnam(sys_get_temp_dir(), $prefix);
+
+        file_put_contents($tempFileName, $string);
+
+        return sprintf('Get your string content here: %s', $tempFileName);
     }
 
     /**
