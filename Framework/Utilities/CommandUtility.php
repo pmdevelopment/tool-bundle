@@ -72,6 +72,15 @@ class CommandUtility
      */
     public static function writeAssociativeArrayTable(SymfonyStyle $helper, $array)
     {
+        if (false === is_array($array)) {
+            $helper->error(
+                [
+                    'Expecting associative array for table',
+                    sprintf('Given data for table is %s.', gettype($array)),
+                ]
+            );
+        }
+
         $rows = [];
         foreach ($array as $index => $value) {
             if (true === is_bool($value)) {
