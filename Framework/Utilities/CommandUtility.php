@@ -70,7 +70,7 @@ class CommandUtility
      * @param SymfonyStyle $helper
      * @param array        $array
      */
-    public static function writeAssociativeArrayTable(SymfonyStyle $helper, $array)
+    public static function writeAssociativeArrayTable(SymfonyStyle $helper, $array, $flatten = true)
     {
         if (false === is_array($array)) {
             $helper->error(
@@ -83,12 +83,29 @@ class CommandUtility
 
         $rows = [];
         foreach ($array as $index => $value) {
+            if (true === is_string($value)) {
+                $rows[] = [
+                    $index,
+                    $value,
+                ];
+
+                continue;
+            }
+
             if (true === is_bool($value)) {
                 if (true === $value) {
                     $value = 'TRUE';
                 } else {
                     $value = 'FALSE';
                 }
+            } elseif (true === is_array($value)) {
+                if (true === $flatten) {
+                    $value = sprintf('Array (%d)', count($value));
+                } else {
+                    $value = json_encode($value);
+                }
+            } else {
+                $value = print_r($value, true);
             }
 
             $rows[] = [
