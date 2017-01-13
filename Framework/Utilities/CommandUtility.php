@@ -60,6 +60,7 @@ class CommandUtility
             [
                 sprintf('Executed %s', $commandName),
                 sprintf('Done within %s seconds', round((microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"]), 4)),
+                date('Y-m-d H:i:s'),
             ]
         );
     }
