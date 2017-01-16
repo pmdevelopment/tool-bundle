@@ -13,6 +13,28 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PMController extends Controller
 {
+    const SESSION_FLASH_BAG_SUCCESS = 'success';
+    const SESSION_FLASH_BAG_ERROR = 'error';
+
+    /**
+     * Add FlashBag Message
+     *
+     * @param string      $type
+     * @param string      $message
+     * @param string|bool $translationDomain
+     *
+     * @return $this
+     */
+    public function addSessionFlashBagMessage($type, $message, $translationDomain = 'messages')
+    {
+        if (false !== $translationDomain) {
+            $message = $this->get('translator')->trans($message, [], $translationDomain);
+        }
+
+        $this->get('session')->getFlashBag()->add($type, $message);
+
+        return $this;
+    }
 
     /**
      * Denied
@@ -23,9 +45,9 @@ class PMController extends Controller
      *
      * @return Response
      */
-    public function denied($route, $routeParameters = array(), $message = "Zugriff verweigert.")
+    public function denied($route, $routeParameters = [], $message = 'flash_bag.error.default')
     {
-        $this->get('session')->getFlashBag()->add('error', $message);
+        $this->addSessionFlashBagMessage(self::SESSION_FLASH_BAG_ERROR, $message);
 
         return $this->redirect($this->generateUrl($route, $routeParameters));
     }
@@ -39,9 +61,9 @@ class PMController extends Controller
      *
      * @return Response
      */
-    public function saved($route, $routeParameters = array(), $message = "Die Änderungen wurden erfolgreich gespeichert.")
+    public function saved($route, $routeParameters = [], $message = 'flash_bag.success.default')
     {
-        $this->get('session')->getFlashBag()->add('success', $message);
+        $this->addSessionFlashBagMessage(self::SESSION_FLASH_BAG_SUCCESS, $message);
 
         return $this->redirect($this->generateUrl($route, $routeParameters));
     }
@@ -55,10 +77,10 @@ class PMController extends Controller
      *
      * @return RedirectResponse
      */
-    public function savedObject($type, $object, $message = "Die Änderungen wurden erfolgreich gespeichert.")
+    public function savedObject($type, $object, $message = 'flash_bag.success.default')
     {
         $objectRouter = $this->get("bg_object_routing.object_router");
-        $this->get('session')->getFlashBag()->add('success', $message);
+        $this->addSessionFlashBagMessage(self::SESSION_FLASH_BAG_SUCCESS, $message);
 
         return $this->redirect($objectRouter->generate($type, $object));
     }
@@ -72,10 +94,10 @@ class PMController extends Controller
      *
      * @return RedirectResponse
      */
-    public function deniedObject($type, $object, $message = "Zugriff verweigert.")
+    public function deniedObject($type, $object, $message = 'flash_bag.error.default')
     {
         $objectRouter = $this->get("bg_object_routing.object_router");
-        $this->get('session')->getFlashBag()->add('error', $message);
+        $this->addSessionFlashBagMessage(self::SESSION_FLASH_BAG_ERROR, $message);
 
         return $this->redirect($objectRouter->generate($type, $object));
     }

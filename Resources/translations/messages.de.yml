@@ -1,0 +1,5 @@
+flash_bag:
+  error:
+    default: 'Zugriff verweigert'
+  success:
+    default: 'Die Änderungen wurden erfolgreich gespeichert.'
