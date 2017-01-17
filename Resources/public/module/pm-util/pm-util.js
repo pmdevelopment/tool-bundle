@@ -131,9 +131,19 @@ var pmUtil = function () {
                 },
                 bootbox: {
                     enabled: false,
+                    cache: '201701171444',
                     callback: function () {
                         $('.pm-bootbox').pmBootbox({
-                            version: 161114
+                            version: 170117
+                        });
+                    }
+                },
+                bootbox_delete: {
+                    enabled: false,
+                    cache: '201701171458',
+                    callback: function () {
+                        $('.pm-bootbox-delete').pmBootboxDelete({
+                            version: 170117
                         });
                     }
                 },
@@ -166,6 +176,8 @@ var pmUtil = function () {
             var _self = this;
 
             $('a.delete').on('click', function () {
+                pmUtil.debug('pmUtil.initBootbox() a.delete_click()');
+
                 var elem = $(this);
 
                 var title = "Den Eintrag wirklich löschen?";
@@ -210,7 +222,10 @@ var pmUtil = function () {
         init: function () {
             this.debug('pmUtil.init()');
 
-            this.initBootbox();
+            if(false === pmUtil.config.module.bootbox_delete.enabled){
+                this.initBootbox();
+            }
+
             this.initAjax();
 
             var path_parcels = '/bundles/pmtool/module/pm-util/parcels';
@@ -222,8 +237,14 @@ var pmUtil = function () {
             }
 
             if (true === this.config.module.bootbox.enabled) {
-                $.getScript(path_parcels + '/jquery.pm-bootbox.js', function () {
+                $.getScript(path_parcels + '/jquery.pm-bootbox.js?v=' + pmUtil.config.module.bootbox.cache, function () {
                     pmUtil.config.module.bootbox.callback();
+                });
+            }
+
+            if (true === this.config.module.bootbox_delete.enabled) {
+                $.getScript(path_parcels + '/jquery.pm-bootbox-delete.js?v=' + pmUtil.config.module.bootbox_delete.cache, function () {
+                    pmUtil.config.module.bootbox_delete.callback();
                 });
             }
 

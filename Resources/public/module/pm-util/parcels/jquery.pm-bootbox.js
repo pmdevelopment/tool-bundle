@@ -2,7 +2,19 @@
     $.fn.pmBootbox = function (options) {
 
         var settings = {
-            version: 161114
+            version: 170117,
+            callback: {
+                load: function () {
+                    /* Executed on form loaded */
+                    pmUtil.debug('{pmBootbox} settings.callback.load() default');
+                },
+                success: function () {
+                    /* Executed on submit success */
+                    pmUtil.debug('{pmBootbox} settings.callback.success() default');
+
+                    window.location.reload(true);
+                }
+            }
         };
 
         settings = $.extend({}, settings, options);
@@ -38,11 +50,7 @@
                         core.debug('dialog.create()');
                         var buttons, type;
 
-                        var defaultOnSuccess = function () {
-                            window.location.reload(true);
-                        };
-
-                        onSuccess = onSuccess || defaultOnSuccess;
+                        onSuccess = onSuccess || settings.callback.success;
 
                         if (0 <= result.indexOf('<form')) {
                             buttons = dialog.getButtonsForm(onSuccess);
@@ -63,6 +71,8 @@
                             message: result,
                             buttons: buttons
                         });
+
+                        settings.callback.load();
                     },
                     /**
                      * Get Buttons Form
