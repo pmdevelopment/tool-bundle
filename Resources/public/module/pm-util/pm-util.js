@@ -173,6 +173,7 @@ var pmUtil = function () {
          */
         initBootbox: function () {
             this.debug('pmUtil.initBootbox()');
+            this.debug(' -- pmUtil.initBootbox is deprecated! --');
             var _self = this;
 
             $('a.delete').on('click', function () {
@@ -222,7 +223,7 @@ var pmUtil = function () {
         init: function () {
             this.debug('pmUtil.init()');
 
-            if(false === pmUtil.config.module.bootbox_delete.enabled){
+            if (false === pmUtil.config.module.bootbox_delete.enabled) {
                 this.initBootbox();
             }
 
