@@ -47,6 +47,28 @@ class CommandUtility
     }
 
     /**
+     * Get Entity Choice
+     *
+     * @param SymfonyStyle  $helper
+     * @param array|mixed[] $entities
+     * @param string        $question
+     *
+     * @return mixed
+     */
+    public static function getEntityChoice(SymfonyStyle $helper, $entities, $question = 'Please choose')
+    {
+        $choice = [];
+        foreach ($entities as $entity) {
+            $choice[$entity->getId()] = strval($entity);
+        }
+
+        $selection = $helper->choice($question, $choice);
+        $selectionId = array_search($selection, $choice);
+
+        return CollectionUtility::find($entities, $selectionId);
+    }
+
+    /**
      * Write Finished Message
      *
      * @param SymfonyStyle $helper
@@ -70,6 +92,7 @@ class CommandUtility
      *
      * @param SymfonyStyle $helper
      * @param array        $array
+     * @param bool         $flatten
      */
     public static function writeAssociativeArrayTable(SymfonyStyle $helper, $array, $flatten = true)
     {
