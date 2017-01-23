@@ -18,13 +18,29 @@ trait HasDoctrineControllerTrait
     /**
      * Persist and Flush
      *
-     * @param mixed $entity
-     *
      * @return $this
      */
-    public function persistAndFlush($entity)
+    public function persistAndFlush()
     {
-        $this->getDoctrine()->getManager()->persist($entity);
+        if (0 === func_num_args()) {
+            throw new \LogicException('Missing arguments');
+        }
+
+        $persists = [];
+        $entities = func_get_args();
+
+        foreach ($entities as $entity) {
+            if (true === is_array($entity)) {
+                $persists = array_merge($persists, $entity);
+            } else {
+                $persists[] = $entity;
+            }
+        }
+
+        foreach ($persists as $persist) {
+            $this->getDoctrine()->getManager()->persist($persist);
+        }
+
         $this->getDoctrine()->getManager()->flush();
 
         return $this;

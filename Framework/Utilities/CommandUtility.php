@@ -17,6 +17,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CommandUtility
 {
+    const MAX_STRING_LENGTH = 100;
+
     /**
      * Get Command Running count.
      *
@@ -108,6 +110,12 @@ class CommandUtility
         $rows = [];
         foreach ($array as $index => $value) {
             if (true === is_string($value)) {
+                if (self::MAX_STRING_LENGTH < strlen($value)) {
+                    $rows = array_merge($rows, self::getRowsFromLongString($index, $value));
+
+                    continue;
+                }
+
                 $rows[] = [
                     $index,
                     $value,
@@ -141,4 +149,35 @@ class CommandUtility
         $helper->table([], $rows);
     }
 
+    /**
+     * Cuts string to multiple rows
+     *
+     * @param string $index
+     * @param string $value
+     *
+     * @return array
+     */
+    public static function getRowsFromLongString($index, $value)
+    {
+        $rows = [
+            [
+                $index,
+                substr($value, 0, self::MAX_STRING_LENGTH),
+            ]
+        ];
+
+        $valueLength = strlen($value);
+        $cutOff = self::MAX_STRING_LENGTH;
+
+        while ($cutOff < $valueLength) {
+            $rows[] = [
+                '',
+                substr($value, $cutOff, self::MAX_STRING_LENGTH),
+            ];
+
+            $cutOff += self::MAX_STRING_LENGTH;
+        }
+
+        return $rows;
+    }
 }

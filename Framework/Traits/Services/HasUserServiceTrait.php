@@ -71,10 +71,14 @@ trait HasUserServiceTrait
     /**
      * Get User
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function getUser()
     {
+        if (null === $this->getTokenStorage()->getToken()) {
+            return null;
+        }
+
         return $this->getTokenStorage()->getToken()->getUser();
     }
 }
