@@ -9,6 +9,7 @@
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Debug\Exception\ContextErrorException;
 
 /**
  * Class CommandUtility
@@ -96,8 +97,12 @@ class CommandUtility
      * @param array        $array
      * @param bool         $flatten
      */
-    public static function writeAssociativeArrayTable(SymfonyStyle $helper, $array, $flatten = true)
+    public static function writeAssociativeArrayTable(SymfonyStyle $helper, $array, $flatten = null)
     {
+        if (null !== $flatten) {
+            $helper->note('Using flatten is deprecated');
+
+        }
         if (false === is_array($array)) {
             $helper->error(
                 [
@@ -109,75 +114,62 @@ class CommandUtility
 
         $rows = [];
         foreach ($array as $index => $value) {
-            if (true === is_string($value)) {
-                if (self::MAX_STRING_LENGTH < strlen($value)) {
-                    $rows = array_merge($rows, self::getRowsFromLongString($index, $value));
+            $rows[] = [
+                $index,
+                self::getStringForTable($value),
+            ];
+        }
+
+        try {
+            $helper->table([], $rows);
+        } catch (ContextErrorException $error) {
+            print_r($rows);
+
+            $helper->error(
+                [
+                    'Table failed with error:',
+                    $error->getMessage(),
+                ]
+            );
+        }
+    }
+
+    /**
+     * Get String for Table
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    public static function getStringForTable($value)
+    {
+        if (true === is_string($value)) {
+            return wordwrap($value, self::MAX_STRING_LENGTH, PHP_EOL);
+        }
+
+        if (true === is_bool($value)) {
+            if (true === $value) {
+                return 'TRUE';
+            }
+
+            return 'FALSE';
+        }
+
+        if (true === is_array($value)) {
+            $result = [];
+            foreach ($value as $arrayIndex => $arrayValue) {
+                if (true === is_numeric($arrayIndex)) {
+                    $result[] = self::getStringForTable($arrayValue);
 
                     continue;
                 }
 
-                $rows[] = [
-                    $index,
-                    $value,
-                ];
-
-                continue;
+                $result[] = sprintf('%s : %s', $arrayIndex, self::getStringForTable($arrayValue));
             }
 
-            if (true === is_bool($value)) {
-                if (true === $value) {
-                    $value = 'TRUE';
-                } else {
-                    $value = 'FALSE';
-                }
-            } elseif (true === is_array($value)) {
-                if (true === $flatten) {
-                    $value = sprintf('Array (%d)', count($value));
-                } else {
-                    $value = json_encode($value);
-                }
-            } else {
-                $value = print_r($value, true);
-            }
-
-            $rows[] = [
-                $index,
-                $value,
-            ];
+            return implode(PHP_EOL, $result);
         }
 
-        $helper->table([], $rows);
-    }
-
-    /**
-     * Cuts string to multiple rows
-     *
-     * @param string $index
-     * @param string $value
-     *
-     * @return array
-     */
-    public static function getRowsFromLongString($index, $value)
-    {
-        $rows = [
-            [
-                $index,
-                substr($value, 0, self::MAX_STRING_LENGTH),
-            ]
-        ];
-
-        $valueLength = strlen($value);
-        $cutOff = self::MAX_STRING_LENGTH;
-
-        while ($cutOff < $valueLength) {
-            $rows[] = [
-                '',
-                substr($value, $cutOff, self::MAX_STRING_LENGTH),
-            ];
-
-            $cutOff += self::MAX_STRING_LENGTH;
-        }
-
-        return $rows;
+        return json_encode($value);
     }
 }
