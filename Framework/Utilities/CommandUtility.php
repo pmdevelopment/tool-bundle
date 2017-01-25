@@ -155,6 +155,14 @@ class CommandUtility
             return 'FALSE';
         }
 
+        if ($value instanceof \DateTime) {
+            return $value->format('Y-m-d H:i:s');
+        }
+
+        if (null === $value) {
+            return 'NULL';
+        }
+
         if (true === is_array($value)) {
             $result = [];
             foreach ($value as $arrayIndex => $arrayValue) {
