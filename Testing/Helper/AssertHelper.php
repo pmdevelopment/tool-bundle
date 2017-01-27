@@ -73,7 +73,7 @@ class AssertHelper
             $pathPublic = $tempFilePath;
         }
 
-        return sprintf('Get your full response body here: %s', $pathPublic);
+        return sprintf('Get your full response body here:%s%s',PHP_EOL, $pathPublic);
     }
 
     /**
