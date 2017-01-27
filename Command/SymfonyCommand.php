@@ -12,6 +12,7 @@ namespace PM\Bundle\ToolBundle\Command;
 use PM\Bundle\ToolBundle\Framework\PMKernel;
 use PM\Bundle\ToolBundle\Framework\Utilities\CommandUtility;
 use PM\Bundle\ToolBundle\Framework\Utilities\SystemUtility;
+use PM\Bundle\ToolBundle\Testing\Config\HelperConfig;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,6 +30,7 @@ class SymfonyCommand extends ContainerAwareCommand
     const NAME = 'pm:tool:symfony';
 
     const ACTION_CACHE_CLEAR = 'cache_clear';
+    const ACTION_TESTING_CLEAR = 'testing_clear';
 
     /**
      * @inheritDoc
@@ -50,7 +52,8 @@ class SymfonyCommand extends ContainerAwareCommand
         $helper->title('Symfony');
 
         $choices = [
-            self::ACTION_CACHE_CLEAR => 'Clear custom cache',
+            self::ACTION_CACHE_CLEAR   => 'Clear custom cache',
+            self::ACTION_TESTING_CLEAR => 'Clear testing output folder'
         ];
 
         $todo = $input->getOption('action');
@@ -80,7 +83,27 @@ class SymfonyCommand extends ContainerAwareCommand
             return $this->actionCacheClear($helper);
         }
 
+        if (self::ACTION_TESTING_CLEAR === $choice) {
+            $helper->note('Removes all temporary files generated to save testing output.');
+
+            return $this->actionTestingClear($helper);
+        }
+
         throw new \RuntimeException(sprintf('Unknown choice %s', $choice));
+    }
+
+    /**
+     * Clear Testing Cache
+     *
+     * @param SymfonyStyle $helper
+     *
+     * @return null
+     */
+    private function actionTestingClear(SymfonyStyle $helper)
+    {
+        array_map('unlink', glob(sprintf('%s/*.html', HelperConfig::getOutputCacheFolder())));
+
+        return null;
     }
 
     /**
@@ -90,7 +113,7 @@ class SymfonyCommand extends ContainerAwareCommand
      *
      * @return null
      */
-    public function actionCacheClear(SymfonyStyle $helper)
+    private function actionCacheClear(SymfonyStyle $helper)
     {
         $kernel = $this->getContainer()->get('kernel');
 

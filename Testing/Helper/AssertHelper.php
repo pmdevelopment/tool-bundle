@@ -9,8 +9,10 @@
 namespace PM\Bundle\ToolBundle\Testing\Helper;
 
 use PM\Bundle\ToolBundle\Constants\HttpStatusCode;
+use PM\Bundle\ToolBundle\Testing\Config\HelperConfig;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class AssertHelper
@@ -51,19 +53,27 @@ class AssertHelper
         $prefix = str_replace('\\', '_', $prefix);
         $prefix = sprintf('%s-', $prefix);
 
-        $tempFileName = tempnam(sys_get_temp_dir(), $prefix);
+        $tempFileName = sprintf('%s_%s.html', $prefix, date('Y-m-d_H-i-s'));
+        $tempFilePath = sprintf('%s/%s', HelperConfig::getOutputCacheFolder(), $tempFileName);
 
         $debug = [
+            '<!--',
             $client->getRequest()->getUri(),
             $client->getResponse()->getStatusCode(),
-            '',
+            '-->',
             '',
             $client->getResponse()->getContent(),
         ];
 
-        file_put_contents($tempFileName, implode(PHP_EOL, $debug));
+        file_put_contents($tempFilePath, implode(PHP_EOL, $debug));
 
-        return sprintf('Get your full response body here: %s', $tempFileName);
+        if ($client->getContainer() instanceof ContainerInterface && $client->getContainer()->has('assets.packages')) {
+            $pathPublic = $client->getContainer()->get('assets.packages')->getUrl(sprintf('bundles/pmtool/testing/%s', $tempFileName));
+        } else {
+            $pathPublic = $tempFilePath;
+        }
+
+        return sprintf('Get your full response body here: %s', $pathPublic);
     }
 
     /**
