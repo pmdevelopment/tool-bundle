@@ -53,7 +53,7 @@ class AssertHelper
         $prefix = str_replace('\\', '_', $prefix);
         $prefix = sprintf('%s-', $prefix);
 
-        $tempFileName = sprintf('%s_%s.html', $prefix, date('Y-m-d_H-i-s'));
+        $tempFileName = sprintf('%s_%s-%s.html', $prefix, date('Y-m-d_H-i-s'), uniqid());
         $tempFilePath = sprintf('%s/%s', HelperConfig::getOutputCacheFolder(), $tempFileName);
 
         $debug = [
