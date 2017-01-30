@@ -65,6 +65,10 @@ class CommandUtility
             $choice[$entity->getId()] = strval($entity);
         }
 
+        if (0 === count($choice)) {
+            throw new \RuntimeException('No choices found!');
+        }
+
         $selection = $helper->choice($question, $choice);
         $selectionId = array_search($selection, $choice);
 
