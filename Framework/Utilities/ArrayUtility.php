@@ -40,4 +40,31 @@ class ArrayUtility
         return true;
     }
 
+    /**
+     * Get Multidimensional-Array as string
+     *
+     * @param mixed  $input
+     * @param string $glue
+     *
+     * @return string
+     */
+    public static function getFlat($input, $glue = ',')
+    {
+        if (false === is_array($input)) {
+            return $input;
+        }
+
+        $result = [];
+
+        foreach ($input as $inputKey => $inputText) {
+            if (true === is_numeric($inputKey)) {
+                $result[] = self::getFlat($inputText, $glue);
+            }
+
+            $result[] = sprintf('%s: %s', $inputKey, self::getFlat($inputText, $glue));
+        }
+
+        return implode($glue, $result);
+    }
+
 }
