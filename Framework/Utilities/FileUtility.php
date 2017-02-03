@@ -8,6 +8,8 @@
 
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
+use PM\Bundle\ToolBundle\Constants\HttpStatusCode;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -27,6 +29,23 @@ class FileUtility
     public static function getDataUriFromUploadedFile(UploadedFile $file)
     {
         return sprintf('data:%s;base64,%s', $file->getMimeType(), base64_encode(file_get_contents($file->getPathname())));
+    }
+
+    /**
+     * Get Response From DataUri
+     *
+     * @param string $dataUri
+     *
+     * @return Response
+     */
+    public static function getResponseFromDataUri($dataUri)
+    {
+        $mimeType = substr($dataUri, 5, strpos($dataUri, ';') - 5);
+        $content = base64_decode(substr($dataUri, strpos($dataUri, ',') + 1));
+
+        return new Response($content, HttpStatusCode::OK, [
+            'Content-Type' => $mimeType,
+        ]);
     }
 
     /**
