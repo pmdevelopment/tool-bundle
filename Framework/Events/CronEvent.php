@@ -22,6 +22,8 @@ class CronEvent extends Event
     const NAME = 'pm__tool.framework_events.cron_event';
 
     const REPEATED_DAILY_MORNING = 'daily_morning';
+    const REPEATED_EVERY_MINUTE = 'one_minute';
+    const REPEATED_FIVE_MINUTES = 'five_minutes';
 
     /**
      * @var string
@@ -80,7 +82,7 @@ class CronEvent extends Event
      * Is Executing?
      *
      * @param mixed|string $class
-     * @param string $repeated
+     * @param string       $repeated
      *
      * @return bool
      */
@@ -90,7 +92,7 @@ class CronEvent extends Event
             return true;
         }
 
-        if(true === is_object($class)){
+        if (true === is_object($class)) {
             $class = get_class($class);
         }
 

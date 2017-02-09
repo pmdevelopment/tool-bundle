@@ -49,6 +49,8 @@ class CronCommand extends ContainerAwareCommand
 
         $repeatAvailable = [
             CronEvent::REPEATED_DAILY_MORNING => 'Daily (Morning, 06:00)',
+            CronEvent::REPEATED_EVERY_MINUTE  => 'Once Per Minute',
+            CronEvent::REPEATED_FIVE_MINUTES  => 'Every Five Minutes',
         ];
 
         $target = $input->getOption('target');
