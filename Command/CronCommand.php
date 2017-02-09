@@ -10,6 +10,7 @@ namespace PM\Bundle\ToolBundle\Command;
 
 
 use PM\Bundle\ToolBundle\Framework\Events\CronEvent;
+use PM\Bundle\ToolBundle\Framework\Utilities\CommandUtility;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -69,6 +70,8 @@ class CronCommand extends ContainerAwareCommand
 
         $event = new CronEvent($repeat, $helper, $target);
         $this->getContainer()->get('event_dispatcher')->dispatch(CronEvent::NAME, $event);
+
+        CommandUtility::writeFinishedMessage($helper, self::NAME);
     }
 
 }
