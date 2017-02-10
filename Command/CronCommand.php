@@ -67,7 +67,6 @@ class CronCommand extends ContainerAwareCommand
             $helper->section(sprintf('Executing target %s', $target));
         }
 
-
         $event = new CronEvent($repeat, $helper, $target);
         $this->getContainer()->get('event_dispatcher')->dispatch(CronEvent::NAME, $event);
 
