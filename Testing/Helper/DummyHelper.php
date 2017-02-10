@@ -28,6 +28,7 @@ class DummyHelper
     const VALUE_IP_V4 = '127.0.0.1';
 
     const VALUE_FQDN = 'stark.com';
+    const VALUE_FQDN_2 = 'stark-and-pepper.com';
 
     const VALUE_PATH = '/suits/mark-4';
 
