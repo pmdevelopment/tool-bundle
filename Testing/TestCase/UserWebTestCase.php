@@ -35,14 +35,12 @@ class UserWebTestCase extends AnonymousWebTestCase
         }
 
         $session = $client->getContainer()->get('session');
-        /** @var $userManager \FOS\UserBundle\Doctrine\UserManager */
-        $userManager = $client->getContainer()->get('fos_user.user_manager');
         /** @var $loginManager \FOS\UserBundle\Security\LoginManager */
         $loginManager = $client->getContainer()->get('fos_user.security.login_manager');
 
         $firewallName = $client->getContainer()->getParameter('fos_user.firewall_name');
 
-        $user = $userManager->findUserByUsername($userName);
+        $user = self::findUserByUsername($userName, $client);
         $loginManager->loginUser($firewallName, $user);
 
         $session->set(sprintf('_security_%s', $firewallName), serialize($client->getContainer()->get('security.token_storage')->getToken()));
@@ -53,4 +51,15 @@ class UserWebTestCase extends AnonymousWebTestCase
         return $client;
     }
 
+
+    /**
+     * @param        $userName
+     * @param Client $client
+     *
+     * @return mixed
+     */
+    public static function findUserByUsername($userName, Client $client)
+    {
+        return $client->getContainer()->get('fos_user.user_manager')->findUserByUsername($userName);
+    }
 }
