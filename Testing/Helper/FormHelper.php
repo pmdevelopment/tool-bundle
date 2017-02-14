@@ -9,6 +9,7 @@
 namespace PM\Bundle\ToolBundle\Testing\Helper;
 
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class FormHelper
@@ -30,4 +31,18 @@ class FormHelper
         return $crawler->filter('form')->form()->get(sprintf('%s[_token]', $formName))->getValue();
     }
 
+    /**
+     * Create File Image
+     *
+     * @return UploadedFile
+     */
+    public static function createFileImage()
+    {
+        return new UploadedFile(
+            sprintf('%s/../../Resources/testing/file_photo.jpg', __DIR__),
+            'file_photo.jpg',
+            'image/jpep',
+            97298
+        );
+    }
 }
