@@ -69,4 +69,27 @@ class AnonymousWebTestCase extends WebTestCase
 
         return $json;
     }
+
+    /**
+     * Find Entity By
+     *
+     * @param Client $client
+     * @param string $className
+     * @param string $fieldName
+     * @param string $fieldValue
+     *
+     * @return null|object
+     */
+    public function findEntityBy(Client $client, $className, $fieldName, $fieldValue)
+    {
+        $entity = $this->getDoctrine($client)->getRepository($className)->findOneBy(
+            [
+                $fieldName => $fieldValue,
+            ]
+        );
+
+        $this->assertInstanceOf($className, $entity);
+
+        return $entity;
+    }
 }
