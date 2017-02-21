@@ -20,6 +20,7 @@ class DummyHelper
 
     const VALUE_STRING_USERNAME = 'tony@stark.com';
     const VALUE_STRING_NAME = 'Tony';
+    const VALUE_STRING_SURNAME = 'Stark';
 
     const VALUE_INTEGER = 1312;
 
