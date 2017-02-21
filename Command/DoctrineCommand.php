@@ -88,6 +88,7 @@ class DoctrineCommand extends ContainerAwareCommand
     private function actionDatabaseImport(SymfonyStyle $helper)
     {
         $timestamp = date('ymdHi');
+        $databaseName = $this->getDatabaseName();
         /*
          * Select Host
          */
@@ -96,12 +97,12 @@ class DoctrineCommand extends ContainerAwareCommand
         /*
          * Select external database (default: database_name)
          */
-        $remoteDatabase = $helper->ask('Remote database', $this->getContainer()->getParameter('database_name'));
+        $remoteDatabase = $helper->ask('Remote database', $databaseName);
 
         /*
          * Select local database (default: database_name)
          */
-        $localDatabase = $helper->ask('New local database', sprintf('%s_%s', $this->getContainer()->getParameter('database_name'), $timestamp));
+        $localDatabase = $helper->ask('New local database', sprintf('%s_%s', $databaseName, $timestamp));
 
         /*
          * mysqldump
@@ -210,5 +211,24 @@ class DoctrineCommand extends ContainerAwareCommand
         );
 
         return null;
+    }
+
+    /**
+     * Get DatabaseName
+     *
+     * @return mixed|string
+     */
+    private function getDatabaseName()
+    {
+        $name = $this->getContainer()->getParameter('database_name');
+        $nameExploded = explode('_', $name);
+
+        if (1 === count($nameExploded) || false === is_numeric(end($nameExploded))) {
+            return $name;
+        }
+
+        unset($nameExploded[count($nameExploded) - 1]);
+
+        return implode('_', $nameExploded);
     }
 }
