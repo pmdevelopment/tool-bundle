@@ -1,0 +1,27 @@
+{% if assets is defined and assets is iterable %}
+    {# Do not forget to include noscript tag into head! #}
+    <script type=text/javascript>
+        !function () {
+            var i, n, m, me, el = [];
+            var s = {{ assets|json_encode() }};
+
+            for (i = 0; i < s.length; i++) {
+                n = document.createElement("link");
+                me = document.getElementsByTagName("meta");
+                m = me[me.length - 1];
+
+                n.rel = "stylesheet", n.href = s[i];
+                n.media = "only x";
+                m.parentNode.insertBefore(n, m);
+
+                el.push(n);
+            }
+
+            window.setTimeout(function () {
+                for (i = 0; i < el.length; i++) {
+                    el[i].media = "all";
+                }
+            }, 10);
+        }();
+    </script>
+{% endif %}

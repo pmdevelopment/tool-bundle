@@ -1,0 +1,18 @@
+{% if assets is defined and assets is iterable %}
+    <script type=text/javascript>
+        !function () {
+            var e, i, s = [];
+            {% for asset in assets %}s.push('{{ asset }}');
+            {% endfor %}
+
+            for (i = 0; i < s.length; i++) {
+                e = document.createElement("script");
+                e.type = "text/javascript";
+                e.async = false;
+                e.src = s[i];
+
+                document.getElementsByTagName("body")[0].appendChild(e);
+            }
+        }();
+    </script>
+{% endif %}
