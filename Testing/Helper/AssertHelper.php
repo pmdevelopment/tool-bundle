@@ -73,7 +73,7 @@ class AssertHelper
             $pathPublic = $tempFilePath;
         }
 
-        return sprintf('Get your full response body here:%s%s',PHP_EOL, $pathPublic);
+        return sprintf('Get your full response body here:%s%s', PHP_EOL, $pathPublic);
     }
 
     /**
@@ -114,5 +114,26 @@ class AssertHelper
     public static function getFilterContains($element, $value)
     {
         return sprintf('%s:contains("%s")', $element, $value);
+    }
+
+    /**
+     * Get Escaped String For Crawler.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function getEscapedForCrawler($string)
+    {
+        $escaped = [
+            '.',
+            '@',
+        ];
+
+        foreach ($escaped as $sign) {
+            $string = str_replace($sign, sprintf('\%s', $sign), $string);
+        }
+
+        return $string;
     }
 }
