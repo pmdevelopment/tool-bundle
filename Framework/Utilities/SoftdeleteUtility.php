@@ -18,6 +18,27 @@ use Doctrine\Common\Collections\Collection;
  */
 class SoftdeleteUtility
 {
+
+    /**
+     * Is Deleted?
+     *
+     * @param mixed $object
+     *
+     * @return bool
+     */
+    public static function isDeleted($object)
+    {
+        if (true === method_exists($object, 'getDeleted') && true === $object->getDeleted()) {
+            return true;
+        }
+
+        if (true === method_exists($object, 'isDeleted') && true === $object->isDeleted()) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Get Not deleted
      *
