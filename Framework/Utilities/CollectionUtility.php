@@ -96,10 +96,11 @@ class CollectionUtility
      * @param Collection|array $collection
      * @param string           $fieldName
      * @param mixed            $searchValue
+     * @param mixed            $default
      *
      * @return null|object
      */
-    public static function findOneBy($collection, $fieldName, $searchValue)
+    public static function findOneBy($collection, $fieldName, $searchValue, $default = null)
     {
         if (false === self::isValid($collection)) {
             return null;
@@ -121,7 +122,7 @@ class CollectionUtility
             }
         }
 
-        return null;
+        return $default;
     }
 
     /**
