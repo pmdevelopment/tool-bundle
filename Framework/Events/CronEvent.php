@@ -23,6 +23,7 @@ class CronEvent extends Event
 
     const REPEATED_DAILY_MORNING = 'daily_morning';
     const REPEATED_EVERY_MINUTE = 'one_minute';
+    const REPEATED_EVERY_HOUR = 'one_hour';
     const REPEATED_FIVE_MINUTES = 'five_minutes';
 
     /**
