@@ -155,6 +155,15 @@ var pmUtil = function () {
                             version: 161201
                         });
                     }
+                },
+                simpleMde: {
+                    enabled: false,
+                    version: '1.11.2',
+                    callback: function () {
+                        $('.pm-markdown').pmMarkdown({
+                            version: 170320
+                        });
+                    }
                 }
             }
         },
@@ -252,6 +261,12 @@ var pmUtil = function () {
             if (true === this.config.module.bootstrapSwitch.enabled) {
                 $.getScript(path_parcels + '/jquery.pm-bootstrap-switch.js', function () {
                     pmUtil.config.module.bootstrapSwitch.callback();
+                });
+            }
+
+            if (true === this.config.module.simpleMde.enabled) {
+                $.getScript(path_parcels + '/jquery.pm-markdown.js', function () {
+                    pmUtil.config.module.simpleMde.callback();
                 });
             }
         }

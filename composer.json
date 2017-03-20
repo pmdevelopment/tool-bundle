@@ -16,6 +16,9 @@
         "knplabs/knp-menu-bundle": "^2.1.1",
         "jms/serializer": "^1.1.0"
     },
+    "suggest": {
+        "erusev/parsedown": "Use the markdown twig extension"
+    },
     "autoload": {
         "psr-0": {
             "PM\\Bundle\\ToolBundle": ""

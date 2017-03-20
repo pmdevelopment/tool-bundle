@@ -46,3 +46,8 @@ services:
     class: PM\Bundle\ToolBundle\Twig\JsonExtension
     tags:
         - { name: twig.extension }
+
+  pm.twig.convert:
+    class: PM\Bundle\ToolBundle\Twig\ConvertExtension
+    tags:
+        - { name: twig.extension }
