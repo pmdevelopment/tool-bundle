@@ -19,10 +19,18 @@ class PMToolExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        /* Config */
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        if (true === isset($config['doctrine']['encryption']) && null !== $config['doctrine']['encryption']) {
+            $container->setParameter('pm__tool.configuration.doctrine.encryption', $config['doctrine']['encryption']);
+        } else {
+            $container->setParameter('pm__tool.configuration.doctrine.encryption', null);
+        }
+
+        /* Services */
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
 }
