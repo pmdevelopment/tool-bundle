@@ -12,6 +12,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use PM\Bundle\ToolBundle\Framework\Annotations\Encrypted;
 use PM\Bundle\ToolBundle\Framework\Interfaces\EncryptedEntityInterface;
 use PM\Bundle\ToolBundle\Framework\Utilities\CryptUtility;
@@ -77,6 +78,7 @@ class EncryptionSubscriber implements EventSubscriber
         return [
             'postLoad',
             'preFlush',
+            'preUpdate'
         ];
     }
 
@@ -97,13 +99,22 @@ class EncryptionSubscriber implements EventSubscriber
      */
     public function preFlush(PreFlushEventArgs $args)
     {
+        foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityInsertions() as $entity) {
+            $this->process($entity, 'encrypt');
+        }
+    }
+
+    /**
+     * Pre Update: Encrypt
+     *
+     * @param PreUpdateEventArgs $args
+     */
+    public function preUpdate(PreUpdateEventArgs $args)
+    {
         foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates() as $entity) {
             $this->process($entity, 'encrypt');
         }
 
-        foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityInsertions() as $entity) {
-            $this->process($entity, 'encrypt');
-        }
     }
 
     /**
