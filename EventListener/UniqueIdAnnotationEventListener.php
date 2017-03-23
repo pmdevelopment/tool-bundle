@@ -11,6 +11,7 @@ namespace PM\Bundle\ToolBundle\EventListener;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use PM\Bundle\ToolBundle\Framework\Annotations\UniqueId;
+use PM\Bundle\ToolBundle\Framework\Interfaces\UniqueIdEntityInterface;
 
 /**
  * Class UniqueIdAnnotationEventListener
@@ -45,11 +46,17 @@ class UniqueIdAnnotationEventListener
 
     /**
      * @param LifecycleEventArgs $args
+     *
+     * @return bool
      */
     public function prePersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
         $entityClass = get_class($entity);
+
+        if (false === ($entity instanceof UniqueIdEntityInterface)) {
+            return false;
+        }
 
         $reflectionClass = new \ReflectionClass($entityClass);
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {

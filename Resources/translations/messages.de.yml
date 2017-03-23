@@ -3,3 +3,5 @@ flash_bag:
     default: 'Zugriff verweigert'
   success:
     default: 'Die Änderungen wurden erfolgreich gespeichert.'
+
+edit: 'Bearbeiten'
