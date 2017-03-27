@@ -24,6 +24,9 @@ use PM\Bundle\ToolBundle\Framework\Utilities\CryptUtility;
  */
 class EncryptionSubscriber implements EventSubscriber
 {
+    const METHOD_ENCRYPT = 'encrypt';
+    const METHOD_DECRYPT = 'decrypt';
+
     /**
      * @var string
      */
@@ -89,7 +92,7 @@ class EncryptionSubscriber implements EventSubscriber
      */
     public function postLoad($args)
     {
-        $this->process($args->getEntity(), 'decrypt');
+        $this->process($args->getEntity(), self::METHOD_DECRYPT);
     }
 
     /**
@@ -100,7 +103,7 @@ class EncryptionSubscriber implements EventSubscriber
     public function preFlush(PreFlushEventArgs $args)
     {
         foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityInsertions() as $entity) {
-            $this->process($entity, 'encrypt');
+            $this->process($entity, self::METHOD_ENCRYPT);
         }
     }
 
@@ -112,7 +115,7 @@ class EncryptionSubscriber implements EventSubscriber
     public function preUpdate(PreUpdateEventArgs $args)
     {
         foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates() as $entity) {
-            $this->process($entity, 'encrypt');
+            $this->process($entity, self::METHOD_ENCRYPT);
         }
 
     }
@@ -131,9 +134,12 @@ class EncryptionSubscriber implements EventSubscriber
             return false;
         }
 
+        if ((self::METHOD_ENCRYPT === $method && true === $entity->isEncrypted()) || (self::METHOD_DECRYPT === $method) && false === $entity->isEncrypted()) {
+            return false;
+        }
+
         $entityClass = get_class($entity);
         $encryptionKey = substr(hash('sha256', $this->getSecret()), 1, 32);
-
 
         $reflectionClass = new \ReflectionClass($entityClass);
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {

@@ -15,5 +15,19 @@ namespace PM\Bundle\ToolBundle\Framework\Interfaces;
  */
 interface EncryptedEntityInterface
 {
+    /**
+     * Is Encrypted?
+     *
+     * @return bool
+     */
+    public function isEncrypted();
 
+    /**
+     * Set Encrypted
+     *
+     * @param bool $encrypted
+     *
+     * @return $this
+     */
+    public function setEncrypted($encrypted);
 }
