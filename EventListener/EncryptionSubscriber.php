@@ -13,6 +13,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Proxy\Proxy;
 use PM\Bundle\ToolBundle\Framework\Annotations\Encrypted;
 use PM\Bundle\ToolBundle\Framework\Interfaces\EncryptedEntityInterface;
 use PM\Bundle\ToolBundle\Framework\Utilities\CryptUtility;
@@ -138,7 +139,16 @@ class EncryptionSubscriber implements EventSubscriber
             return false;
         }
 
-        $entityClass = get_class($entity);
+        if (property_exists($entity, '__isInitialized__')) {
+            $entity->__load();
+        }
+
+        if (true === ($entity instanceof Proxy)) {
+            $entityClass = get_parent_class($entity);
+        } else {
+            $entityClass = get_class($entity);
+        }
+
         $encryptionKey = substr(hash('sha256', $this->getSecret()), 1, 32);
 
         $reflectionClass = new \ReflectionClass($entityClass);
