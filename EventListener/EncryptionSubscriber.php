@@ -134,7 +134,7 @@ class EncryptionSubscriber implements EventSubscriber
             return false;
         }
 
-        if ((self::METHOD_ENCRYPT === $method && true === $entity->isEncrypted()) || (self::METHOD_DECRYPT === $method) && false === $entity->isEncrypted()) {
+        if ((self::METHOD_ENCRYPT === $method && true === $entity->isEncrypted()) || (self::METHOD_DECRYPT === $method) && true !== $entity->isEncrypted()) {
             return false;
         }
 
@@ -158,6 +158,12 @@ class EncryptionSubscriber implements EventSubscriber
             }
 
             $reflectionProperty->setValue($entity, CryptUtility::$method($fieldValue, $encryptionKey));
+        }
+
+        if (self::METHOD_ENCRYPT === $method) {
+            $entity->setEncrypted(true);
+        } else {
+            $entity->setEncrypted(false);
         }
 
         return true;
