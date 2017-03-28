@@ -134,7 +134,7 @@ class EncryptionSubscriber implements EventSubscriber
             return false;
         }
 
-        if ((self::METHOD_ENCRYPT === $method && true === $entity->isEncrypted()) || (self::METHOD_DECRYPT === $method) && true !== $entity->isEncrypted()) {
+        if (null !== $entity->getEncrypted() && ((self::METHOD_ENCRYPT === $method && true === $entity->isEncrypted()) || (self::METHOD_DECRYPT === $method) && false === $entity->isEncrypted())) {
             return false;
         }
 
