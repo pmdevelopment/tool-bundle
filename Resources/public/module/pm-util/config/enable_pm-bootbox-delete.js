@@ -1,0 +1,1 @@
+pmUtil.config.module.bootbox_delete.enabled = true;
