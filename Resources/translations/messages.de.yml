@@ -5,3 +5,9 @@ flash_bag:
     default: 'Die Änderungen wurden erfolgreich gespeichert.'
 
 edit: 'Bearbeiten'
+
+label:
+    value: 'Wert:'
+
+button:
+    save: 'Speichern'

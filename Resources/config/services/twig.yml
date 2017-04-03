@@ -51,3 +51,10 @@ services:
     class: PM\Bundle\ToolBundle\Twig\ConvertExtension
     tags:
         - { name: twig.extension }
+
+  pm.twig.config:
+    class: PM\Bundle\ToolBundle\Twig\ConfigExtension
+    calls:
+        - [setDoctrine, ['@doctrine']]
+    tags:
+        - { name: twig.extension }
