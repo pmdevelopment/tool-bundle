@@ -50,7 +50,19 @@ class IconExtension extends Twig_Extension
                         'html',
                     ],
                 ]
-            )
+            ),
+            new Twig_SimpleFilter(
+                'icon_custom',
+                [
+                    $this,
+                    'iconCustomFilter',
+                ],
+                [
+                    'is_safe' => [
+                        'html',
+                    ],
+                ]
+            ),
         ];
     }
 
@@ -86,6 +98,19 @@ class IconExtension extends Twig_Extension
     public function iconFilter($icon, $color = 'black')
     {
         return sprintf('<i class="fa %sfa-%s" aria-hidden="true"></i>', $color == 'white' ? 'icon-white ' : '', $icon);
+    }
+
+    /**
+     * Returns the HTML code for the given icon using a custom prefix
+     *
+     * @param string $icon
+     * @param string $prefix
+     *
+     * @return string
+     */
+    public function iconCustomFilter($icon, $prefix = 'icon-')
+    {
+        return sprintf('<i class="%s%s" aria-hidden="true"></i>', $prefix, $icon);
     }
 
     /**
