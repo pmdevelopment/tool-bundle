@@ -41,10 +41,11 @@ class ConfigExtension extends Twig_Extension
      * Get Value By Key
      *
      * @param string $key
+     * @param mixed  $default
      *
      * @return string
      */
-    public function getValueByKey($key)
+    public function getValueByKey($key, $default = '')
     {
         $result = $this->getDoctrine()->getRepository($this->getEntityClass())->findOneBy(
             [
@@ -53,7 +54,7 @@ class ConfigExtension extends Twig_Extension
         );
 
         if (null === $result) {
-            return '';
+            return $default;
         }
 
         return $result->getValue();

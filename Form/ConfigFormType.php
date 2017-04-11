@@ -13,6 +13,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
@@ -31,10 +32,28 @@ class ConfigFormType extends AbstractType
             ->add('value', TextType::class, [
                 'label'       => 'label.value',
                 'constraints' => new NotBlank(),
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'button.save',
             ]);
+
+        if (true === $options['show_submit_button']) {
+            $builder
+                ->add('submit', SubmitType::class, [
+                    'label' => 'button.save',
+                ]);
+        }
+    }
+
+    /**
+     * Configure Options
+     *
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'show_submit_button' => true,
+            ]
+        );
     }
 
 
