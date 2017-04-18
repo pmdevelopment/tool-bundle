@@ -120,6 +120,10 @@ var pmUtil = function () {
     return {
         config: {
             debugging: false,
+            ajax: {
+                cache: true,
+                error: 'Es ist ein schwerwiegender Fehler aufgetreten. Bitte lade die Seite erneut.'
+            },
             module: {
                 select2: {
                     enabled: false,
@@ -210,21 +214,21 @@ var pmUtil = function () {
          */
         initAjax: function () {
             $.ajaxSetup({
-                cache: true
+                cache: pmUtil.config.ajax.cache
             });
 
-            $(document).ajaxComplete(function (event, xhr) {
-                if (undefined !== xhr.status && 500 === xhr.status) {
-                    var message = 'Es ist ein schwerwiegender Fehler aufgetreten. Bitte lade die Seite erneut.';
-                    if (undefined !== bootbox) {
-                        bootbox.hideAll();
-                        bootbox.alert(message);
-                    } else {
-                        alert(message);
+            if (false !== this.config.ajax.error) {
+                $(document).ajaxComplete(function (event, xhr) {
+                    if (undefined !== xhr.status && 500 === xhr.status) {
+                        if (undefined !== bootbox) {
+                            bootbox.hideAll();
+                            bootbox.alert(pmUtil.config.ajax.error);
+                        } else {
+                            alert(pmUtil.config.ajax.error);
+                        }
                     }
-
-                }
-            });
+                });
+            }
         },
         /**
          * Init
