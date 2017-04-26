@@ -35,9 +35,24 @@ class DataSetConfig
     private $pointRadius;
 
     /**
+     * @var float
+     */
+    private $pointHoverRadius;
+
+    /**
      * @var string
      */
     private $pointBorderColor;
+
+    /**
+     * @var string
+     */
+    private $pointHoverBackgroundColor;
+
+    /**
+     * @var string
+     */
+    private $pointHoverBorderColor;
 
     /**
      * @var float
@@ -221,6 +236,66 @@ class DataSetConfig
         return $this;
     }
 
+    /**
+     * @return float
+     */
+    public function getPointHoverRadius()
+    {
+        return $this->pointHoverRadius;
+    }
+
+    /**
+     * @param float $pointHoverRadius
+     *
+     * @return DataSetConfig
+     */
+    public function setPointHoverRadius($pointHoverRadius)
+    {
+        $this->pointHoverRadius = $pointHoverRadius;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPointHoverBackgroundColor()
+    {
+        return $this->pointHoverBackgroundColor;
+    }
+
+    /**
+     * @param string $pointHoverBackgroundColor
+     *
+     * @return DataSetConfig
+     */
+    public function setPointHoverBackgroundColor($pointHoverBackgroundColor)
+    {
+        $this->pointHoverBackgroundColor = $pointHoverBackgroundColor;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPointHoverBorderColor()
+    {
+        return $this->pointHoverBorderColor;
+    }
+
+    /**
+     * @param string $pointHoverBorderColor
+     *
+     * @return DataSetConfig
+     */
+    public function setPointHoverBorderColor($pointHoverBorderColor)
+    {
+        $this->pointHoverBorderColor = $pointHoverBorderColor;
+
+        return $this;
+    }
+
 
     /**
      * Export
@@ -230,14 +305,17 @@ class DataSetConfig
     public function export()
     {
         return [
-            'lineTension'      => $this->getLineTension(),
-            'backgroundColor'  => $this->getBackgroundColor(),
-            'pointRadius'      => $this->getPointRadius(),
-            'pointBorderColor' => $this->getPointBorderColor(),
-            'pointBorderWidth' => $this->getPointBorderWidth(),
-            'pointHitRadius'   => $this->getPointHitRadius(),
-            'borderWidth'      => $this->getBorderWidth(),
-            'borderColor'      => $this->getBorderColor(),
+            'lineTension'               => $this->getLineTension(),
+            'backgroundColor'           => $this->getBackgroundColor(),
+            'pointRadius'               => $this->getPointRadius(),
+            'pointHoverRadius'          => $this->getPointHoverRadius(),
+            'pointHoverBackgroundColor' => $this->getPointHoverBackgroundColor(),
+            'pointHoverBorderColor'     => $this->getPointHoverBorderColor(),
+            'pointBorderColor'          => $this->getPointBorderColor(),
+            'pointBorderWidth'          => $this->getPointBorderWidth(),
+            'pointHitRadius'            => $this->getPointHitRadius(),
+            'borderWidth'               => $this->getBorderWidth(),
+            'borderColor'               => $this->getBorderColor(),
         ];
     }
 }

@@ -8,6 +8,22 @@ edit: 'Bearbeiten'
 
 label:
     value: 'Wert:'
+    chartjs:
+        line_tension: 'Kurve:'
+        point_radius: 'Radius der Punkte:'
+        point_radius_hover: 'Radius der Punkte (Hover):'
+        point_radius_hit: 'Radius der Punkt-Hitbox:'
+        point_border_color: 'Farbe der Punkt-Ränder:'
+        point_border_width: 'Dicke der Punkt-Ränder:'
+        point_hover_background_color: 'Farbe der Punkte (Hover):'
+        point_hover_border_color: 'Farbe der Punkt-Ränder (Hover):'
+        border_color: 'Farbe der Linie:'
+        border_width: 'Dicke der Linie:'
+        background_color: 'Farbe der Füllfläche:'
+
+placeholder:
+    chartjs:
+        line_tension: 'Biegung der Kurve. 0 bis 1.'
 
 button:
     save: 'Speichern'
