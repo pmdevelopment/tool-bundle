@@ -165,5 +165,6 @@
             core.init();
         });
 
+        return this;
     };
 }(jQuery));
