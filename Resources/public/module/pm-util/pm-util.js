@@ -112,7 +112,8 @@ var pmUtilLoading = function () {
 
 /**
  * pmUtil
- * @type {{config, debug, initBootbox, initAjax, init}}
+ *
+ * @type {{config, debug, debugError, debugWarning, initBootbox, initAjax, init}}
  */
 var pmUtil = function () {
     "use strict";
@@ -178,6 +179,26 @@ var pmUtil = function () {
             if (true === this.config.debugging) {
                 for (var i = 0; i < arguments.length; i++) {
                     console.log(arguments[i]);
+                }
+            }
+        },
+        /**
+         * Debug with error style
+         */
+        debugError: function () {
+            if (true === this.config.debugging) {
+                for (var i = 0; i < arguments.length; i++) {
+                    console.error(arguments[i]);
+                }
+            }
+        },
+        /**
+         * Debug with warning style
+         */
+        debugWarning: function () {
+            if (true === this.config.debugging) {
+                for (var i = 0; i < arguments.length; i++) {
+                    console.warn(arguments[i]);
                 }
             }
         },
