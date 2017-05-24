@@ -58,3 +58,8 @@ services:
         - [setDoctrine, ['@doctrine']]
     tags:
         - { name: twig.extension }
+
+  pm.twig.php:
+    class: PM\Bundle\ToolBundle\Twig\PhpExtension
+    tags:
+        - { name: twig.extension }
