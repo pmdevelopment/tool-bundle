@@ -67,4 +67,21 @@ class ArrayUtility
         return implode($glue, $result);
     }
 
+    /**
+     * Get first result
+     *
+     * @param array      $array
+     * @param mixed|null $default
+     *
+     * @return mixed|null
+     */
+    public static function getFirst($array, $default = null)
+    {
+        if (0 === count($array)) {
+            return $default;
+        }
+
+        return reset($array);
+    }
+
 }
