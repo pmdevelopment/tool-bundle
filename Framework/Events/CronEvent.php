@@ -93,6 +93,18 @@ class CronEvent extends Event
             return true;
         }
 
+        return $this->isTarget($class);
+    }
+
+    /**
+     * Is Target
+     *
+     * @param string|object $class
+     *
+     * @return bool
+     */
+    public function isTarget($class)
+    {
         if (true === is_object($class)) {
             $class = get_class($class);
         }
