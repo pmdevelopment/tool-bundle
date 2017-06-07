@@ -80,11 +80,22 @@
                      * @returns {{save: {label: string, className: string, callback: Function}, close: {label: string, className: string}}}
                      */
                     getButtonsForm: function (onSuccess) {
+                        var labelSubmit = $(_element).data('button-submit');
+                        if (undefined === labelSubmit) {
+                            labelSubmit = 'Speichern';
+                        }
+
                         return {
                             save: {
-                                label: "Speichern",
+                                label: labelSubmit,
                                 className: "btn-success",
                                 callback: function () {
+                                    if ('form' === $(_element).data('submit')) {
+                                        $('.pm-bootbox-form-dialog form').attr('action', $(_element).attr('href')).submit();
+
+                                        return;
+                                    }
+
                                     var formData = $('.pm-bootbox-form-dialog form').serialize();
                                     pmUtilLoading.startDialog();
 
@@ -135,7 +146,7 @@
                             dialog.init();
 
                             return false;
-                        }).removeClass('disabled');
+                        }).removeClass('disabled').removeClass('hidden');
                     },
                     /**
                      * Get Title
