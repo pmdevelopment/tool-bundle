@@ -43,4 +43,19 @@ class MenuUtility
             ]);
         }
     }
+
+    /**
+     * Get Route Parameter Slug
+     *
+     * @param string $parameterName
+     * @param string $parameterValue
+     *
+     * @return array
+     */
+    public static function getRouteParameterSlug($parameterName = '_slug', $parameterValue = '*')
+    {
+        return [
+            $parameterName => $parameterValue,
+        ];
+    }
 }
