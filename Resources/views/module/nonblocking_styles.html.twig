@@ -3,7 +3,7 @@
     <script type=text/javascript>
         !function () {
             var i, n, m, me, el = [];
-            var s = {{ assets|json_encode() }};
+            var s = {{ assets|json_encode()|raw }};
 
             for (i = 0; i < s.length; i++) {
                 n = document.createElement("link");
