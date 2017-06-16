@@ -63,12 +63,23 @@ trait HasDoctrineServiceTrait
      */
     public function persistAndFlush($entities)
     {
-        if (false === is_array($entities)) {
-            $entities = [$entities];
+        if (0 === func_num_args()) {
+            throw new \LogicException('Missing arguments');
         }
 
+        $persists = [];
+        $entities = func_get_args();
+
         foreach ($entities as $entity) {
-            $this->getDoctrineManager()->persist($entity);
+            if (true === is_array($entity)) {
+                $persists = array_merge($persists, $entity);
+            } else {
+                $persists[] = $entity;
+            }
+        }
+
+        foreach ($persists as $persist) {
+            $this->getDoctrineManager()->persist($persist);
         }
 
         $this->getDoctrineManager()->flush();
