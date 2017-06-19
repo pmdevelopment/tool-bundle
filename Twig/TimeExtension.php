@@ -8,6 +8,7 @@
 
 namespace PM\Bundle\ToolBundle\Twig;
 
+use DateTime;
 use Twig_Extension;
 use Twig_SimpleFilter;
 
@@ -23,7 +24,7 @@ class TimeExtension extends Twig_Extension
      */
     public function getFilters()
     {
-        return array(
+        return [
             new Twig_SimpleFilter(
                 "secondsAsText",
                 [
@@ -55,7 +56,7 @@ class TimeExtension extends Twig_Extension
                     "getMonthName",
                 ]
             ),
-        );
+        ];
     }
 
     /**

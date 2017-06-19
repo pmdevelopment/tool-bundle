@@ -1,0 +1,13 @@
+{% if start|date('Y-m-d') == end|date('Y-m-d') %}
+    {% if fullDay|default(false) %}
+        {{ 'all_day_on'|trans({}, 'PMToolBundle') }} {{ start|date('d.m.Y') }}
+    {% else %}
+        {{ 'on'|trans({}, 'PMToolBundle') }} {{ start|date('d.m.Y') }} {{ 'from'|trans({}, 'PMToolBundle') }} {{ start|date('H:i') }} {{ 'till'|trans({}, 'PMToolBundle') }} {{ end|date('H:i') }} {{ 'clock'|trans({}, 'PMToolBundle') }}
+    {% endif %}
+{% else %}
+    {% if fullDay|default(false) %}
+        {{ start|date('d.m.Y') }} {{ 'till'|trans({}, 'PMToolBundle') }} {{ end|date('d.m.Y') }}
+    {% else %}
+        {{ start|date('d.m.Y H:i') }} {{ 'till'|trans({}, 'PMToolBundle') }} {{ end|date('d.m.Y H:i') }}
+    {% endif %}
+{% endif %}
