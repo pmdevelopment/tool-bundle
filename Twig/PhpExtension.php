@@ -55,6 +55,13 @@ class PhpExtension extends Twig_Extension
                     'getBcdiv',
                 ]
             ),
+            new \Twig_SimpleFilter(
+                'str_split',
+                [
+                    $this,
+                    'getStrSplit',
+                ]
+            ),
         ];
     }
 
@@ -73,7 +80,7 @@ class PhpExtension extends Twig_Extension
     }
 
     /**
-     * BCDIV
+     * bcdiv
      *
      * Hint: use division by one to cut decimals without rounding
      *
@@ -86,5 +93,18 @@ class PhpExtension extends Twig_Extension
     public function getBcdiv($operandLeft, $operandRight = 1, $scale = 0)
     {
         return bcdiv($operandLeft, $operandRight, $scale);
+    }
+
+    /**
+     * str_split
+     *
+     * @param string $string
+     * @param int    $length
+     *
+     * @return array
+     */
+    public function getStrSplit($string, $length = 1)
+    {
+        return str_split($string, $length);
     }
 }
