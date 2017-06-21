@@ -41,6 +41,25 @@ class PhpExtension extends Twig_Extension
     }
 
     /**
+     * Get Filters
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return [
+            new \Twig_SimpleFilter(
+                'bcdiv',
+                [
+                    $this,
+                    'getBcdiv',
+                ]
+            ),
+        ];
+    }
+
+
+    /**
      * Is Instance Of
      *
      * @param mixed $var
@@ -53,4 +72,19 @@ class PhpExtension extends Twig_Extension
         return $var instanceof $instance;
     }
 
+    /**
+     * BCDIV
+     *
+     * Hint: use division by one to cut decimals without rounding
+     *
+     * @param float     $operandLeft
+     * @param int|float $operandRight
+     * @param int       $scale
+     *
+     * @return string
+     */
+    public function getBcdiv($operandLeft, $operandRight = 1, $scale = 0)
+    {
+        return bcdiv($operandLeft, $operandRight, $scale);
+    }
 }

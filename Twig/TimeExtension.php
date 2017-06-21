@@ -26,34 +26,34 @@ class TimeExtension extends Twig_Extension
     {
         return [
             new Twig_SimpleFilter(
-                "secondsAsText",
+                'secondsAsText',
                 [
                     $this,
-                    "getSecondsAsText",
+                    'getSecondsAsText',
                 ],
                 [
                     'deprecated' => true,
                 ]
             ),
             new Twig_SimpleFilter(
-                "time_seconds_as_text",
+                'time_seconds_as_text',
                 [
                     $this,
-                    "getSecondsAsText",
+                    'getSecondsAsText',
                 ]
             ),
             new Twig_SimpleFilter(
-                "time_minutes_as_hours",
+                'time_minutes_as_hours',
                 [
                     $this,
-                    "getMinutesAsHours",
+                    'getMinutesAsHours',
                 ]
             ),
             new Twig_SimpleFilter(
-                "time_month_number_to_name",
+                'time_month_number_to_name',
                 [
                     $this,
-                    "getMonthName",
+                    'getMonthName',
                 ]
             ),
         ];
@@ -69,24 +69,24 @@ class TimeExtension extends Twig_Extension
      *
      * @return string
      */
-    public function getSecondsAsText($seconds, $decimals = 2, $decPoint = ",", $thousandsSep = ".")
+    public function getSecondsAsText($seconds, $decimals = 2, $decPoint = ',', $thousandsSep = '.')
     {
         $seconds = floatval($seconds);
 
         if (60 > $seconds) {
-            return sprintf("%ss", number_format($seconds, $decimals, $decPoint, $thousandsSep));
+            return sprintf('%ss', number_format($seconds, $decimals, $decPoint, $thousandsSep));
         }
 
         $minutes = floor($seconds / 60);
 
         if (3600 > $seconds) {
-            return sprintf("%sm %ss", $minutes, number_format($seconds - ($minutes * 60), 0, $decPoint, $thousandsSep));
+            return sprintf('%sm %ss', $minutes, number_format($seconds - ($minutes * 60), 0, $decPoint, $thousandsSep));
         }
 
         $hours = floor($minutes / 60);
         $minutes = $minutes - ($hours * 60);
 
-        return sprintf("%sh %sm %ss", $hours, $minutes, number_format($seconds - ($minutes * 60) - ($hours * 3600), 0, $decPoint, $thousandsSep));
+        return sprintf('%sh %sm %ss', $hours, $minutes, number_format($seconds - ($minutes * 60) - ($hours * 3600), 0, $decPoint, $thousandsSep));
     }
 
     /**
@@ -101,7 +101,7 @@ class TimeExtension extends Twig_Extension
         $hours = floor($minutes / 60);
         $minutes = $minutes - ($hours * 60);
 
-        return sprintf('%s:%s', $hours, str_pad($minutes, 2, "0", STR_PAD_LEFT));
+        return sprintf('%s:%s', $hours, str_pad($minutes, 2, '0', STR_PAD_LEFT));
     }
 
     /**
@@ -123,7 +123,7 @@ class TimeExtension extends Twig_Extension
      */
     public function getName()
     {
-        return "pm_time_extension";
+        return 'pm_time_extension';
     }
 
 }
