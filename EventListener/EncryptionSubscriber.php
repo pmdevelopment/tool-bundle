@@ -11,6 +11,7 @@ namespace PM\Bundle\ToolBundle\EventListener;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Proxy\Proxy;
@@ -37,6 +38,11 @@ class EncryptionSubscriber implements EventSubscriber
      * @var AnnotationReader
      */
     private $reader;
+
+    /**
+     * @var mixed[]
+     */
+    private $entitiesEncrypted = [];
 
     /**
      * EncryptionSubscriber constructor.
@@ -67,6 +73,15 @@ class EncryptionSubscriber implements EventSubscriber
     }
 
     /**
+     * @return \mixed[]
+     */
+    public function getEntitiesEncrypted()
+    {
+        return $this->entitiesEncrypted;
+    }
+
+
+    /**
      * Get Subscribed Events
      *
      * @return array
@@ -81,9 +96,22 @@ class EncryptionSubscriber implements EventSubscriber
 
         return [
             'postLoad',
+            'postFlush',
             'preFlush',
             'preUpdate'
         ];
+    }
+
+    /**
+     * PostFlush: Decrypt again for further usage
+     *
+     * @param PostFlushEventArgs $args
+     */
+    public function postFlush($args)
+    {
+        foreach ($this->getEntitiesEncrypted() as $entity) {
+            $this->process($entity, self::METHOD_DECRYPT);
+        }
     }
 
     /**
@@ -172,8 +200,14 @@ class EncryptionSubscriber implements EventSubscriber
 
         if (self::METHOD_ENCRYPT === $method) {
             $entity->setEncrypted(true);
+
+            $this->entitiesEncrypted[] = $entity;
         } else {
             $entity->setEncrypted(false);
+
+            if (true === in_array($entity, $this->getEntitiesEncrypted())) {
+                unset($this->entitiesEncrypted[array_search($entity, $this->getEntitiesEncrypted())]);
+            }
         }
 
         return true;
