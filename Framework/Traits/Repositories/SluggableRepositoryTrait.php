@@ -17,12 +17,12 @@ trait SluggableRepositoryTrait
      *
      * @return mixed
      */
-    public function findOneBySlug($slug, $fieldName = "slug")
+    public function findOneBySlug($slug, $fieldName = 'slug')
     {
         return $this->findOneBy(
             [
-                'slug'    => $slug,
-                'deleted' => false,
+                $fieldName => $slug,
+                'deleted'  => false,
             ]
         );
     }
