@@ -2,7 +2,7 @@
     $.fn.pmBootbox = function (options) {
 
         var settings = {
-            version: 170117,
+            version: 170627,
             callback: {
                 load: function () {
                     /* Executed on form loaded */
@@ -54,18 +54,20 @@
 
                         if (0 <= result.indexOf('<form')) {
                             buttons = dialog.getButtonsForm(onSuccess);
+                        } else if (true === $(_element).data('confirm')) {
+                            buttons = dialog.getButtonsConfirm(onSuccess);
                         } else {
                             buttons = {
                                 close: {
-                                    label: "Schließen",
-                                    className: "btn-success"
+                                    label: 'Schließen',
+                                    className: 'btn-success'
                                 }
                             };
                         }
 
                         bootbox.hideAll();
                         bootbox.dialog({
-                            className: "pm-bootbox-form-dialog",
+                            className: 'pm-bootbox-form-dialog',
                             title: core.getTitle(),
                             size: core.getSize(),
                             message: result,
@@ -73,6 +75,35 @@
                         });
 
                         settings.callback.load();
+                    },
+                    /**
+                     * Get Buttons Confirmed
+                     *
+                     * @param onSuccess
+                     * @returns {{cancel: {label: string, className: string}, confirm: {label: *, className: string, callback: Function}}}
+                     */
+                    getButtonsConfirm: function (onSuccess) {
+                        return {
+                            cancel: {
+                                label: 'Abbrechen',
+                                className: 'btn-default'
+                            },
+                            confirm: {
+                                label: $(_element).attr('title'),
+                                className: 'btn-success',
+                                callback: function () {
+                                    pmUtilLoading.startDialog();
+
+                                    $.get($(_element).attr('href'), {confirmed: true}, function (result) {
+                                        if ("" !== result) {
+                                            dialog.create(result, onSuccess);
+                                        } else {
+                                            onSuccess();
+                                        }
+                                    });
+                                }
+                            }
+                        }
                     },
                     /**
                      * Get Buttons Form
