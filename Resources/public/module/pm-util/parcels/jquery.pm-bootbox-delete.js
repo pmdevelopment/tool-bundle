@@ -57,7 +57,7 @@
                             });
 
                             return false;
-                        }).removeClass('disabled');
+                        }).removeClass('disabled').removeClass('hidden');
                     }
                 };
             }();
