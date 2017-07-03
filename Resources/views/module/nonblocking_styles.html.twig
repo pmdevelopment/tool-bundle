@@ -5,14 +5,13 @@
             var i, n, m, me, el = [];
             var s = {{ assets|json_encode()|raw }};
 
+            var t = document.getElementsByTagName('head')[0];
             for (i = 0; i < s.length; i++) {
                 n = document.createElement("link");
-                me = document.getElementsByTagName("meta");
-                m = me[me.length - 1];
 
                 n.rel = "stylesheet", n.href = s[i];
                 n.media = "only x";
-                m.parentNode.insertBefore(n, m);
+                t.appendChild(n);
 
                 el.push(n);
             }
