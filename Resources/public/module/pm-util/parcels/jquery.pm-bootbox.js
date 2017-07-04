@@ -183,7 +183,7 @@
                         if ($(_element).data('hidden')) {
                             hiddenClass = $(_element).data('hidden');
                         }
-                        
+
                         $(_element).removeClass('disabled').removeClass(hiddenClass);
                     },
                     /**
