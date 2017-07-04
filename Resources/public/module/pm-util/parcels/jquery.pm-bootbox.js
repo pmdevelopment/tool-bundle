@@ -2,7 +2,7 @@
     $.fn.pmBootbox = function (options) {
 
         var settings = {
-            version: 170627,
+            version: 170704,
             callback: {
                 load: function () {
                     /* Executed on form loaded */
@@ -177,7 +177,14 @@
                             dialog.init();
 
                             return false;
-                        }).removeClass('disabled').removeClass('hidden');
+                        });
+
+                        var hiddenClass = 'hidden';
+                        if ($(_element).data('hidden')) {
+                            hiddenClass = $(_element).data('hidden');
+                        }
+                        
+                        $(_element).removeClass('disabled').removeClass(hiddenClass);
                     },
                     /**
                      * Get Title
