@@ -71,18 +71,24 @@ class PMController extends Controller
     /**
      * Saved with Object Routing
      *
-     * @param string $type
-     * @param mixed  $object
-     * @param string $message
+     * @param string      $type
+     * @param mixed       $object
+     * @param string      $message
+     * @param string|null $fragment
      *
      * @return RedirectResponse
      */
-    public function savedObject($type, $object, $message = 'flash_bag.success.default')
+    public function savedObject($type, $object, $message = 'flash_bag.success.default', $fragment = null)
     {
         $objectRouter = $this->get("bg_object_routing.object_router");
         $this->addSessionFlashBagMessage(self::SESSION_FLASH_BAG_SUCCESS, $message);
 
-        return $this->redirect($objectRouter->generate($type, $object));
+        $url = $objectRouter->generate($type, $object);
+        if (null !== $fragment) {
+            $url = sprintf('%s#%s', $url, $fragment);
+        }
+
+        return $this->redirect($url);
     }
 
     /**
