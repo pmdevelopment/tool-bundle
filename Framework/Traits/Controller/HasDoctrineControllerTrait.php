@@ -8,6 +8,8 @@
 
 namespace PM\Bundle\ToolBundle\Framework\Traits\Controller;
 
+use Doctrine\ORM\EntityManager;
+
 /**
  * Class DoctrineTrait
  *
@@ -44,5 +46,13 @@ trait HasDoctrineControllerTrait
         $this->getDoctrine()->getManager()->flush();
 
         return $this;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getDoctrineManager()
+    {
+        return $this->getDoctrine()->getManager();
     }
 }

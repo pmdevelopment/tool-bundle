@@ -8,9 +8,9 @@
 
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
+use Symfony\Bundle\SecurityBundle\Security\FirewallContext;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Bundle\SecurityBundle\Security\FirewallContext;
 use Symfony\Component\Security\Http\Firewall\AccessListener;
 
 /**
@@ -75,6 +75,58 @@ class SecurityUtility
         }
 
         return $names;
+    }
+
+    /**
+     * Get Random Password
+     *
+     * @param int|null $length
+     * @param int|null $countCharsNum
+     * @param int|null $countCharsSpecial
+     *
+     * @return string
+     */
+    public static function getRandomPassword($length = null, $countCharsNum = null, $countCharsSpecial = null)
+    {
+        $chars = [
+            'alpha'   => 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ',
+            'special' => '!$%&=?*-:;.,+~@_',
+        ];
+
+        if (null === $length) {
+            $length = mt_rand(9, 13);
+        }
+
+        if (null === $countCharsNum) {
+            $countCharsNum = mt_rand(2, 3);
+        }
+
+        if (null === $countCharsSpecial) {
+            $countCharsSpecial = mt_rand(1, 2);
+        }
+
+        $countCharsAlpha = $length - $countCharsNum - $countCharsSpecial;
+        if (0 >= $countCharsAlpha) {
+            throw new \LogicException(sprintf('%d chars are not enough to include %d numbers and %d special chars', $lengthAlpha, $countCharsNum, $countCharsSpecial));
+        }
+
+        $result = [];
+
+        for ($index = 0; $index < $countCharsAlpha; $index++) {
+            $result[] = substr($chars['alpha'], mt_rand(0, 45), 1);
+        }
+
+        for ($index = 0; $index < $countCharsNum; $index++) {
+            $result[] = mt_rand(1, 9);
+        }
+
+        for ($index = 0; $index < $countCharsSpecial; $index++) {
+            $result[] = substr($chars['special'], mt_rand(0, 15), 1);
+        }
+
+        shuffle($result);
+
+        return join('', $result);
     }
 
 }
