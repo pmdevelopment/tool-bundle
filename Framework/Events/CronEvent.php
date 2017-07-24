@@ -117,4 +117,22 @@ class CronEvent extends Event
 
         return false;
     }
+
+    /**
+     * Get Event Names
+     *
+     * @return array
+     */
+    public static function getEventNames()
+    {
+        $names = [];
+        $reflection = new \ReflectionClass(self::class);
+        foreach ($reflection->getConstants() as $constant => $value) {
+            if ('REPEATED_' === substr($constant, 0, 9)) {
+                $names[] = $value;
+            }
+        }
+
+        return $names;
+    }
 }
