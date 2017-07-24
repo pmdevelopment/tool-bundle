@@ -4,15 +4,21 @@ imports:
     - { resource: "services/twig.yml" }
 
 services:
-  pm.knpmenu.voter:
-    class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter
-    arguments: ["@request_stack"]
-    tags:
-      - { name: knp_menu.voter }
+    pm.knpmenu.voter:
+        class: PM\Bundle\ToolBundle\KnpMenu\RouteVoter
+        arguments: ["@request_stack"]
+        tags:
+          - { name: knp_menu.voter }
 
-  pm.pdf:
-    class: PM\Bundle\ToolBundle\Services\PdfService
-    arguments: ["%kernel.root_dir%"]
+    pm.pdf:
+        class: PM\Bundle\ToolBundle\Services\PdfService
+        arguments: ["%kernel.root_dir%"]
 
-  pm.image:
-    class: PM\Bundle\ToolBundle\Services\ImageService
+    pm.image:
+        class: PM\Bundle\ToolBundle\Services\ImageService
+
+    pm.cronjob:
+        class: PM\Bundle\ToolBundle\Services\CronjobService
+        calls:
+            - [setLogger, ['@logger']]
+            - [setEventDispatcher, ['@event_dispatcher']]

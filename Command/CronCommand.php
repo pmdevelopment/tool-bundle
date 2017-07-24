@@ -70,7 +70,7 @@ class CronCommand extends ContainerAwareCommand
         }
 
         $event = new CronEvent($repeat, $helper, $target);
-        $this->getContainer()->get('event_dispatcher')->dispatch(CronEvent::NAME, $event);
+        $this->getContainer()->get('debug.event_dispatcher')->dispatch(CronEvent::NAME, $event);
 
         CommandUtility::writeFinishedMessage($helper, self::NAME);
     }

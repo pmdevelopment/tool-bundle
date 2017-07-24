@@ -1,10 +1,17 @@
+edit: 'Bearbeiten'
+
+cronjob:
+    daily_morning: 'Morgens um 06:00'
+    daily_night: 'Nacht um 03:00'
+    five_minutes: 'Alle 5 Minuten'
+    one_hour: 'Jede Stunde'
+    one_minute: 'Jede Minute'
+
 flash_bag:
   error:
     default: 'Zugriff verweigert'
   success:
     default: 'Die Änderungen wurden erfolgreich gespeichert.'
-
-edit: 'Bearbeiten'
 
 label:
     value: 'Wert:'
