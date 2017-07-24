@@ -42,6 +42,11 @@
                     init: function () {
                         core.debug('core.init()');
 
+                        var hiddenClass = 'hidden';
+                        if ($(_element).data('hidden')) {
+                            hiddenClass = $(_element).data('hidden');
+                        }
+
                         $(_element).on('click', function () {
                             core.debug('core.init() => element.onClick');
 
@@ -57,7 +62,7 @@
                             });
 
                             return false;
-                        }).removeClass('disabled').removeClass('hidden');
+                        }).removeClass('disabled').removeClass(hiddenClass);
                     }
                 };
             }();
