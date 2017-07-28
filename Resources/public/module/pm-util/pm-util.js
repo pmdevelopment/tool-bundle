@@ -102,7 +102,8 @@ var pmUtilLoading = function () {
             var element = $('<div></div>');
 
             bootbox.dialog({
-                message: element
+                message: element,
+                animate: false
             });
 
             this.startInline(element);
