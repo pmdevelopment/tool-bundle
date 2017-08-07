@@ -69,6 +69,20 @@ class PMController extends Controller
     }
 
     /**
+     * Saved Ajax
+     *
+     * @param string $message
+     *
+     * @return Response
+     */
+    public function savedAjax($message = 'flash_bag.success.default')
+    {
+        $this->addSessionFlashBagMessage(self::SESSION_FLASH_BAG_SUCCESS, $message);
+
+        return new Response('');
+    }
+
+    /**
      * Saved with Object Routing
      *
      * @param string      $type
