@@ -1,0 +1,17 @@
+edit: 'Edit'
+
+cronjob:
+    daily_morning: 'Daily 6am'
+    daily_night: 'Daily 3am'
+    five_minutes: '5 minutes'
+    one_hour: 'Every hour'
+    one_minute: 'Every minute'
+
+flash_bag:
+  error:
+    default: 'Access denied.'
+  success:
+    default: 'The changes have been saved.'
+
+button:
+    save: 'Save'
