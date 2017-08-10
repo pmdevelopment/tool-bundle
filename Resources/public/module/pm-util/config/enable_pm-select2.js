@@ -1,0 +1,1 @@
+pmUtil.config.module.select2.enabled = true;
