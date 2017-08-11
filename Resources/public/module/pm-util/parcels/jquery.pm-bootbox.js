@@ -14,6 +14,11 @@
 
                     window.location.reload(true);
                 }
+            },
+            text: {
+                save: 'Speichern',
+                cancel: 'Abbrechen',
+                close: 'Schließen'
             }
         };
 
@@ -59,7 +64,7 @@
                         } else {
                             buttons = {
                                 close: {
-                                    label: 'Schließen',
+                                    label: settings.text.close,
                                     className: 'btn-success'
                                 }
                             };
@@ -113,7 +118,7 @@
                     getButtonsForm: function (onSuccess) {
                         var labelSubmit = $(_element).data('button-submit');
                         if (undefined === labelSubmit) {
-                            labelSubmit = 'Speichern';
+                            labelSubmit = settings.text.save;
                         }
 
                         return {
@@ -140,7 +145,7 @@
                                 }
                             },
                             close: {
-                                label: "Abbrechen",
+                                label: settings.text.cancel,
                                 className: "btn-warning"
                             }
                         };
