@@ -2,7 +2,7 @@
     $.fn.pmBootbox = function (options) {
 
         var settings = {
-            version: 170704,
+            version: 170811,
             callback: {
                 load: function () {
                     /* Executed on form loaded */
@@ -19,7 +19,8 @@
                 save: 'Speichern',
                 cancel: 'Abbrechen',
                 close: 'Schließen'
-            }
+            },
+            use_form_action: true
         };
 
         settings = $.extend({}, settings, options);
@@ -132,10 +133,16 @@
                                         return;
                                     }
 
-                                    var formData = $('.pm-bootbox-form-dialog form').serialize();
+                                    var form = $('.pm-bootbox-form-dialog').find('form');
+                                    var uri = $(_element).attr('href');
+
+                                    if (true === settings.use_form_action && 0 < form.attr('action').length) {
+                                        uri = form.attr('action');
+                                    }
+
                                     pmUtilLoading.startDialog();
 
-                                    $.post($(_element).attr('href'), formData, function (result) {
+                                    $.post(uri, form.serialize(), function (result) {
                                         if ("" !== result) {
                                             dialog.create(result, onSuccess);
                                         } else {
