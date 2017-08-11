@@ -251,7 +251,7 @@
                                     label: "Anwenden",
                                     className: "btn-success",
                                     callback: function () {
-                                        pmCore.loadingStart();
+                                        pmUtilLoading.start();
 
                                         filter.apply(key, $('.pm-table-filter-dialog').find('select').val());
                                     }
