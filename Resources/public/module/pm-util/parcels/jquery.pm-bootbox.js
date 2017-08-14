@@ -200,7 +200,9 @@
                             hiddenClass = $(_element).data('hidden');
                         }
 
-                        settings.callback.init();
+                        if (undefined !== settings.callback.init) {
+                            settings.callback.init();
+                        }
 
                         $(_element).removeClass('disabled').removeClass(hiddenClass);
                     },
