@@ -2,7 +2,7 @@
     $.fn.pmTable = function (options) {
 
         var settings = {
-            version: 0,
+            version: 170815,
             modules: {
                 action: false,
                 sortable: false,
@@ -17,7 +17,7 @@
             action: {
                 editable: false,
                 deletable: false,
-                path: null,
+                path: null
             },
             sorting: {
                 index: "",
@@ -228,7 +228,13 @@
                      * @returns {*}
                      */
                     getList: function () {
-                        return $(_element).parent().find(settings.filter.selectors.menu);
+                        var parent = $(_element).parent();
+
+                        if (true === parent.hasClass('table-scrollable')) {
+                            parent = parent.parent();
+                        }
+
+                        return parent.find(settings.filter.selectors.menu);
                     },
                     /**
                      * Show
