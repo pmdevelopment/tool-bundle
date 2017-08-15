@@ -2,7 +2,7 @@
     $.fn.pmBootbox = function (options) {
 
         var settings = {
-            version: 170811,
+            version: 170814,
             callback: {
                 load: function () {
                     /* Executed on form loaded */
@@ -13,6 +13,10 @@
                     pmUtil.debug('{pmBootbox} settings.callback.success() default');
 
                     window.location.reload(true);
+                },
+                init: function () {
+                    /* Executed on init */
+                    pmUtil.debug('{pmBootbox} settings.callback.init() default');
                 }
             },
             text: {
@@ -194,6 +198,10 @@
                         var hiddenClass = 'hidden';
                         if ($(_element).data('hidden')) {
                             hiddenClass = $(_element).data('hidden');
+                        }
+
+                        if (undefined !== settings.callback.init) {
+                            settings.callback.init();
                         }
 
                         $(_element).removeClass('disabled').removeClass(hiddenClass);
