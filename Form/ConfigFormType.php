@@ -23,13 +23,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class ConfigFormType extends AbstractType
 {
-    /**
+      /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('value', TextType::class, [
+            ->add('value', $options['value_type'], [
                 'label'       => 'label.value',
                 'constraints' => new NotBlank(),
             ]);
@@ -52,9 +52,9 @@ class ConfigFormType extends AbstractType
         $resolver->setDefaults(
             [
                 'show_submit_button' => true,
+                'value_type'         => TextType::class,
             ]
         );
     }
-
 
 }
