@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Class CronCommand
@@ -70,7 +71,8 @@ class CronCommand extends ContainerAwareCommand
         }
 
         $event = new CronEvent($repeat, $helper, $target);
-        $this->getContainer()->get('debug.event_dispatcher')->dispatch(CronEvent::NAME, $event);
+
+        $this->getContainer()->get('event_dispatcher')->dispatch(CronEvent::NAME, $event);
 
         CommandUtility::writeFinishedMessage($helper, self::NAME);
     }
