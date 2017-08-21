@@ -9,6 +9,7 @@
 namespace PM\Bundle\ToolBundle\Framework\Events;
 
 
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -43,17 +44,24 @@ class CronEvent extends Event
     private $target;
 
     /**
+     * @var InputInterface
+     */
+    private $input;
+
+    /**
      * CronEvent constructor.
      *
-     * @param string       $repeated
-     * @param SymfonyStyle $helper
-     * @param null|string  $target
+     * @param string         $repeated
+     * @param SymfonyStyle   $helper
+     * @param null|string    $target
+     * @param InputInterface $input
      */
-    public function __construct($repeated, SymfonyStyle $helper, $target)
+    public function __construct($repeated, SymfonyStyle $helper, $target, $input)
     {
         $this->repeated = $repeated;
         $this->helper = $helper;
         $this->target = $target;
+        $this->input = $input;
     }
 
     /**
@@ -78,6 +86,14 @@ class CronEvent extends Event
     public function getTarget()
     {
         return $this->target;
+    }
+
+    /**
+     * @return InputInterface
+     */
+    public function getInput()
+    {
+        return $this->input;
     }
 
     /**
