@@ -24,6 +24,7 @@ services:
     class: PM\Bundle\ToolBundle\Twig\FOSUserExtension
     calls:
         - [setDoctrine, ['@doctrine']]
+        - [setRoleHierarchyRoles, ['%security.role_hierarchy.roles%']]
     tags:
         - { name: twig.extension }
 
