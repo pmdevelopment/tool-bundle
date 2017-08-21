@@ -7,6 +7,10 @@
                 load: function () {
                     /* Executed on form loaded */
                     pmUtil.debug('{pmBootbox} settings.callback.load() default');
+
+                    if (null !== settings.recursive) {
+                        $('.pm-bootbox-form-dialog').find(settings.recursive).pmBootbox(settings);
+                    }
                 },
                 success: function () {
                     /* Executed on submit success */
@@ -24,7 +28,8 @@
                 cancel: 'Abbrechen',
                 close: 'Schließen'
             },
-            use_form_action: true
+            use_form_action: true,
+            recursive: '.pm-bootbox'
         };
 
         settings = $.extend({}, settings, options);
