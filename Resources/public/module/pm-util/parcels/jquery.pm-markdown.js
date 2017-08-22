@@ -2,7 +2,8 @@
     $.fn.pmMarkdown = function (options) {
 
         var settings = {
-            version: 170320
+            version: 170320,
+            forceSync: true
         };
 
         settings = $.extend({}, settings, options);
@@ -38,7 +39,8 @@
                         $(_elements).each(function () {
                             new SimpleMDE({
                                 element: $(this)[0],
-                                spellChecker: false
+                                spellChecker: false,
+                                forceSync: settings.forceSync
                             });
                         });
                     });

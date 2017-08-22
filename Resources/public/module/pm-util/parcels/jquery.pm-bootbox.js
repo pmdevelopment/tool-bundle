@@ -29,7 +29,8 @@
                 close: 'Schließen'
             },
             use_form_action: true,
-            recursive: '.pm-bootbox'
+            use_pm_markdown: false,
+            recursive: null
         };
 
         settings = $.extend({}, settings, options);
@@ -81,13 +82,19 @@
                         }
 
                         bootbox.hideAll();
-                        bootbox.dialog({
+                        var bootboxDialog = bootbox.dialog({
                             className: 'pm-bootbox-form-dialog',
                             title: core.getTitle(),
                             size: core.getSize(),
                             message: result,
                             buttons: buttons
                         });
+
+                        if (true === settings.use_pm_markdown && true === pmUtil.config.module.simpleMde.enabled) {
+                            bootboxDialog.on('shown.bs.modal', function () {
+                                pmUtil.config.module.simpleMde.callback();
+                            });
+                        }
 
                         settings.callback.load();
                     },
