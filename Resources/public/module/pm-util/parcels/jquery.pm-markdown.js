@@ -32,6 +32,17 @@
                 init: function () {
                     core.debug('core.init()');
 
+                    if (0 === $(_elements).length) {
+                        return;
+                    }
+
+                    $(_elements).each(function () {
+                        var div = $('<div class="pm-markdown-loading"></div>');
+                        $(this).parent().append(div);
+
+                        pmUtilLoading.startInline(div);
+                    });
+
                     var basePath = '/bundles/pmtool/vendor/simplemde/' + pmUtil.config.module.simpleMde.version;
                     $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', basePath + '/simplemde.min.css'));
 
@@ -42,6 +53,8 @@
                                 spellChecker: false,
                                 forceSync: settings.forceSync
                             });
+
+                            $(this).parent().find('.pm-markdown-loading').remove();
                         });
                     });
                 }
