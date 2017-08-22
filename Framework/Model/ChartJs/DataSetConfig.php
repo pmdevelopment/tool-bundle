@@ -318,4 +318,44 @@ class DataSetConfig
             'borderColor'               => $this->getBorderColor(),
         ];
     }
+
+    /**
+     * Get Config Blue Dark
+     *
+     * @return DataSetConfig
+     */
+    public static function createBlueDark()
+    {
+        $config = new DataSetConfig();
+        $config
+            ->setLineTension(0)
+            ->setBorderWidth(2)
+            ->setPointRadius(1)
+            ->setPointHitRadius(5)
+            ->setPointBorderColor('rgb(94, 115, 139)')
+            ->setBorderColor('rgb(94, 115, 139)')
+            ->setBackgroundColor('rgba(94, 115, 139, 0.1)');
+
+        return $config;
+    }
+
+    /**
+     * Get Config Blue Madison
+     *
+     * @return DataSetConfig
+     */
+    public static function createBlueMadison()
+    {
+        $config = new DataSetConfig();
+        $config
+            ->setLineTension(0)
+            ->setBorderWidth(2)
+            ->setPointRadius(1)
+            ->setPointHitRadius(5)
+            ->setPointBorderColor('rgb(87, 142, 190)')
+            ->setBorderColor('rgb(87, 142, 190)')
+            ->setBackgroundColor('rgba(87, 142, 190, 0.1)');
+
+        return $config;
+    }
 }
