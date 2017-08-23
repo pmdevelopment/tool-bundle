@@ -158,13 +158,32 @@
 
                                     pmUtilLoading.startDialog();
 
-                                    $.post(uri, form.serialize(), function (result) {
-                                        if ("" !== result) {
-                                            dialog.create(result, onSuccess);
-                                        } else {
-                                            onSuccess();
-                                        }
-                                    });
+                                    if (0 < form.find('input[type="file"]').length) {
+                                        $.ajax({
+                                            url: uri,
+                                            type: "POST",
+                                            data: new FormData(form[0]),
+                                            contentType: false,
+                                            cache: false,
+                                            processData: false,
+                                            success: function (result) {
+                                                if ("" !== result) {
+                                                    dialog.create(result, onSuccess);
+                                                } else {
+                                                    onSuccess();
+                                                }
+                                            }
+                                        });
+
+                                    } else {
+                                        $.post(uri, form.serialize(), function (result) {
+                                            if ("" !== result) {
+                                                dialog.create(result, onSuccess);
+                                            } else {
+                                                onSuccess();
+                                            }
+                                        });
+                                    }
                                 }
                             },
                             close: {
