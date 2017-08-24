@@ -2,7 +2,7 @@
     $.fn.pmBootbox = function (options) {
 
         var settings = {
-            version: 170814,
+            version: 24082017,
             callback: {
                 load: function () {
                     /* Executed on form loaded */
@@ -54,7 +54,13 @@
                         core.debug('dialog.init()');
 
                         $.get($(_element).attr('href'), {}, function (result) {
-                            dialog.create(result, onSuccess);
+                            if('' === result){
+                                onSuccess = onSuccess || settings.callback.success;
+
+                                onSuccess();
+                            } else {
+                                dialog.create(result, onSuccess);
+                            }
                         });
                     },
                     /**
