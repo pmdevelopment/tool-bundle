@@ -8,9 +8,9 @@
 
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
-use PM\Bundle\ToolBundle\Constants\HttpStatusCode;
-use Symfony\Component\HttpFoundation\Response;
+use PM\Bundle\ToolBundle\Components\Helper\FileUtilityHelper;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class FileUtility
@@ -19,6 +19,24 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class FileUtility
 {
+    /**
+     * Get FontAwesome Icon by File Extension
+     *
+     * @param string $fileExtension
+     * @param string $default
+     *
+     * @return null|string
+     */
+    public static function getFontAwesomeIcon($fileExtension, $default = 'file-o')
+    {
+        $result = FileUtilityHelper::getIconByExtension($fileExtension);
+        if (null === $result) {
+            return $default;
+        }
+
+        return $result;
+    }
+
     /**
      * Get Base64 Encoded Data Uri
      *
@@ -43,7 +61,7 @@ class FileUtility
         $mimeType = substr($dataUri, 5, strpos($dataUri, ';') - 5);
         $content = base64_decode(substr($dataUri, strpos($dataUri, ',') + 1));
 
-        return new Response($content, HttpStatusCode::OK, [
+        return new Response($content, Response::HTTP_OK, [
             'Content-Type' => $mimeType,
         ]);
     }
@@ -87,11 +105,11 @@ class FileUtility
     {
         $path = [
             sys_get_temp_dir(),
-            "symfony2",
+            'symfony2',
         ];
 
         if (null !== $folder) {
-            $path[] = sprintf("%s_%s", $folder, self::getCurrentSetupHash());
+            $path[] = sprintf('%s_%s', $folder, self::getCurrentSetupHash());
         }
 
         $path[] = SystemUtility::getCurrentUser();

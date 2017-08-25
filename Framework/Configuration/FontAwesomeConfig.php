@@ -23,9 +23,11 @@ class FontAwesomeConfig
      */
     public static function getVersions()
     {
-        return array(
-            "4.4.0"
-        );
+        return [
+            '4.4.0',
+        ];
+
+        /* Todo: Add missing versions */
     }
 
     /**

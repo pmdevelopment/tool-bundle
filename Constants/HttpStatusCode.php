@@ -12,6 +12,8 @@ namespace PM\Bundle\ToolBundle\Constants;
  * Class HttpStatusCode
  *
  * @package PM\Bundle\ToolBundle\Constants
+ *
+ * @deprecated Use Symfony Response instead!
  */
 class HttpStatusCode
 {
