@@ -38,6 +38,13 @@ class ConvertExtension extends Twig_Extension
                     ],
                 ]
             ),
+            new \Twig_SimpleFilter(
+                'convert_byte_to_string',
+                [
+                    $this,
+                    'getStringByByte',
+                ]
+            ),
         ];
     }
 
@@ -59,5 +66,36 @@ class ConvertExtension extends Twig_Extension
         return $parse->text($string);
     }
 
+    /**
+     * Get Human Readable Bytes
+     *
+     * @param int    $bytes
+     * @param int    $decimals
+     * @param string $decimalPoint
+     * @param string $thousandsSeparator
+     *
+     * @return string
+     */
+    public function getStringByByte($bytes, $decimals = 2, $decimalPoint = '.', $thousandsSeparator = ',')
+    {
+        $size = [
+            'B',
+            'kB',
+            'MB',
+            'GB',
+            'TB',
+            'PB',
+            'EB',
+            'ZB',
+            'YB',
+        ];
+
+        $factor = intval(floor((strlen($bytes) - 1) / 3));
+        if (false === isset($size[$factor])) {
+            return $bytes;
+        }
+
+        return sprintf('%s %s', number_format($bytes / pow(1024, $factor), $decimals, $decimalPoint, $thousandsSeparator), $size[$factor]);
+    }
 
 }
