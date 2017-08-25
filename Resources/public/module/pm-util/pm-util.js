@@ -137,7 +137,7 @@ var pmUtil = function () {
                 },
                 bootbox: {
                     enabled: false,
-                    cache: '201708241113',
+                    cache: '201708251230',
                     callback: function () {
                         $('.pm-bootbox').pmBootbox({
                             version: 170117

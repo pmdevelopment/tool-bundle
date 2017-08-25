@@ -2,7 +2,7 @@
     $.fn.pmBootbox = function (options) {
 
         var settings = {
-            version: 24082017,
+            version: 25082017,
             callback: {
                 load: function () {
                     /* Executed on form loaded */
@@ -30,6 +30,7 @@
             },
             use_form_action: true,
             use_pm_markdown: false,
+            disable_buttons: false,
             recursive: null
         };
 
@@ -40,7 +41,7 @@
 
             /**
              * Dialog
-             * @type {{init, create, getButtonsForm}}
+             * @type {{init, create, getButtons, getButtonsConfirm, getButtonsForm}}
              */
             var dialog = function () {
                 "use strict";
@@ -54,7 +55,7 @@
                         core.debug('dialog.init()');
 
                         $.get($(_element).attr('href'), {}, function (result) {
-                            if('' === result){
+                            if ('' === result) {
                                 onSuccess = onSuccess || settings.callback.success;
 
                                 onSuccess();
@@ -74,26 +75,13 @@
 
                         onSuccess = onSuccess || settings.callback.success;
 
-                        if (0 <= result.indexOf('<form')) {
-                            buttons = dialog.getButtonsForm(onSuccess);
-                        } else if (true === $(_element).data('confirm')) {
-                            buttons = dialog.getButtonsConfirm(onSuccess);
-                        } else {
-                            buttons = {
-                                close: {
-                                    label: settings.text.close,
-                                    className: 'btn-success'
-                                }
-                            };
-                        }
-
                         bootbox.hideAll();
                         var bootboxDialog = bootbox.dialog({
                             className: 'pm-bootbox-form-dialog',
                             title: core.getTitle(),
                             size: core.getSize(),
                             message: result,
-                            buttons: buttons
+                            buttons: dialog.getButtons(result, onSuccess)
                         });
 
                         if (true === settings.use_pm_markdown && true === pmUtil.config.module.simpleMde.enabled) {
@@ -103,6 +91,32 @@
                         }
 
                         settings.callback.load();
+                    },
+                    /**
+                     * Get Buttons
+                     * @param result
+                     * @param onSuccess
+                     * @returns {*}
+                     */
+                    getButtons: function (result, onSuccess) {
+                        if (true === settings.disable_buttons) {
+                            return {};
+                        }
+
+                        if (0 <= result.indexOf('<form')) {
+                            return dialog.getButtonsForm(onSuccess);
+                        }
+
+                        if (true === $(_element).data('confirm')) {
+                            return dialog.getButtonsConfirm(onSuccess);
+                        }
+
+                        return {
+                            close: {
+                                label: settings.text.close,
+                                className: 'btn-success'
+                            }
+                        };
                     },
                     /**
                      * Get Buttons Confirmed
