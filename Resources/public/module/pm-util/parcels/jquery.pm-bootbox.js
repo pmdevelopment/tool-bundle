@@ -4,12 +4,13 @@
         var settings = {
             version: 170828,
             callback: {
-                load: function () {
+                load: function (element) {
                     /* Executed on form loaded */
                     pmUtil.debug('{pmBootbox} settings.callback.load() default');
 
-                    if (null !== settings.recursive) {
-                        $('.pm-bootbox-form-dialog').find(settings.recursive).pmBootbox(settings);
+                    var recursive = $(element).data('recursive') || settings.recursive;
+                    if (null !== recursive) {
+                        $('.pm-bootbox-form-dialog').find(recursive).pmBootbox(settings);
                     }
                 },
                 success: function () {
@@ -90,7 +91,7 @@
                             });
                         }
 
-                        settings.callback.load();
+                        settings.callback.load(_element);
                     },
                     /**
                      * Get Buttons

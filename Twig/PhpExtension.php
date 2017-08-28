@@ -62,6 +62,13 @@ class PhpExtension extends Twig_Extension
                     'getStrSplit',
                 ]
             ),
+            new \Twig_SimpleFilter(
+                'array_reverse',
+                [
+                    $this,
+                    'getArrayReverse',
+                ]
+            ),
         ];
     }
 
@@ -106,5 +113,18 @@ class PhpExtension extends Twig_Extension
     public function getStrSplit($string, $length = 1)
     {
         return str_split($string, $length);
+    }
+
+    /**
+     * array_reverse
+     *
+     * @param array      $array
+     * @param bool|false $preserveKeys
+     *
+     * @return array
+     */
+    public function getArrayReverse($array, $preserveKeys = false)
+    {
+        return array_reverse($array, $preserveKeys);
     }
 }
