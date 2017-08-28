@@ -3,7 +3,6 @@
 namespace PM\Bundle\ToolBundle\Twig;
 
 use Twig_Extension;
-use Twig_Filter_Method;
 
 /**
  * Description of CssVersionExtension

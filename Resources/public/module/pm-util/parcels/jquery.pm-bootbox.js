@@ -2,7 +2,7 @@
     $.fn.pmBootbox = function (options) {
 
         var settings = {
-            version: 25082017,
+            version: 170828,
             callback: {
                 load: function () {
                     /* Executed on form loaded */
