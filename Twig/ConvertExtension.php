@@ -128,9 +128,6 @@ class ConvertExtension extends Twig_Extension
             return $this->getTranslator()->trans('time.today');
         }
 
-        dump((new DateTime('yesterday'))->format('Ymd'));
-        dump($date->format('Ymd'));
-
         if ($date->format('Ymd') === ((new DateTime('yesterday'))->format('Ymd'))) {
             return $this->getTranslator()->trans('time.yesterday');
         }
