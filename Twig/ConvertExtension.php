@@ -8,7 +8,9 @@
 
 namespace PM\Bundle\ToolBundle\Twig;
 
+use DateTime;
 use Parsedown;
+use PM\Bundle\ToolBundle\Framework\Traits\Services\HasTranslatorServiceTrait;
 use Twig_Extension;
 
 /**
@@ -18,6 +20,8 @@ use Twig_Extension;
  */
 class ConvertExtension extends Twig_Extension
 {
+    use HasTranslatorServiceTrait;
+
     /**
      * Get Filters
      *
@@ -43,6 +47,13 @@ class ConvertExtension extends Twig_Extension
                 [
                     $this,
                     'getStringByByte',
+                ]
+            ),
+            new \Twig_SimpleFilter(
+                'convert_date_to_relative_string',
+                [
+                    $this,
+                    'getStringByDate',
                 ]
             ),
         ];
@@ -98,4 +109,60 @@ class ConvertExtension extends Twig_Extension
         return sprintf('%s %s', number_format($bytes / pow(1024, $factor), $decimals, $decimalPoint, $thousandsSeparator), $size[$factor]);
     }
 
+    /**
+     * Get String By Date
+     *
+     * @param DateTime $date
+     *
+     * @return string
+     */
+    public function getStringByDate(DateTime $date)
+    {
+        $dateNow = new DateTime();
+
+        if ($dateNow < $date) {
+            return 'Future date not implemented.';
+        }
+
+        if ($date->format('Ymd') === $dateNow->format('Ymd')) {
+            return $this->getTranslator()->trans('time.today');
+        }
+
+        dump((new DateTime('yesterday'))->format('Ymd'));
+        dump($date->format('Ymd'));
+
+        if ($date->format('Ymd') === ((new DateTime('yesterday'))->format('Ymd'))) {
+            return $this->getTranslator()->trans('time.yesterday');
+        }
+
+        $diffDays = ceil(($dateNow->getTimestamp() - $date->getTimestamp()) / 86400);
+
+        if (7 > $diffDays) {
+            return $this->getTranslator()->trans('time.days_ago', [
+                '{days}' => $diffDays,
+            ]);
+        }
+
+        if ($date->format('W') === (new DateTime('-1 Week'))->format('W')) {
+            return $this->getTranslator()->trans('time.last_week');
+        }
+
+        if (28 > $diffDays) {
+            return $this->getTranslator()->trans('time.weeks_ago', [
+                '{weeks}' => floor($diffDays / 7),
+            ]);
+        }
+
+        if ($date->format('Ym') === (new DateTime('-1 month'))->format('Ym')) {
+            return $this->getTranslator()->trans('time.last_month');
+        }
+
+        if ($date->format('Y') === ($dateNow->format('Y') - 1)) {
+            return $this->getTranslator()->trans('time.last_year');
+        }
+
+        return $this->getTranslator()->trans('time.years_ago', [
+            '{years}' => $dateNow->format('Y') - $date->format('Y'),
+        ]);
+    }
 }

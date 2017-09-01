@@ -1,4 +1,5 @@
-edit: 'Bearbeiten'
+button:
+    save: 'Speichern'
 
 cronjob:
     daily_morning: 'Morgens um 06:00'
@@ -6,6 +7,8 @@ cronjob:
     five_minutes: 'Alle 5 Minuten'
     one_hour: 'Jede Stunde'
     one_minute: 'Jede Minute'
+
+edit: 'Bearbeiten'
 
 flash_bag:
   error:
@@ -32,5 +35,13 @@ placeholder:
     chartjs:
         line_tension: 'Biegung der Kurve. 0 bis 1.'
 
-button:
-    save: 'Speichern'
+time:
+    today: 'Heute'
+    yesterday: 'Gestern'
+    days_ago: 'Vor {days} Tagen'
+    last_week: 'Letzte Woche'
+    weeks_ago: 'Vor {weeks} Wochen'
+    last_month: 'Letzter Monat'
+    months_ago: 'Vor {months} Monaten'
+    last_year: 'Letztes Jahr'
+    years_ago: 'Vor {years} Jahren'

@@ -1,4 +1,5 @@
-edit: 'Edit'
+button:
+    save: 'Save'
 
 cronjob:
     daily_morning: 'Daily 6am'
@@ -7,11 +8,21 @@ cronjob:
     one_hour: 'Every hour'
     one_minute: 'Every minute'
 
+edit: 'Edit'
+
 flash_bag:
   error:
     default: 'Access denied.'
   success:
     default: 'The changes have been saved.'
 
-button:
-    save: 'Save'
+time:
+    today: 'Today'
+    yesterday: 'Yesterday'
+    days_ago: '{days} days ago'
+    last_week: 'Last week'
+    weeks_ago: '{weeks} weeks ago'
+    last_month: 'Last month'
+    months_ago: '{months} months ago'
+    last_year: 'Last year'
+    years_ago: '{years} ago'

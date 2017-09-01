@@ -50,6 +50,8 @@ services:
 
   pm.twig.convert:
     class: PM\Bundle\ToolBundle\Twig\ConvertExtension
+    calls:
+        - [setTranslator, ['@translator']]
     tags:
         - { name: twig.extension }
 
