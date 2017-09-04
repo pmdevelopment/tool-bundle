@@ -58,4 +58,19 @@ class MenuUtility
             $parameterName => $parameterValue,
         ];
     }
+
+    /**
+     * Get Route Parameter Slug
+     *
+     * @param string $parameterName
+     * @param string $parameterValue
+     *
+     * @return array
+     */
+    public static function getRouteParameterId($parameterName = 'id', $parameterValue = 0)
+    {
+        return [
+            $parameterName => $parameterValue,
+        ];
+    }
 }
