@@ -4,7 +4,6 @@ namespace PM\Bundle\ToolBundle\KnpMenu;
 
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Voter\VoterInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -40,6 +39,8 @@ class RouteVoter implements VoterInterface
     }
 
     /**
+     * Match Item
+     *
      * @param ItemInterface $item
      *
      * @return bool|null
@@ -58,32 +59,55 @@ class RouteVoter implements VoterInterface
         }
 
 
-        $routes = (array)$item->getExtra('routes', array());
-
+        $routes = $item->getExtra('routes', []);
+        if (false === is_array($routes)) {
+            return null;
+        }
 
         foreach ($routes as $testedRoute) {
-            if ($route == $testedRoute['route']) {
+            /* Route matching? */
+            if ($route !== $testedRoute['route']) {
+                continue;
+            }
 
-                if (is_array($routeParameters) && 0 < count($routeParameters)) {
-                    if (isset($testedRoute['parameters']) && is_array($testedRoute['parameters'])) {
-                        $matching = true;
+            /* No Parameters? */
+            if (false === is_array($routeParameters) || 0 === count($routeParameters)) {
+                return true;
+            }
 
-                        foreach ($routeParameters as $index => $value) {
-                            if ('_' != substr($index, 0, 1)) {
-                                if (!isset($testedRoute['parameters'][$index]) || ($testedRoute['parameters'][$index] != $value && (0 < $testedRoute['parameters'][$index]) || !is_numeric($value))) {
-                                    $matching = false;
-                                }
-                            }
-                        }
+            /* Parameters only in current route? */
+            if (false === isset($testedRoute['parameters']) || false === is_array($testedRoute['parameters'])) {
+                continue;
+            }
 
-                        if ($matching) {
-                            return true;
-                        }
-                    }
-                } else {
-                    return true;
+            /* Assume match, until different parameters are found */
+            $matching = true;
+
+            foreach ($routeParameters as $index => $value) {
+                /* Ignore underscored parameters */
+                if ('_' === substr($index, 0, 1)) {
+                    continue;
+                }
+
+                /* Parameter not found */
+                if (false === isset($testedRoute['parameters'][$index])) {
+                    $matching = false;
+
+                    break;
+                }
+
+                /* Parameter not matching */
+                if ($testedRoute['parameters'][$index] !== $value && ((0 < $testedRoute['parameters'][$index]) || false === is_numeric($value))) {
+                    $matching = false;
+
+                    break;
                 }
             }
+
+            if (true === $matching) {
+                return true;
+            }
+
         }
 
         return null;
