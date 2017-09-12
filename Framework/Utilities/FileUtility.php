@@ -9,6 +9,8 @@
 namespace PM\Bundle\ToolBundle\Framework\Utilities;
 
 use PM\Bundle\ToolBundle\Components\Helper\FileUtilityHelper;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -93,6 +95,33 @@ class FileUtility
         return $files;
     }
 
+    /**
+     * Get Folders
+     *
+     * @param string $root
+     *
+     * @return array
+     */
+    public static function getFolders($root)
+    {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($root, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST,
+            RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
+        );
+
+        $paths = [
+            $root,
+        ];
+
+        foreach ($iterator as $path => $dir) {
+            if (true === $dir->isDir()) {
+                $paths[] = $path;
+            }
+        }
+
+        return $paths;
+    }
 
     /**
      * Get User Based Cache dir (e.g. /tmp/symfony2/yourfolder_uniquehash/www-data)
