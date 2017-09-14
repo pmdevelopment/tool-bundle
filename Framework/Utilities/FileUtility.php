@@ -69,7 +69,7 @@ class FileUtility
     }
 
     /**
-     * Get Files
+     * Get Files and folders
      *
      * @param array $folder
      *
@@ -85,7 +85,7 @@ class FileUtility
 
         $handle = opendir($folder);
         while (false !== ($entry = readdir($handle))) {
-            if ('.' !== substr($entry, 0, 1)) {
+            if (false === in_array($entry, self::getDirSymbols())) {
                 $files[] = $entry;
             }
         }
@@ -124,6 +124,43 @@ class FileUtility
     }
 
     /**
+     * Get Folders and Files recursive
+     *
+     * @param string $root
+     *
+     * @return array
+     */
+    public static function getFolderAsArray($root)
+    {
+        if (false === is_dir($root)) {
+            return null;
+        }
+
+        $result = [];
+        $folderContent = scandir($root);
+
+        $dirChecks = [
+            true,
+            false,
+        ];
+
+        foreach ($dirChecks as $dirCheck) {
+            foreach ($folderContent as $entry) {
+                if (true === in_array($entry, self::getDirSymbols())) {
+                    continue;
+                }
+
+                $path = sprintf('%s/%s', $root, $entry);
+                if ($dirCheck === is_dir($path)) {
+                    $result[$entry] = self::getFolderAsArray($path);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get User Based Cache dir (e.g. /tmp/symfony2/yourfolder_uniquehash/www-data)
      *
      * @param string $folder
@@ -146,6 +183,19 @@ class FileUtility
         $folder = implode(DIRECTORY_SEPARATOR, $path);
 
         return $folder;
+    }
+
+    /**
+     * Get Dir Symbols (. and ..)
+     *
+     * @return array
+     */
+    public static function getDirSymbols()
+    {
+        return [
+            '.',
+            '..',
+        ];
     }
 
     /**
@@ -195,6 +245,74 @@ class FileUtility
 
             chmod($subFolder, 0777);
         }
+
+        return true;
+    }
+
+    /**
+     * RMDIR recursive
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    public static function rmdir($path)
+    {
+        if (true === is_dir($path)) {
+            $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
+
+            foreach ($files as $file) {
+                if (false === in_array($file->getBasename(), self::getDirSymbols())) {
+                    if (true === $file->isDir()) {
+                        rmdir($file->getPathName());
+                    } else {
+                        if ((true === $file->isFile()) || (true === $file->isLink())) {
+                            unlink($file->getPathname());
+                        }
+                    }
+                }
+            }
+
+            return rmdir($path);
+        } else {
+            if ((is_file($path) === true) || (is_link($path) === true)) {
+                return unlink($path);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Copy recursive
+     *
+     * @param string $source
+     * @param string $target
+     *
+     * @return bool
+     */
+    public static function copy($source, $target)
+    {
+        if (false === is_dir($source)) {
+            return copy($source, $target);
+        }
+
+        self::mkdir($target);
+
+        $dirSource = dir($source);
+
+        while (false !== ($fileEntry = $dirSource->read())) {
+            if (true === in_array($fileEntry, self::getDirSymbols())) {
+                continue;
+            }
+
+            if (false === self::copy(sprintf('%s/%s', $source, $fileEntry), sprintf('%s/%s', $target, $fileEntry))) {
+                return false;
+            }
+
+        }
+
+        $dirSource->close();
 
         return true;
     }
