@@ -21,6 +21,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FileUtility
 {
+    const EXCLUDE_FOLDERS = true;
+    const INCLUDE_FOLDERS = false;
+
     /**
      * Get FontAwesome Icon by File Extension
      *
@@ -72,10 +75,11 @@ class FileUtility
      * Get Files and folders
      *
      * @param array $folder
+     * @param bool  $excludeFolders
      *
      * @return array
      */
-    public static function getFiles($folder)
+    public static function getFiles($folder, $excludeFolders = self::INCLUDE_FOLDERS)
     {
         $files = [];
 
@@ -85,9 +89,15 @@ class FileUtility
 
         $handle = opendir($folder);
         while (false !== ($entry = readdir($handle))) {
-            if (false === in_array($entry, self::getDirSymbols())) {
-                $files[] = $entry;
+            if (true === in_array($entry, self::getDirSymbols())) {
+                continue;
             }
+
+            if (self::EXCLUDE_FOLDERS === $excludeFolders && true === is_dir(sprintf('%s/%s', $folder, $entry))) {
+                continue;
+            }
+
+            $files[] = $entry;
         }
 
         closedir($handle);
