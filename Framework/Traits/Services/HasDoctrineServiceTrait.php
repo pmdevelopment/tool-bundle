@@ -55,13 +55,14 @@ trait HasDoctrineServiceTrait
     }
 
     /**
-     * Persist and flush
+     * Persist and flush (and clear?)
      *
-     * @param mixed|object|array $entities
+     * @param mixed|object|array $entities        entities to persist and flush.
+     * @param mixed|string|bool  $clearAfterPush  true to clear all or class name.
      *
      * @return $this
      */
-    public function persistAndFlush($entities)
+    public function persistAndFlush($entities, $clearAfterPush = false)
     {
         if (0 === func_num_args()) {
             throw new \LogicException('Missing arguments');
@@ -83,6 +84,17 @@ trait HasDoctrineServiceTrait
         }
 
         $this->getDoctrineManager()->flush();
+
+        /* Clear after push */
+        if (false !== $clearAfterPush) {
+            if (true === $clearAfterPush) {
+                $this->getDoctrineManager()->clear();
+
+                return $this;
+            }
+
+            $this->getDoctrineManager()->clear($clearAfterPush);
+        }
 
         return $this;
     }
