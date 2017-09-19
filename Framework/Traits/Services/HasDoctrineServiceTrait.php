@@ -57,8 +57,8 @@ trait HasDoctrineServiceTrait
     /**
      * Persist and flush (and clear?)
      *
-     * @param mixed|object|array $entities        entities to persist and flush.
-     * @param mixed|string|bool  $clearAfterPush  true to clear all or class name.
+     * @param mixed|object|array $entities       entities to persist and flush.
+     * @param mixed|string|bool  $clearAfterPush true to clear all or class name.
      *
      * @return $this
      */
@@ -70,8 +70,15 @@ trait HasDoctrineServiceTrait
 
         $persists = [];
         $entities = func_get_args();
+        $clearAfterPush = false;
 
         foreach ($entities as $entity) {
+            if (true === $entity || true === is_string($entity)) {
+                $clearAfterPush = $entity;
+
+                continue;
+            }
+
             if (true === is_array($entity)) {
                 $persists = array_merge($persists, $entity);
             } else {
