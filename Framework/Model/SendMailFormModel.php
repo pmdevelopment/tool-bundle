@@ -24,10 +24,12 @@ class SendMailFormModel
      * @var string
      */
     private $sender;
+
     /**
      * @var string
      */
     private $recipient;
+
     /**
      * @var string
      */
@@ -72,7 +74,7 @@ class SendMailFormModel
     }
 
     /**
-     * @return string
+     * @return string|array
      */
     public function getRecipient()
     {
@@ -80,7 +82,7 @@ class SendMailFormModel
     }
 
     /**
-     * @param string $recipient
+     * @param string|array $recipient
      *
      * @return SendMailFormModel
      */
@@ -160,10 +162,22 @@ class SendMailFormModel
     {
         $message = \Swift_Message::newInstance();
 
+        if (true === is_array($this->getRecipient())) {
+            $recipient = $this->getRecipient();
+        } else {
+            $recipient = [
+                $this->getRecipient(),
+            ];
+        };
+
         $message
             ->setSubject($this->getSubject())
-            ->setFrom(array($this->getSender()))
-            ->setTo(array($this->getRecipient()))
+            ->setFrom(
+                [
+                    $this->getSender(),
+                ]
+            )
+            ->setTo($recipient)
             ->setBody($this->getMessage());
 
         if (0 < count($this->getAttachments())) {

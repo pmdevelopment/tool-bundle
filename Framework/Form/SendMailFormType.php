@@ -9,7 +9,12 @@
 namespace PM\Bundle\ToolBundle\Framework\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -21,37 +26,47 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class SendMailFormType extends AbstractType
 {
     /**
-     * @inheritDoc
-     */
-    public function getName()
-    {
-        return "pm_tool_framework_sendmail";
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add("sender", "email", array(
-                "label"       => "Absender:",
-                "constraints" => array(new Email())
-            ))
-            ->add("recipient", "email", array(
-                "label"       => "Empfänger:",
-                "constraints" => array(new Email())
-            ))
-            ->add("subject", "text", array(
-                "label"       => "Betreff:",
-                "constraints" => array(new NotBlank())
-            ))
-            ->add("message", "textarea", array(
-                "label"       => "Nachricht:",
-                "constraints" => array(new NotBlank()),
-                "attr"        => array("rows" => 10)
-            ))
-            ->add("senden", "submit");
+            ->add('sender', EmailType::class, [
+                'label'       => 'mail_sender',
+                'constraints' => new Email(),
+            ])
+            ->add('recipient', EmailType::class, [
+                'label'       => 'mail_recipient',
+                'constraints' => new Email(),
+            ])
+            ->add('subject', TextType::class, [
+                'label'       => 'mail_subject',
+                'constraints' => new NotBlank(),
+            ])
+            ->add('message', TextareaType::class, [
+                'label'       => 'mail_message',
+                'constraints' => new NotBlank(),
+                'attr'        => [
+                    'rows' => $options['message_rows'],
+                ],
+            ])
+            ->add('send', SubmitType::class, [
+                'label' => 'button.send',
+            ]);
+    }
+
+    /**
+     * Configures the options for this type.
+     *
+     * @param OptionsResolver $resolver The resolver for the options
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'message_rows' => 10,
+            ]
+        );
     }
 
 

@@ -1,5 +1,11 @@
+mail_message: 'Nachricht'
+mail_recipient: 'Empfänger'
+mail_sender: 'Absender'
+mail_subject: 'Betreff'
+
 button:
     save: 'Speichern'
+    send: 'Senden'
 
 cronjob:
     daily_morning: 'Morgens um 06:00'

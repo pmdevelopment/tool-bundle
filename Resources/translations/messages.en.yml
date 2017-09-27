@@ -1,5 +1,11 @@
+mail_message: 'Message'
+mail_recipient: 'Recipient'
+mail_sender: 'Sender'
+mail_subject: 'Subject'
+
 button:
     save: 'Save'
+    send: 'Send'
 
 cronjob:
     daily_morning: 'Daily 6am'
