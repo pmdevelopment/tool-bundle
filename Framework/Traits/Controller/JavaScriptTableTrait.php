@@ -3,11 +3,9 @@
 namespace PM\Bundle\ToolBundle\Framework\Traits\Controller;
 
 use Doctrine\ORM\QueryBuilder;
-use PM\Bundle\ToolBundle\Framework\Model\JavaScriptTable\SortingModel;
 use PM\Bundle\ToolBundle\Framework\Model\JavaScriptTable\TableModel;
 use PM\Bundle\ToolBundle\Framework\Utilities\CollectionUtility;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class JavaScriptTableTrait
