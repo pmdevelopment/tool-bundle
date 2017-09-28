@@ -2,10 +2,10 @@
 
 namespace PM\Bundle\ToolBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -23,14 +23,37 @@ class PMToolExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        if (true === isset($config['doctrine']['encryption']) && null !== $config['doctrine']['encryption']) {
-            $container->setParameter('pm__tool.configuration.doctrine.encryption', $config['doctrine']['encryption']);
-        } else {
-            $container->setParameter('pm__tool.configuration.doctrine.encryption', null);
+
+        $parameters = $this->getParameters($config, 'pm__tool.configuration');
+        foreach ($parameters as $key => $value) {
+            $container->setParameter($key, $value);
         }
 
         /* Services */
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
+    }
+
+    /**
+     * @param array  $config
+     * @param string $prefix
+     *
+     * @return array
+     */
+    private function getParameters(array $config, $prefix)
+    {
+        $result = [];
+
+        foreach ($config as $key => $value) {
+            $index = sprintf('%s.%s', $prefix, $key);
+
+            if (true === is_array($value)) {
+                $result = array_merge($result, $this->getParameters($value, $index));
+            } else {
+                $result[$index] = $value;
+            }
+        }
+
+        return $result;
     }
 }
