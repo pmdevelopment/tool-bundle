@@ -21,8 +21,10 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('pm_tool');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('doctrine')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('encryption')->defaultNull()->end()
                     ->end()

@@ -9,9 +9,8 @@
 namespace PM\Bundle\ToolBundle\Framework;
 
 
-use PM\Bundle\ToolBundle\Constants\Environment;
-use PM\Bundle\ToolBundle\Framework\Utilities\FileUtility;
 use LogicException;
+use PM\Bundle\ToolBundle\Framework\Utilities\FileUtility;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -27,11 +26,21 @@ use Symfony\Component\HttpKernel\Kernel;
 class PMKernel extends Kernel
 {
     /**
+     * @var string
+     */
+    private $cacheDir;
+
+    /**
+     * @var string
+     */
+    private $logDir;
+
+    /**
      * @inheritDoc
      */
     public function registerBundles()
     {
-        throw new LogicException("No bundles registered");
+        throw new LogicException('No bundles registered');
     }
 
     /**
@@ -39,7 +48,7 @@ class PMKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        throw new LogicException("Missing container configuration");
+        throw new LogicException('Missing container configuration');
     }
 
     /**
@@ -47,14 +56,20 @@ class PMKernel extends Kernel
      */
     public function getCacheDir()
     {
-        if ('dev' !== $this->getEnvironment()) {
-            return sprintf("%s/../var/cache/%s", $this->getRootDir(), $this->getEnvironment());
+        if (null !== $this->cacheDir) {
+            return $this->cacheDir;
         }
 
-        return implode(DIRECTORY_SEPARATOR, [
+        if ('dev' !== $this->getEnvironment()) {
+            return parent::getCacheDir();
+        }
+
+        $this->cacheDir = implode(DIRECTORY_SEPARATOR, [
             $this->getBaseTmpDir(),
-            "cache",
+            'cache',
         ]);
+
+        return $this->cacheDir;
     }
 
     /**
@@ -62,11 +77,17 @@ class PMKernel extends Kernel
      */
     public function getLogDir()
     {
-        if ('dev' !== $this->getEnvironment()) {
-            return sprintf("%s/../var/logs", $this->getRootDir());
+        if (null !== $this->logDir) {
+            return $this->logDir;
         }
 
-        return $this->getBaseTmpDir();
+        if ('dev' !== $this->getEnvironment()) {
+            return parent::getLogDir();
+        }
+
+        $this->logDir = $this->getBaseTmpDir();
+
+        return $this->logDir;
     }
 
     /**
@@ -82,7 +103,7 @@ class PMKernel extends Kernel
         /**
          * Base Path
          */
-        $projectDir = "";
+        $projectDir = '';
         if (true === isset($folders[$foldersCount - 2])) {
             $projectDir = $folders[$foldersCount - 2];
         }
