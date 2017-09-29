@@ -10,8 +10,10 @@ namespace PM\Bundle\ToolBundle\EventListener;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Event\PreFlushEventArgs;
+use Doctrine\ORM\Mapping\Column;
 use PM\Bundle\ToolBundle\Framework\Annotations\Optional;
 use PM\Bundle\ToolBundle\Framework\Interfaces\HasOptionalFieldsEntityInterface;
+use ReflectionProperty;
 
 /**
  * Class OptionalAnnotationEventListener
@@ -79,13 +81,53 @@ class OptionalAnnotationEventListener
                 continue;
             }
 
+            $default = $this->getDefault($reflectionProperty, $propertyAnnotation->default);
             $reflectionProperty->setAccessible(true);
 
             if (null === $reflectionProperty->getValue($entity)) {
-                $reflectionProperty->setValue($entity, $propertyAnnotation->default);
+                $reflectionProperty->setValue($entity, $default);
             }
         }
 
         return true;
+    }
+
+    /**
+     * Get Default, e.g. empty array for simple_array
+     *
+     * @param ReflectionProperty $reflectionProperty
+     * @param mixed              $default
+     *
+     * @return mixed
+     */
+    private function getDefault($reflectionProperty, $default)
+    {
+        $type = $this->getColumnAnnotation($reflectionProperty);
+        if (null === $type) {
+            return $default;
+        }
+
+        if (true === empty($default) && 'array' === $type) {
+            return [];
+        }
+
+        return $default;
+    }
+
+    /**
+     * Get Column Annotation
+     *
+     * @param $reflectionProperty
+     *
+     * @return null|string
+     */
+    private function getColumnAnnotation($reflectionProperty)
+    {
+        $columnAnnotation = $this->getReader()->getPropertyAnnotation($reflectionProperty, Column::class);
+        if (null === $columnAnnotation) {
+            return null;
+        }
+
+        return $columnAnnotation->type;
     }
 }
