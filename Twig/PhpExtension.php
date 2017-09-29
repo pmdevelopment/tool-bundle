@@ -56,6 +56,13 @@ class PhpExtension extends Twig_Extension
                 ]
             ),
             new \Twig_SimpleFilter(
+                'str_pad',
+                [
+                    $this,
+                    'getStrPad',
+                ]
+            ),
+            new \Twig_SimpleFilter(
                 'str_split',
                 [
                     $this,
@@ -113,6 +120,22 @@ class PhpExtension extends Twig_Extension
     public function getStrSplit($string, $length = 1)
     {
         return str_split($string, $length);
+    }
+
+    /**
+     * str_split
+     *
+     *
+     * @param mixed $input
+     * @param int   $padLength
+     * @param int   $padString
+     * @param int   $padType
+     *
+     * @return array
+     */
+    public function getStrPad($input, $padLength, $padString = 0, $padType = STR_PAD_LEFT)
+    {
+        return str_pad($input, $padLength, $padString, $padType);
     }
 
     /**
