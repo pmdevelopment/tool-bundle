@@ -48,10 +48,12 @@ services:
     tags:
         - { name: twig.extension }
 
+  # Convert
   pm.twig.convert:
     class: PM\Bundle\ToolBundle\Twig\ConvertExtension
     calls:
         - [setTranslator, ['@translator']]
+        - [setParameterParseDownBreaksEnabled, ['%pm__tool.configuration.twig.parse_down.breaks_enabled%']]
     tags:
         - { name: twig.extension }
 

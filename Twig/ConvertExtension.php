@@ -23,6 +23,31 @@ class ConvertExtension extends Twig_Extension
     use HasTranslatorServiceTrait;
 
     /**
+     * @var bool
+     */
+    private $parameterParseDownBreaksEnabled;
+
+    /**
+     * @return boolean
+     */
+    public function isParameterParseDownBreaksEnabled()
+    {
+        return $this->parameterParseDownBreaksEnabled;
+    }
+
+    /**
+     * @param boolean $parameterParseDownBreaksEnabled
+     *
+     * @return ConvertExtension
+     */
+    public function setParameterParseDownBreaksEnabled($parameterParseDownBreaksEnabled)
+    {
+        $this->parameterParseDownBreaksEnabled = $parameterParseDownBreaksEnabled;
+
+        return $this;
+    }
+
+    /**
      * Get Filters
      *
      * @return array
@@ -73,6 +98,7 @@ class ConvertExtension extends Twig_Extension
         }
 
         $parse = new Parsedown();
+        $parse->setBreaksEnabled($this->isParameterParseDownBreaksEnabled());
 
         return $parse->text($string);
     }

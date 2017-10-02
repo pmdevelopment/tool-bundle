@@ -29,6 +29,17 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('encryption')->defaultNull()->end()
                     ->end()
                 ->end()
+                ->arrayNode('twig')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('parse_down')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->booleanNode('breaks_enabled')->defaultFalse()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
