@@ -32,7 +32,8 @@
             use_form_action: true,
             use_pm_markdown: false,
             disable_buttons: false,
-            recursive: null
+            recursive: null,
+            animate: true
         };
 
         settings = $.extend({}, settings, options);
@@ -82,7 +83,8 @@
                             title: core.getTitle(),
                             size: core.getSize(),
                             message: result,
-                            buttons: dialog.getButtons(result, onSuccess)
+                            buttons: dialog.getButtons(result, onSuccess),
+                            animate: settings.animate
                         });
 
                         if (true === settings.use_pm_markdown && true === pmUtil.config.module.simpleMde.enabled) {
