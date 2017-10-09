@@ -273,9 +273,13 @@ var pmUtil = function () {
             }
 
             if (true === this.config.module.bootbox.enabled) {
-                $.getScript(path_parcels + '/jquery.pm-bootbox.js?v=' + pmUtil.config.module.bootbox.cache, function () {
+                if ($().pmBootbox) {
                     pmUtil.config.module.bootbox.callback();
-                });
+                } else {
+                    $.getScript(path_parcels + '/jquery.pm-bootbox.js?v=' + pmUtil.config.module.bootbox.cache, function () {
+                        pmUtil.config.module.bootbox.callback();
+                    });
+                }
             }
 
             if (true === this.config.module.bootbox_delete.enabled) {
