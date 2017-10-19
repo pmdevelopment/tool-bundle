@@ -18,6 +18,9 @@ var pmUtilLoading = function () {
             inline: {
                 color: "#3bc9d7",
                 init: false
+            },
+            text: {
+                loading: 'Lädt...'
             }
         },
         count: 0,
@@ -75,6 +78,7 @@ var pmUtilLoading = function () {
          * Start inline
          * @param target
          * @param size
+         * @param text
          */
         startInline: function (target, size) {
             if (false === this.config.inline.init) {
@@ -84,7 +88,7 @@ var pmUtilLoading = function () {
             }
 
             var divClass = 'pm-util-loading-inline';
-            var text = 'Lädt...';
+            var text = this.config.text.loading;
             var style = 'width:80px;margin: 60px auto;height:80px;';
 
             if ('small' === size) {
