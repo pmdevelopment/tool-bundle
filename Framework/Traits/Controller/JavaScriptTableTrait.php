@@ -3,8 +3,8 @@
 namespace PM\Bundle\ToolBundle\Framework\Traits\Controller;
 
 use Doctrine\ORM\QueryBuilder;
+use PM\Bundle\ToolBundle\Framework\Model\JavaScriptTable\FilterItemModel;
 use PM\Bundle\ToolBundle\Framework\Model\JavaScriptTable\TableModel;
-use PM\Bundle\ToolBundle\Framework\Utilities\CollectionUtility;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -28,11 +28,25 @@ trait JavaScriptTableTrait
 
         if (true === is_array($table->getFilters())) {
             foreach ($table->getFilters() as $filterKey => $filterItems) {
-                if (false === is_array($filterItems) || 0 === count($filterItems)) {
+                if (false === is_array($filterItems)) {
                     continue;
                 }
 
-                $queryBuilder->andWhere($queryBuilder->expr()->in(sprintf('%s.%s', $rootAlias, $filterKey), CollectionUtility::getIds($filterItems)));
+                $ids = [];
+                /** @var FilterItemModel $item */
+                foreach ($filterItems as $item) {
+                    if (FilterItemModel::IGNORE_FOR_QUERY === $item->isAddToQuery()) {
+                        continue;
+                    }
+
+                    $ids[] = $item->getId();
+                }
+
+                if (0 === count($ids)) {
+                    continue;
+                }
+
+                $queryBuilder->andWhere($queryBuilder->expr()->in(sprintf('%s.%s', $rootAlias, $filterKey), $ids));
             }
         }
 

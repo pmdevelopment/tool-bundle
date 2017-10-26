@@ -17,6 +17,8 @@ use JMS\Serializer\Annotation\Type;
  */
 class FilterItemModel
 {
+    const ADD_TO_QUERY = true;
+    const IGNORE_FOR_QUERY = false;
     /**
      * @var int
      *
@@ -32,15 +34,24 @@ class FilterItemModel
     private $text;
 
     /**
+     * @var bool
+     *
+     * @Type("boolean")
+     */
+    private $addToQuery;
+
+    /**
      * FilterItemModel constructor.
      *
      * @param int    $id
      * @param string $text
+     * @param bool   $addToQuery
      */
-    public function __construct($id, $text)
+    public function __construct($id, $text, $addToQuery = self::ADD_TO_QUERY)
     {
         $this->id = $id;
         $this->text = $text;
+        $this->addToQuery = $addToQuery;
     }
 
     /**
@@ -83,5 +94,24 @@ class FilterItemModel
         return $this;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isAddToQuery()
+    {
+        return $this->addToQuery;
+    }
+
+    /**
+     * @param boolean $addToQuery
+     *
+     * @return FilterItemModel
+     */
+    public function setAddToQuery($addToQuery)
+    {
+        $this->addToQuery = $addToQuery;
+
+        return $this;
+    }
 
 }
