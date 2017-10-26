@@ -237,16 +237,34 @@
                         return parent.find(settings.filter.selectors.menu);
                     },
                     /**
-                     * Show
+                     * Get Input
+                     * @param ajax
+                     * @returns {*|HTMLElement}
                      */
-                    show: function (key, title, preload) {
-                        core.debug('filter.show(' + key + ',' + title + ')');
+                    getInput: function (ajax) {
+                        if (false === ajax) {
+                            return $('<input>', {
+                                class: 'form-control',
+                                style: 'width:100%;'
+                            });
+                        }
 
-                        var input = $('<select></select>', {
+                        return $('<select>', {
                             class: 'form-control',
                             style: 'width:100%;',
                             multiple: 'multiple'
                         });
+                    },
+                    /**
+                     * Show
+                     */
+                    show: function (th, title, preload) {
+                        var key = th.data('key');
+                        var ajax = th.data('ajax');
+
+                        core.debug('filter.show(' + key + ',' + title + ')');
+
+                        var input = filter.getInput(ajax);
 
                         bootbox.dialog({
                             className: "pm-table-filter-dialog",
@@ -259,7 +277,15 @@
                                     callback: function () {
                                         pmUtilLoading.start();
 
-                                        filter.apply(key, $('.pm-table-filter-dialog').find('select').val());
+                                        var dialog = $('.pm-table-filter-dialog');
+
+                                        if (false === ajax) {
+                                            filter.apply(key, [dialog.find('input').val()]);
+
+                                            return true;
+                                        }
+
+                                        filter.apply(key, dialog.find('select').val());
                                     }
                                 },
                                 close: {
@@ -272,10 +298,14 @@
                         $.fn.modal.Constructor.prototype.enforceFocus = function () {
                         };
 
+                        if (false === ajax) {
+                            return;
+                        }
+
                         var select = $('.pm-table-filter-dialog').find('select');
 
                         var selectConfig = filter.getSelect2Config(key);
-                        if (true === settings.filter.preload) {
+                        if (true === settings.filter.preload && false !== ajax) {
                             selectConfig.defaultResults = preload;
                             selectConfig.dataAdapter = $.fn.select2.amd.require('select2/data/extended-ajax');
                         }
@@ -335,20 +365,22 @@
                                 return;
                             }
 
-                            var key = $(this).data('key');
-                            var title = $(this).text();
+                            var th = $(this);
+                            var title = th.text();
+                            var ajax = th.data('ajax');
+                            var key = th.data('key');
 
                             titles[key] = title;
 
                             var entry = $('<a></a>', {
                                 href: 'javascript:void(0)'
                             }).text(title).on('click', function () {
-                                if (true === settings.filter.preload) {
+                                if (true === settings.filter.preload && false !== ajax) {
                                     $.get(settings.paths.filter, {key: key, preload: true}, function (result) {
-                                        filter.show(key, title, result);
+                                        filter.show(th, title, result);
                                     }, 'json');
                                 } else {
-                                    filter.show(key, title);
+                                    filter.show(th, title);
                                 }
                             });
 
