@@ -81,6 +81,13 @@ class ConvertExtension extends Twig_Extension
                     'getStringByDate',
                 ]
             ),
+            new \Twig_SimpleFilter(
+                'convert_class_path_to_short_name',
+                [
+                    $this,
+                    'getClassShortName',
+                ]
+            )
         ];
     }
 
@@ -187,5 +194,19 @@ class ConvertExtension extends Twig_Extension
         return $this->getTranslator()->trans('time.years_ago', [
             '{years}' => $dateNow->format('Y') - $date->format('Y'),
         ]);
+    }
+
+    /**
+     * Get ShortName by Class Name with Namespace
+     *
+     * @param string $class
+     *
+     * @return string
+     */
+    public function getClassShortName($class)
+    {
+        $reflection = new \ReflectionClass($class);
+
+        return $reflection->getShortName();
     }
 }
