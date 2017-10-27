@@ -37,7 +37,7 @@ class CronjobService
             $listenerClass = get_class($listener[0]);
 
             if (!$listener[0] instanceof CronEventListenerInterface) {
-                $this->getLogger()->addWarning(sprintf('%s without %s', $listenerClass, CronEventListenerInterface::class));
+                $this->getLogger()->addError(sprintf('%s without %s', $listenerClass, CronEventListenerInterface::class));
 
                 continue;
             }
