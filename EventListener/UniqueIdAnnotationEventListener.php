@@ -71,7 +71,7 @@ class UniqueIdAnnotationEventListener
             $reflectionProperty->setAccessible(true);
 
             while (null === $reflectionProperty->getValue($entity)) {
-                $randomId = substr(hash('sha256', sprintf('%s - %s - %s', microtime(), $entityClass, uniqid())), 0, $propertyAnnotation->length);
+                $randomId = $this->getRandomId($entityClass, $propertyAnnotation);
                 if (null !== $propertyAnnotation->prefix) {
                     $randomId = sprintf("%s%s", $propertyAnnotation->prefix, $randomId);
                 }
@@ -82,5 +82,23 @@ class UniqueIdAnnotationEventListener
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Get Random Id
+     *
+     * @param string   $entityClass
+     * @param UniqueId $annotation
+     *
+     * @return string
+     */
+    private function getRandomId($entityClass, $annotation)
+    {
+        if ('int' === $annotation->type || 'integer' === $annotation->type) {
+            return mt_rand(pow(10, $annotation->length - 1), pow(10, $annotation->length) - 1);
+        }
+
+        return substr(hash('sha256', sprintf('%s - %s - %s', microtime(), $entityClass, uniqid())), 0, $annotation->length);
     }
 }

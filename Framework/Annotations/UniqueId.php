@@ -30,4 +30,11 @@ final class UniqueId extends Annotation
      */
     public $prefix;
 
+    /**
+     * String or Integer
+     *
+     * @var string
+     */
+    public $type;
+
 }
