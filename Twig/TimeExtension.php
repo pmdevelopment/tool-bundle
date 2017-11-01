@@ -9,6 +9,7 @@
 namespace PM\Bundle\ToolBundle\Twig;
 
 use DateTime;
+use PM\Bundle\ToolBundle\Framework\Traits\Services\HasTranslatorServiceTrait;
 use Twig_Extension;
 use Twig_SimpleFilter;
 
@@ -19,6 +20,8 @@ use Twig_SimpleFilter;
  */
 class TimeExtension extends Twig_Extension
 {
+    use HasTranslatorServiceTrait;
+
     /**
      * @return array
      */
@@ -40,6 +43,13 @@ class TimeExtension extends Twig_Extension
                 [
                     $this,
                     'getSecondsAsText',
+                ]
+            ),
+            new Twig_SimpleFilter(
+                'time_seconds_as_text_extended',
+                [
+                    $this,
+                    'getSecondsAsTextExtended',
                 ]
             ),
             new Twig_SimpleFilter(
@@ -87,6 +97,39 @@ class TimeExtension extends Twig_Extension
         $minutes = $minutes - ($hours * 60);
 
         return sprintf('%sh %sm %ss', $hours, $minutes, number_format($seconds - ($minutes * 60) - ($hours * 3600), 0, $decPoint, $thousandsSep));
+    }
+
+    /**
+     * Get Seconds As Text Extended
+     *
+     * @param float  $seconds
+     * @param int    $decimals
+     * @param string $decPoint
+     * @param string $thousandsSep
+     *
+     * @return string
+     */
+    public function getSecondsAsTextExtended($seconds, $decimals = 2, $decPoint = ',', $thousandsSep = '.')
+    {
+        $seconds = floatval($seconds);
+        $result = [];
+
+        $steps = [
+            'days'    => 86400,
+            'hours'   => 3600,
+            'minutes' => 60,
+            'seconds' => 1,
+        ];
+
+        foreach ($steps as $stepName => $stepDivider) {
+            $stepCount = floor($seconds / $stepDivider);
+            if (0 < $stepCount) {
+                $result[] = sprintf('%d %s', $stepCount, $this->getTranslator()->trans($stepName));
+                $seconds = $seconds - ($stepCount * $stepDivider);
+            }
+        }
+
+        return implode(' ', $result);
     }
 
     /**

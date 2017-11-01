@@ -40,6 +40,8 @@ services:
 
   pm.twig.time:
       class: PM\Bundle\ToolBundle\Twig\TimeExtension
+      calls:
+        - [setTranslator, ['@translator']]
       tags:
         - { name: twig.extension }
 
