@@ -102,14 +102,11 @@ class TimeExtension extends Twig_Extension
     /**
      * Get Seconds As Text Extended
      *
-     * @param float  $seconds
-     * @param int    $decimals
-     * @param string $decPoint
-     * @param string $thousandsSep
+     * @param float $seconds
      *
      * @return string
      */
-    public function getSecondsAsTextExtended($seconds, $decimals = 2, $decPoint = ',', $thousandsSep = '.')
+    public function getSecondsAsTextExtended($seconds)
     {
         $seconds = floatval($seconds);
         $result = [];
@@ -124,7 +121,7 @@ class TimeExtension extends Twig_Extension
         foreach ($steps as $stepName => $stepDivider) {
             $stepCount = floor($seconds / $stepDivider);
             if (0 < $stepCount) {
-                $result[] = sprintf('%d %s', $stepCount, $this->getTranslator()->trans($stepName));
+                $result[] = sprintf('%d %s', $stepCount, $this->getTranslator()->transChoice($stepName, $stepCount));
                 $seconds = $seconds - ($stepCount * $stepDivider);
             }
         }

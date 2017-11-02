@@ -1,11 +1,11 @@
-days: 'Days'
-hours: 'Hours'
+days: '{1} Day|]2,Inf] Days'
+hours: '{1} Hour|]2,Inf] Hours'
 mail_message: 'Message'
 mail_recipient: 'Recipient'
 mail_sender: 'Sender'
 mail_subject: 'Subject'
-minutes: 'Minutes'
-seconds: 'Seconds'
+minutes: '{1} Minute|]2,Inf] Minutes'
+seconds: '{1} Second|]2,Inf] Seconds'
 
 button:
     save: 'Save'
