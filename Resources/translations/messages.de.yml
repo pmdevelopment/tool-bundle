@@ -12,14 +12,15 @@ button:
     send: 'Senden'
 
 cronjob:
-    daily_morning: 'Morgens um 06:00'
-    daily_night: 'Nacht um 03:00'
     one_minute: 'Jede Minute'
     two_minutes: 'Jede 2. Minute'
     five_minutes: 'Alle 5 Minuten'
     ten_minutes: 'Alle 10 Minuten'
     twenty_minutes: 'Alle 20 Minuten'
     one_hour: 'Jede Stunde'
+    daily_morning: 'Morgens um 06:00'
+    daily_night: 'Nacht um 03:00'
+    first_day_of_month: 'Erster Tag des Monats'
 
 edit: 'Bearbeiten'
 

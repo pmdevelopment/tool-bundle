@@ -22,14 +22,15 @@ class CronEvent extends Event
 {
     const NAME = 'pm__tool.framework_events.cron_event';
 
-    const REPEATED_DAILY_MORNING = 'daily_morning';
-    const REPEATED_DAILY_NIGHT = 'daily_night';
     const REPEATED_EVERY_MINUTE = 'one_minute';
     const REPEATED_TWO_MINUTES = 'two_minutes';
     const REPEATED_FIVE_MINUTES = 'five_minutes';
     const REPEATED_TEN_MINUTES = 'ten_minutes';
     const REPEATED_TWENTY_MINUTES = 'twenty_minutes';
     const REPEATED_EVERY_HOUR = 'one_hour';
+    const REPEATED_DAILY_MORNING = 'daily_morning';
+    const REPEATED_DAILY_NIGHT = 'daily_night';
+    const REPEATED_FIRST_DAY_OF_MONTH = 'first_day_of_month';
 
     /**
      * @var string
