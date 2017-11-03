@@ -1,11 +1,11 @@
-days: '{1} Tag|]2,Inf] Tage'
-hours: '{1} Stunde|]2,Inf] Stunden'
+days: 'Tag|Tage'
+hours: 'Stunde|Stunden'
 mail_message: 'Nachricht'
 mail_recipient: 'Empfänger'
 mail_sender: 'Absender'
 mail_subject: 'Betreff'
-minutes: '{1} Minute|]2,Inf] Minuten'
-seconds: '{1} Sekunde|]2,Inf] Sekunden'
+minutes: 'Minute|Minuten'
+seconds: 'Sekunde|Sekunden'
 
 button:
     save: 'Speichern'
