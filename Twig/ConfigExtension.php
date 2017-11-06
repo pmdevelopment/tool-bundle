@@ -8,10 +8,10 @@
 
 namespace PM\Bundle\ToolBundle\Twig;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use PM\Bundle\ToolBundle\Entity\Config;
 use PM\Bundle\ToolBundle\Framework\Traits\Services\HasDoctrineServiceTrait;
 use Twig_Extension;
-use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * Class ConfigExtension
@@ -40,14 +40,19 @@ class ConfigExtension extends Twig_Extension
     /**
      * Get Value By Key
      *
-     * @param string $key
-     * @param mixed  $default
+     * @param string      $key
+     * @param mixed       $default
+     * @param null|string $class
      *
      * @return string
      */
-    public function getValueByKey($key, $default = '')
+    public function getValueByKey($key, $default = '', $class = null)
     {
-        $result = $this->getDoctrine()->getRepository($this->getEntityClass())->findOneBy(
+        if (null === $class) {
+            $class = $this->getEntityClass();
+        }
+
+        $result = $this->getDoctrine()->getRepository($class)->findOneBy(
             [
                 'key' => $key,
             ]
