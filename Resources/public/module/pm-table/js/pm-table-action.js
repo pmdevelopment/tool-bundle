@@ -82,7 +82,7 @@
                     /**
                      * Load
                      */
-                    load: function (action) {
+                    load: function (action, callback) {
                         core.log('form.load(' + action + ')');
 
                         pmCore.loadingStart();
@@ -104,7 +104,7 @@
                                 }
 
                             } else {
-                                form.show(action, path, result);
+                                form.show(action, path, result, callback);
 
                                 pmCore.loadingEnd();
                             }
@@ -113,7 +113,7 @@
                     /**
                      * Show
                      */
-                    show: function (action, path, html) {
+                    show: function (action, path, html, callback) {
                         core.log('form.show()');
 
                         bootbox.dialog({
@@ -129,7 +129,7 @@
 
                                         $.post(path, $('.bootbox-form-dialog form').serialize(), function (result) {
                                             if ("" !== result) {
-                                                form.show(action, path, result);
+                                                form.show(action, path, result, callback);
                                                 pmCore.loadingEnd();
                                             } else {
                                                 window.location.reload(true);
@@ -143,6 +143,10 @@
                                 }
                             }
                         });
+
+                        if (undefined !== callback && undefined !== callback.on_load) {
+                            callback.on_load();
+                        }
                     }
                 };
             }();
@@ -237,8 +241,16 @@
                                 buttons.getAll().append('&nbsp;<a href="javascript:void(0)" class="' + buttons.classes.button + ' ' + this.color + ' pm-button-custom" data-id="' + this.id + '">' + this.title + '</a>');
                             });
 
-                            buttons.getCustom().on('click', function () {
-                                form.load($(this).data('id'));
+                            $(settings.custom).each(function () {
+                                var customButton = this;
+
+                                buttons.getAll('a[data-id="' + customButton.id + '"]').on('click', function () {
+                                    if (undefined === customButton.callback) {
+                                        form.load($(this).data('id'));
+                                    } else {
+                                        form.load($(this).data('id'), customButton.callback);
+                                    }
+                                });
                             });
                         }
                     },
