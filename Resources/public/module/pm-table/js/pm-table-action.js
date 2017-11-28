@@ -145,7 +145,9 @@
                         });
 
                         if (undefined !== callback && undefined !== callback.on_load) {
-                            callback.on_load();
+                            $('.bootbox-form-dialog').on('shown.bs.modal', function () {
+                                callback.on_load();
+                            });
                         }
                     }
                 };
