@@ -9,6 +9,7 @@
 namespace PM\Bundle\ToolBundle\Framework\Events;
 
 
+use DateInterval;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\Event;
@@ -155,5 +156,29 @@ class CronEvent extends Event
         }
 
         return $names;
+    }
+
+    /**
+     * Get DateInterval Names
+     *
+     * @param string $type
+     *
+     * @return DateInterval
+     */
+    public static function getDateInterval($type)
+    {
+        $types = [
+            self::REPEATED_EVERY_MINUTE       => 'PT1M',
+            self::REPEATED_TWO_MINUTES        => 'PT2M',
+            self::REPEATED_FIVE_MINUTES       => 'PT5M',
+            self::REPEATED_TEN_MINUTES        => 'PT10M',
+            self::REPEATED_TWENTY_MINUTES     => 'PT20M',
+            self::REPEATED_EVERY_HOUR         => 'PT60M',
+            self::REPEATED_DAILY_MORNING      => 'P1D',
+            self::REPEATED_DAILY_NIGHT        => 'P1D',
+            self::REPEATED_FIRST_DAY_OF_MONTH => 'P1M',
+        ];
+
+        return new DateInterval($types[$type]);
     }
 }
