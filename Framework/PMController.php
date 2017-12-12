@@ -55,17 +55,23 @@ class PMController extends Controller
     /**
      * Saved
      *
-     * @param string $route
-     * @param array  $routeParameters
-     * @param string $message
+     * @param string      $route
+     * @param array       $routeParameters
+     * @param string      $message
+     * @param string|null $fragment
      *
      * @return Response
      */
-    public function saved($route, $routeParameters = [], $message = 'flash_bag.success.default')
+    public function saved($route, $routeParameters = [], $message = 'flash_bag.success.default', $fragment = null)
     {
         $this->addSessionFlashBagMessage(self::SESSION_FLASH_BAG_SUCCESS, $message);
 
-        return $this->redirect($this->generateUrl($route, $routeParameters));
+        $url = $this->generateUrl($route, $routeParameters);
+        if (null !== $fragment) {
+            $url = sprintf('%s#%s', $url, $fragment);
+        }
+
+        return $this->redirect($url);
     }
 
     /**
@@ -84,6 +90,8 @@ class PMController extends Controller
 
     /**
      * Saved with Object Routing
+     *
+     * @deprecated Object Routing will not be supported anymore in the near future
      *
      * @param string      $type
      * @param mixed       $object
@@ -107,6 +115,8 @@ class PMController extends Controller
 
     /**
      * Denied with Object Routing
+     *
+     * @deprecated Object Routing will not be supported anymore in the near future
      *
      * @param string $type
      * @param mixed  $object
