@@ -9,10 +9,10 @@
 namespace PM\Bundle\ToolBundle\Testing\TestCase;
 
 
-use PM\Bundle\ToolBundle\Constants\HttpStatusCode;
 use PM\Bundle\ToolBundle\Testing\Helper\AssertHelper;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AnonymousWebTestCase
@@ -58,7 +58,7 @@ class AnonymousWebTestCase extends WebTestCase
      */
     public function getClientResponseJson(Client $client)
     {
-        $this->assertSame(HttpStatusCode::OK, $client->getResponse()->getStatusCode(), AssertHelper::saveResponseForFailedAssert($client));
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode(), AssertHelper::saveResponseForFailedAssert($client));
         $this->assertNotFalse(strpos($client->getResponse()->headers->get('Content-Type'), '/json'));
         $this->assertNotEmpty($client->getResponse()->getContent());
 
