@@ -37,7 +37,6 @@ class IconExtension extends Twig_Extension
                     'is_safe'    => [
                         'html',
                     ],
-                    'deprecated' => true,
                 ]
             ),
             new Twig_SimpleFilter(
@@ -50,7 +49,6 @@ class IconExtension extends Twig_Extension
                     'is_safe'    => [
                         'html',
                     ],
-                    'deprecated' => true,
                 ]
             ),
             new Twig_SimpleFilter(
@@ -95,8 +93,6 @@ class IconExtension extends Twig_Extension
     /**
      * Parses the given string and replaces all occurrences of .icon-[name] with the corresponding icon.
      *
-     * @deprecated don't use this.
-     *
      * @param string $text  The text to parse
      * @param string $color The color of the icon; can be 'black' or 'white'; defaults to 'black'
      *
@@ -117,8 +113,6 @@ class IconExtension extends Twig_Extension
 
     /**
      * Returns the HTML code for the given icon.
-     *
-     * @deprecated use FontAwesome 5
      *
      * @param string $icon  The name of the icon
      * @param string $color The color of the icon; can be 'black' or 'white'; defaults to 'black'
