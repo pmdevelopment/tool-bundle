@@ -34,9 +34,10 @@ class IconExtension extends Twig_Extension
                     'parseIconsFilter',
                 ],
                 [
-                    'is_safe' => [
+                    'is_safe'    => [
                         'html',
                     ],
+                    'deprecated' => true,
                 ]
             ),
             new Twig_SimpleFilter(
@@ -44,6 +45,31 @@ class IconExtension extends Twig_Extension
                 [
                     $this,
                     'iconFilter',
+                ],
+                [
+                    'is_safe'    => [
+                        'html',
+                    ],
+                    'deprecated' => true,
+                ]
+            ),
+            new Twig_SimpleFilter(
+                'icon_far',
+                [
+                    $this,
+                    'iconFar',
+                ],
+                [
+                    'is_safe' => [
+                        'html',
+                    ],
+                ]
+            ),
+            new Twig_SimpleFilter(
+                'icon_fas',
+                [
+                    $this,
+                    'iconFas',
                 ],
                 [
                     'is_safe' => [
@@ -69,6 +95,8 @@ class IconExtension extends Twig_Extension
     /**
      * Parses the given string and replaces all occurrences of .icon-[name] with the corresponding icon.
      *
+     * @deprecated don't use this.
+     *
      * @param string $text  The text to parse
      * @param string $color The color of the icon; can be 'black' or 'white'; defaults to 'black'
      *
@@ -90,6 +118,8 @@ class IconExtension extends Twig_Extension
     /**
      * Returns the HTML code for the given icon.
      *
+     * @deprecated use FontAwesome 5
+     *
      * @param string $icon  The name of the icon
      * @param string $color The color of the icon; can be 'black' or 'white'; defaults to 'black'
      *
@@ -98,6 +128,30 @@ class IconExtension extends Twig_Extension
     public function iconFilter($icon, $color = 'black')
     {
         return sprintf('<i class="fa %sfa-%s" aria-hidden="true"></i>', $color == 'white' ? 'icon-white ' : '', $icon);
+    }
+
+    /**
+     * Get Icon: FontAwesome Regular
+     *
+     * @param string $icon
+     *
+     * @return string
+     */
+    public function iconFar($icon)
+    {
+        return $this->getIconFontAwesome($icon, 'far');
+    }
+
+    /**
+     * Get Icon: FontAwesome Solid
+     *
+     * @param string $icon
+     *
+     * @return string
+     */
+    public function iconFas($icon)
+    {
+        return $this->getIconFontAwesome($icon, 'fas');
     }
 
     /**
@@ -119,6 +173,19 @@ class IconExtension extends Twig_Extension
     public function getName()
     {
         return 'pm.twig.icon';
+    }
+
+    /**
+     * Get Icon FontAwesome
+     *
+     * @param string $icon
+     * @param string $prefix
+     *
+     * @return string
+     */
+    private function getIconFontAwesome($icon, $prefix)
+    {
+        return sprintf('<span class="%s fa-%s"></span>', $prefix, $icon);
     }
 }
 
