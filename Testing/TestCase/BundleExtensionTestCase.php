@@ -8,6 +8,7 @@
 
 namespace PM\Bundle\ToolBundle\Testing\TestCase;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 
@@ -16,7 +17,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
  *
  * @package PM\Bundle\ToolBundle\Testing\TestCase
  */
-class BundleExtensionTestCase extends \PHPUnit_Framework_TestCase
+class BundleExtensionTestCase extends TestCase
 {
     /**
      * Get Container.
