@@ -31,6 +31,7 @@ class CronEvent extends Event
     const REPEATED_EVERY_HOUR = 'one_hour';
     const REPEATED_DAILY_MORNING = 'daily_morning';
     const REPEATED_DAILY_NIGHT = 'daily_night';
+    const REPEATED_DAILY_NOON = 'daily_noon';
     const REPEATED_FIRST_DAY_OF_MONTH = 'first_day_of_month';
 
     /**
@@ -176,6 +177,7 @@ class CronEvent extends Event
             self::REPEATED_EVERY_HOUR         => 'PT60M',
             self::REPEATED_DAILY_MORNING      => 'P1D',
             self::REPEATED_DAILY_NIGHT        => 'P1D',
+            self::REPEATED_DAILY_NOON         => 'P1D',
             self::REPEATED_FIRST_DAY_OF_MONTH => 'P1M',
         ];
 

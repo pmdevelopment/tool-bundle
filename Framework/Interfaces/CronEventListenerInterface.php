@@ -22,5 +22,4 @@ interface CronEventListenerInterface
      * @return string
      */
     public static function getRepeatedType();
-
 }
