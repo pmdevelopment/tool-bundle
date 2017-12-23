@@ -20,6 +20,7 @@ cronjob:
     one_hour: 'Every hour'
     daily_morning: 'Daily 6am'
     daily_night: 'Daily 3am'
+    daily_noon: 'Daily at noon'
     first_day_of_month: 'First day of month'
 
 edit: 'Edit'
