@@ -12,13 +12,16 @@ services:
 
     pm.pdf:
         class: PM\Bundle\ToolBundle\Services\PdfService
+        public: true
         arguments: ["%kernel.root_dir%"]
 
     pm.image:
         class: PM\Bundle\ToolBundle\Services\ImageService
+        public: true
 
     pm.cronjob:
         class: PM\Bundle\ToolBundle\Services\CronjobService
+        public: true
         calls:
             - [setLogger, ['@logger']]
             - [setEventDispatcher, ['@event_dispatcher']]

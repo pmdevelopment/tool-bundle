@@ -5,4 +5,5 @@ parameters:
 services:
   pm_tool.services_google.link_shortener_service:
     class: PM\Bundle\ToolBundle\Services\Google\LinkShortenerService
+    public: true
     arguments: ['%pm_tool.google_link_shortener.token%', '%pm_tool.google_link_shortener.url%']
