@@ -24,12 +24,17 @@ class CronjobService
     use HasEventDispatcherServiceTrait;
     use HasLoggerServiceTrait;
 
+    const FULL_RESULT = true;
+    const FLAT_RESULT = false;
+
     /**
      * Get Listeners
      *
+     * @param bool $resultType
+     *
      * @return array
      */
-    public function getListeners()
+    public function getListeners($resultType = self::FLAT_RESULT)
     {
         $listeners = [];
 
@@ -38,6 +43,12 @@ class CronjobService
 
             if (!$listener[0] instanceof CronEventListenerInterface) {
                 $this->getLogger()->addError(sprintf('%s without %s', $listenerClass, CronEventListenerInterface::class));
+
+                continue;
+            }
+
+            if (self::FLAT_RESULT === $resultType) {
+                $listeners[] = $listenerClass;
 
                 continue;
             }
@@ -53,4 +64,13 @@ class CronjobService
         return $listeners;
     }
 
+    /**
+     * Get Listeners without type
+     *
+     * @return array
+     */
+    public function getListenersWithoutType()
+    {
+        return $this->getListeners(self::FLAT_RESULT);
+    }
 }

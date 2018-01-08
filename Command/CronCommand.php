@@ -44,29 +44,37 @@ class CronCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = new SymfonyStyle($input, $output);
-        $helper->title('Cron');
+        $helper->title(self::NAME);
 
-        $helper->warning('Work in progress!');
+        $repeatAvailable = [];
 
-        $repeatAvailable = [
-            CronEvent::REPEATED_DAILY_MORNING => 'Daily (Morning, 06:00)',
-            CronEvent::REPEATED_DAILY_NIGHT   => 'Daily (Night, 3:00)',
-            CronEvent::REPEATED_EVERY_MINUTE  => 'Once Per Minute',
-            CronEvent::REPEATED_FIVE_MINUTES  => 'Every Five Minutes',
-            CronEvent::REPEATED_EVERY_HOUR    => 'Every Hour',
-        ];
+        foreach (CronEvent::getEventNames() as $name) {
+            $repeatAvailable[$name] = $this->getContainer()->get('translator')->trans(sprintf('cronjob.%s', $name));
+        }
 
         $target = $input->getOption('target');
         $repeat = $input->getOption('repeat');
 
-        if (null === $target) {
-            if (null === $repeat || false === isset($repeatAvailable[$repeat])) {
-                $repeat = $helper->choice('Repeated', $repeatAvailable);
-            }
+        if (null === $target && null === $repeat) {
+            $typeChoice = $helper->choice('How to choose cronjob(s)?', [
+                'repeat'   => 'All with the same repetition',
+                'listener' => 'One single listener',
+            ]);
 
+            if ('repeat' === $typeChoice) {
+                $repeat = $helper->choice('Choose repetition', $repeatAvailable);
+            } else {
+                $listeners = $this->getContainer()->get('pm.cronjob')->getListenersWithoutType();
+                $targetChoice = $helper->choice('Choose listener', $listeners);
+
+                $target = $listeners[$targetChoice];
+            }
+        }
+
+        if (null === $target) {
             $helper->section($repeatAvailable[$repeat]);
         } else {
-            $helper->section(sprintf('Executing target %s', $target));
+            $helper->section($target);
         }
 
         $event = new CronEvent($repeat, $helper, $target, $input);
