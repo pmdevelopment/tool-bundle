@@ -34,7 +34,7 @@ class CronjobService
      *
      * @return array
      */
-    public function getListeners($resultType = self::FLAT_RESULT)
+    public function getListeners($resultType = self::FULL_RESULT)
     {
         $listeners = [];
 
