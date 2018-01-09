@@ -132,8 +132,13 @@ class CronEvent extends Event
             $class = get_class($class);
         }
 
+        if ($class === $this->getTarget()) {
+            return true;
+        }
+
         $class = explode('\\', $class);
         $className = end($class);
+
         if ($className === $this->getTarget()) {
             return true;
         }

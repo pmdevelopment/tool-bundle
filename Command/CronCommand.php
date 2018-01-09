@@ -65,9 +65,7 @@ class CronCommand extends ContainerAwareCommand
                 $repeat = $helper->choice('Choose repetition', $repeatAvailable);
             } else {
                 $listeners = $this->getContainer()->get('pm.cronjob')->getListenersWithoutType();
-                $targetChoice = $helper->choice('Choose listener', $listeners);
-
-                $target = $listeners[$targetChoice];
+                $target = $helper->choice('Choose listener', $listeners);
             }
         }
 
