@@ -304,7 +304,7 @@ class DataSetConfig
      */
     public function export()
     {
-        return [
+        $export = [
             'lineTension'               => $this->getLineTension(),
             'backgroundColor'           => $this->getBackgroundColor(),
             'pointRadius'               => $this->getPointRadius(),
@@ -317,6 +317,10 @@ class DataSetConfig
             'borderWidth'               => $this->getBorderWidth(),
             'borderColor'               => $this->getBorderColor(),
         ];
+
+        return array_filter($export, function ($value) {
+            return null !== $value;
+        });
     }
 
     /**
