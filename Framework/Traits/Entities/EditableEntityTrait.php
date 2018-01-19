@@ -111,21 +111,4 @@ trait EditableEntityTrait
         return $this;
     }
 
-    /**
-     * Set Editable Fields
-     *
-     * @ORM\PreFlush()
-     */
-    public function setEditableOnFlush()
-    {
-        if (null === $this->isDeleted()) {
-            $this->setDeleted(false);
-        }
-
-        if (null === $this->getCreated()) {
-            $this->setCreated(new DateTime());
-        }
-
-        $this->setUpdated(new DateTime());
-    }
 }

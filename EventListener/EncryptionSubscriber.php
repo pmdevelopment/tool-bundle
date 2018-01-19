@@ -11,13 +11,15 @@ namespace PM\Bundle\ToolBundle\EventListener;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Event\PreFlushEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Events;
 use Doctrine\ORM\Proxy\Proxy;
+use PM\Bundle\ToolBundle\Components\Helper\DoctrineHelper;
 use PM\Bundle\ToolBundle\Framework\Annotations\Encrypted;
 use PM\Bundle\ToolBundle\Framework\Interfaces\EncryptedEntityInterface;
 use PM\Bundle\ToolBundle\Framework\Utilities\CryptUtility;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * Class EncryptionSubscriber
@@ -38,11 +40,6 @@ class EncryptionSubscriber implements EventSubscriber
      * @var AnnotationReader
      */
     private $reader;
-
-    /**
-     * @var mixed[]
-     */
-    private $entitiesEncrypted = [];
 
     /**
      * EncryptionSubscriber constructor.
@@ -73,15 +70,6 @@ class EncryptionSubscriber implements EventSubscriber
     }
 
     /**
-     * @return \mixed[]
-     */
-    public function getEntitiesEncrypted()
-    {
-        return $this->entitiesEncrypted;
-    }
-
-
-    /**
      * Get Subscribed Events
      *
      * @return array
@@ -95,81 +83,92 @@ class EncryptionSubscriber implements EventSubscriber
         }
 
         return [
-            'postLoad',
-            'postFlush',
-            'preFlush',
-            'preUpdate'
+            Events::postLoad,
+            Events::onFlush,
         ];
     }
 
     /**
-     * PostFlush: Decrypt again for further usage
-     *
-     * @param PostFlushEventArgs $args
-     */
-    public function postFlush($args)
-    {
-        foreach ($this->getEntitiesEncrypted() as $entity) {
-            $this->process($entity, self::METHOD_DECRYPT);
-        }
-    }
-
-    /**
-     * PostLoad: Decrypt
+     * PostLoad: Decrypt properties
      *
      * @param LifecycleEventArgs $args
-     */
-    public function postLoad($args)
-    {
-        $this->process($args->getEntity(), self::METHOD_DECRYPT);
-    }
-
-    /**
-     * PreFlush: Encrypt
-     *
-     * @param PreFlushEventArgs $args
-     */
-    public function preFlush(PreFlushEventArgs $args)
-    {
-        foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityInsertions() as $entity) {
-            $this->process($entity, self::METHOD_ENCRYPT);
-        }
-    }
-
-    /**
-     * Pre Update: Encrypt
-     *
-     * @param PreUpdateEventArgs $args
-     */
-    public function preUpdate(PreUpdateEventArgs $args)
-    {
-        foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates() as $entity) {
-            $this->process($entity, self::METHOD_ENCRYPT);
-        }
-
-    }
-
-    /**
-     * Process
-     *
-     * @param mixed  $entity
-     * @param string $method
      *
      * @return bool
      */
-    private function process($entity, $method)
+    public function postLoad($args)
     {
+        $entity = $args->getEntity();
+
         if (false === ($entity instanceof EncryptedEntityInterface)) {
             return false;
         }
 
-        if (null !== $entity->isEncrypted() && ((self::METHOD_ENCRYPT === $method && true === $entity->isEncrypted()) || (self::METHOD_DECRYPT === $method && false === $entity->isEncrypted()))) {
-            return false;
+        foreach ($this->getEntityEncryptedReflectionProperties($entity) as $property) {
+            $fieldValue = $property->getValue($entity);
+
+            if (null === $fieldValue || true === empty($fieldValue)) {
+                continue;
+            }
+
+            $property->setValue($entity, CryptUtility::decrypt($fieldValue, $this->getEncryptionKey()));
         }
 
-        if (property_exists($entity, '__isInitialized__')) {
-            $entity->__load();
+        return true;
+    }
+
+
+    /**
+     * OnFlush: Manipulate change set to encrypted values
+     *
+     * @param OnFlushEventArgs $args
+     */
+    public function onFlush(OnFlushEventArgs $args)
+    {
+        $unitOfWork = $args->getEntityManager()->getUnitOfWork();
+
+        $related = array_merge(
+            $unitOfWork->getScheduledEntityUpdates(),
+            $unitOfWork->getScheduledEntityInsertions()
+        );
+
+        foreach ($related as $entity) {
+            if (false === ($entity instanceof EncryptedEntityInterface)) {
+                continue;
+            }
+
+            $properties = $this->getEntityEncryptedReflectionProperties($entity);
+            $changeSet = $unitOfWork->getEntityChangeSet($entity);
+
+            if (0 === count($properties)) {
+                continue;
+            }
+
+            foreach ($properties as $property) {
+                if (false === isset($changeSet[$property->getName()])) {
+                    continue;
+                }
+
+                $encryptedValue = CryptUtility::encrypt($changeSet[$property->getName()][1], $this->getEncryptionKey());
+
+                if ($encryptedValue === $changeSet[$property->getName()][0]) {
+                    unset($changeSet[$property->getName()]);
+                } else {
+                    $changeSet[$property->getName()][1] = $encryptedValue;
+                }
+            }
+
+            DoctrineHelper::setUnitOfWorkEntityChangeSet($entity, $changeSet, $unitOfWork);
         }
+    }
+
+    /**
+     * @param object|mixed $entity
+     *
+     * @return array|ReflectionProperty[]
+     */
+    private function getEntityEncryptedReflectionProperties($entity)
+    {
+        $properties = [];
 
         if (true === ($entity instanceof Proxy)) {
             $entityClass = get_parent_class($entity);
@@ -177,10 +176,9 @@ class EncryptionSubscriber implements EventSubscriber
             $entityClass = get_class($entity);
         }
 
-        $encryptionKey = substr(hash('sha256', $this->getSecret()), 1, 32);
-
-        $reflectionClass = new \ReflectionClass($entityClass);
+        $reflectionClass = new ReflectionClass($entityClass);
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+
             /** @var Encrypted $propertyAnnotation */
             $propertyAnnotation = $this->getReader()->getPropertyAnnotation($reflectionProperty, Encrypted::class);
             if (null === $propertyAnnotation) {
@@ -189,27 +187,21 @@ class EncryptionSubscriber implements EventSubscriber
 
             $reflectionProperty->setAccessible(true);
 
-            $fieldValue = $reflectionProperty->getValue($entity);
-
-            if (null === $fieldValue || true === empty($fieldValue)) {
-                continue;
-            }
-
-            $reflectionProperty->setValue($entity, CryptUtility::$method($fieldValue, $encryptionKey));
+            $properties[] = $reflectionProperty;
         }
 
-        if (self::METHOD_ENCRYPT === $method) {
-            $entity->setEncrypted(true);
-
-            $this->entitiesEncrypted[] = $entity;
-        } else {
-            $entity->setEncrypted(false);
-
-            if (true === in_array($entity, $this->getEntitiesEncrypted())) {
-                unset($this->entitiesEncrypted[array_search($entity, $this->getEntitiesEncrypted())]);
-            }
-        }
-
-        return true;
+        return $properties;
     }
+
+    /**
+     * Get Encryption Key
+     *
+     * @return string
+     */
+    private function getEncryptionKey()
+    {
+        return substr(hash('sha256', $this->getSecret()), 1, 32);
+    }
+
+
 }

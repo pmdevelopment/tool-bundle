@@ -1,9 +1,14 @@
 services:
-    pm_tool.event_listener.unique_id_annotation_event_listener:
-        class: PM\Bundle\ToolBundle\EventListener\UniqueIdAnnotationEventListener
-        arguments: ['@annotations.reader']
+    pm__tool.event_listener.editable_entity_subscriber:
+        class: PM\Bundle\ToolBundle\EventListener\EditableEntitySubscriber
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_subscriber, connection: default }
+
+    pm__tool.event_listener.encryption_subscriber:
+        class: PM\Bundle\ToolBundle\EventListener\EncryptionSubscriber
+        arguments: ['@annotations.reader', '%pm__tool.configuration.doctrine.encryption%']
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
 
     pm_tool.event_listener.optional_annotation_event_listener:
         class: PM\Bundle\ToolBundle\EventListener\OptionalAnnotationEventListener
@@ -11,8 +16,8 @@ services:
         tags:
             - { name: doctrine.event_listener, event: preFlush }
 
-    pm__tool.event_listener.encryption_subscriber:
-        class: PM\Bundle\ToolBundle\EventListener\EncryptionSubscriber
-        arguments: ['@annotations.reader', '%pm__tool.configuration.doctrine.encryption%']
+    pm_tool.event_listener.unique_id_annotation_event_listener:
+        class: PM\Bundle\ToolBundle\EventListener\UniqueIdAnnotationEventListener
+        arguments: ['@annotations.reader']
         tags:
-            - { name: doctrine.event_subscriber, connection: default }
+            - { name: doctrine.event_listener, event: prePersist }
