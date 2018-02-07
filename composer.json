@@ -17,7 +17,8 @@
         "jms/serializer": "^1.1.0"
     },
     "suggest": {
-        "erusev/parsedown": "Use the markdown twig extension"
+        "erusev/parsedown": "Use the markdown twig extension",
+        "guzzlehttp/guzzle": "Required for Google reCAPTCHA"
     },
     "autoload": {
         "psr-0": {
