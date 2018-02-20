@@ -211,7 +211,7 @@
                             },
                             close: {
                                 label: settings.text.cancel,
-                                className: "btn-warning"
+                                className: "btn-default"
                             }
                         };
                     }
