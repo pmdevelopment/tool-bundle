@@ -521,16 +521,7 @@
                         });
 
                         if (true === settings.modules.action) {
-                            if (settings.version < 161109) {
-                                $(_element).pmTableAction({
-                                    editable: true,
-                                    path: settings.paths.action
-                                });
-                            } else {
-                                $(_element).pmTableAction(settings.action);
-                            }
-
-
+                            $(_element).pmTableAction(settings.action);
                         }
 
                         if (true === settings.modules.filter) {

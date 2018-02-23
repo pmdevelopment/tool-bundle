@@ -262,46 +262,49 @@ var pmUtil = function () {
         init: function () {
             this.debug('pmUtil.init()');
 
-            if (false === pmUtil.config.module.bootbox_delete.enabled) {
-                this.initBootbox();
-            }
-
             this.initAjax();
 
-            var path_parcels = '/bundles/pmtool/module/pm-util/parcels';
+            /* v2 Update: Load all Scripts yourself! */
 
             if (true === this.config.module.select2.enabled) {
-                $.getScript(path_parcels + '/jquery.pm-select2.js', function () {
+                if (typeof $().pmSelect2 === "undefined") {
+                    alert('Missing pmSelect2!');
+                } else {
                     pmUtil.config.module.select2.callback();
-                });
+                }
             }
 
             if (true === this.config.module.bootbox.enabled) {
-                if ($().pmBootbox) {
-                    pmUtil.config.module.bootbox.callback();
+                if (typeof $().pmBootbox === "undefined") {
+                    alert('Missing pmBootbox!');
                 } else {
-                    $.getScript(path_parcels + '/jquery.pm-bootbox.js?v=' + pmUtil.config.module.bootbox.cache, function () {
-                        pmUtil.config.module.bootbox.callback();
-                    });
+                    pmUtil.config.module.bootbox.callback();
                 }
             }
 
             if (true === this.config.module.bootbox_delete.enabled) {
-                $.getScript(path_parcels + '/jquery.pm-bootbox-delete.js?v=' + pmUtil.config.module.bootbox_delete.cache, function () {
+                if (typeof $().pmBootboxDelete === "undefined") {
+                    alert('Missing pmBootboxDelete!');
+                } else {
                     pmUtil.config.module.bootbox_delete.callback();
-                });
+                }
+
             }
 
             if (true === this.config.module.bootstrapSwitch.enabled) {
-                $.getScript(path_parcels + '/jquery.pm-bootstrap-switch.js', function () {
+                if (typeof $().pmBootstrapSwitch === "undefined") {
+                    alert('Missing pmBootstrapSwitch!');
+                } else {
                     pmUtil.config.module.bootstrapSwitch.callback();
-                });
+                }
             }
 
             if (true === this.config.module.simpleMde.enabled) {
-                $.getScript(path_parcels + '/jquery.pm-markdown.js', function () {
+                if (typeof $().pmMarkdown === "undefined") {
+                    alert('Missing pmMarkdown!');
+                } else {
                     pmUtil.config.module.simpleMde.callback();
-                });
+                }
             }
         }
     };

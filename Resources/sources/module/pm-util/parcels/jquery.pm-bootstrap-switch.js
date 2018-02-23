@@ -45,11 +45,12 @@
                         init: function () {
                             core.debug('core.init()');
 
-                            $(_element).removeClass('hidden').bootstrapSwitch();
+                            $(_element).removeClass('invisible').bootstrapSwitch();
 
+                            /* Ajax */
                             if ($(_element).data('path')) {
                                 $(_element).on('switchChange.bootstrapSwitch', function (event, state) {
-                                    pmUtilLoading.start();
+                                    pmUtilLoading.startDialog();
 
                                     $.get($(_element).data('path'), {"value": $(_element).val(), "checked": state}, function (result) {
                                         pmUtilLoading.stop();
@@ -60,6 +61,15 @@
                                     });
                                 });
                             }
+
+                            /* Redirect */
+                            if ($(_element).data('redirect')) {
+                                $(_element).on('switchChange.bootstrapSwitch', function (event, state) {
+                                    pmUtilLoading.startDialog();
+
+                                    window.location.href = $(_element).data('redirect');
+                                });
+                            }
                         }
                     };
                 }();
@@ -68,13 +78,8 @@
             });
         };
 
-        if (undefined === jQuery().bootstrapSwitch) {
-            var path_bootstrap_switch = "/bundles/pmtool/vendor/bootstrap-switch/" + pmUtil.config.module.bootstrapSwitch.version;
-            $("head").append("<link rel='stylesheet' href='" + path_bootstrap_switch + "/css/bootstrap3/bootstrap-switch.min.css' type='text/css' media='screen' />");
-
-            $.get(path_bootstrap_switch + '/js/bootstrap-switch.min.js', function () {
-                pmBootstrapSwitchInit();
-            });
+        if (typeof jQuery().bootstrapSwitch === "undefined") {
+            alert('Bootstrap Switch not loaded');
         } else {
             pmBootstrapSwitchInit();
         }
