@@ -42,7 +42,7 @@
                     init: function () {
                         core.debug('core.init()');
 
-                        var hiddenClass = 'hidden';
+                        var hiddenClass = 'invisible';
                         if ($(_element).data('hidden')) {
                             hiddenClass = $(_element).data('hidden');
                         }

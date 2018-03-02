@@ -70,6 +70,38 @@
                                     window.location.href = $(_element).data('redirect');
                                 });
                             }
+
+                            /* Bootbox */
+                            if ($(_element).data('bootbox')) {
+                                $(_element).on('switchChange.bootstrapSwitch', function (event, state) {
+                                    if (!$(_element).data('initalized')) {
+                                        var callbals =
+                                            $(_element).pmBootbox(
+                                                {
+                                                    callback: {
+                                                        load: function () {
+                                                        },
+                                                        success: function () {
+                                                            window.location.reload(true);
+                                                        },
+                                                        cancel: function () {
+                                                            $(_element).bootstrapSwitch('state', true, true);
+                                                        },
+                                                        init: function () {
+
+                                                        }
+                                                    }
+                                                }
+                                            );
+
+                                        $(_element).data('initalized', true);
+                                    }
+
+                                    $(_element).click();
+
+                                    return false;
+                                });
+                            }
                         }
                     };
                 }();

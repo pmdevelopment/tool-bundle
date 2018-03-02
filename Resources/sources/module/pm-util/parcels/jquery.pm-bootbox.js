@@ -19,6 +19,10 @@
 
                     window.location.reload(true);
                 },
+                cancel: function () {
+                    /* Executed on cancel */
+                    pmUtil.debug('{pmBootbox} settings.callback.cancel() default');
+                },
                 init: function () {
                     /* Executed on init */
                     pmUtil.debug('{pmBootbox} settings.callback.init() default');
@@ -53,16 +57,16 @@
                      * Init
                      * @param onSuccess
                      */
-                    init: function (onSuccess) {
+                    init: function (onSuccess, onCancel) {
                         core.debug('dialog.init()');
 
-                        $.get($(_element).attr('href'), {}, function (result) {
+                        $.get(core.getUri(), {}, function (result) {
                             if ('' === result) {
                                 onSuccess = onSuccess || settings.callback.success;
 
                                 onSuccess();
                             } else {
-                                dialog.create(result, onSuccess);
+                                dialog.create(result, onSuccess, onCancel);
                             }
                         });
                     },
@@ -71,19 +75,21 @@
                      * @param result
                      * @param onSuccess
                      */
-                    create: function (result, onSuccess) {
+                    create: function (result, onSuccess, onCancel) {
                         core.debug('dialog.create()');
                         var buttons, type;
 
                         onSuccess = onSuccess || settings.callback.success;
+                        onCancel = onCancel || settings.callback.cancel
 
-                        bootbox.hideAll();
+                        pmUtilLoading.stopDialog();
+
                         var bootboxDialog = bootbox.dialog({
                             className: 'pm-bootbox-form-dialog',
                             title: core.getTitle(),
                             size: core.getSize(),
                             message: result,
-                            buttons: dialog.getButtons(result, onSuccess),
+                            buttons: dialog.getButtons(result, onSuccess, onCancel),
                             animate: settings.animate
                         });
 
@@ -97,11 +103,13 @@
                     },
                     /**
                      * Get Buttons
+                     *
                      * @param result
                      * @param onSuccess
+                     * @param onCancel
                      * @returns {*}
                      */
-                    getButtons: function (result, onSuccess) {
+                    getButtons: function (result, onSuccess, onCancel) {
                         if (true === settings.disable_buttons) {
                             return {};
                         }
@@ -111,7 +119,7 @@
                         }
 
                         if (true === $(_element).data('confirm')) {
-                            return dialog.getButtonsConfirm(onSuccess);
+                            return dialog.getButtonsConfirm(onSuccess, onCancel);
                         }
 
                         return {
@@ -122,16 +130,18 @@
                         };
                     },
                     /**
-                     * Get Buttons Confirmed
+                     * Get Buttons Confirm
                      *
                      * @param onSuccess
-                     * @returns {{cancel: {label: string, className: string}, confirm: {label: *, className: string, callback: Function}}}
+                     * @param onCancel
+                     * @returns {{cancel: {label: string, className: string, callback: *}, confirm: {label, className: string, callback: confirm.callback}}}
                      */
-                    getButtonsConfirm: function (onSuccess) {
+                    getButtonsConfirm: function (onSuccess, onCancel) {
                         return {
                             cancel: {
                                 label: 'Abbrechen',
-                                className: 'btn-default'
+                                className: 'btn-default',
+                                callback: onCancel
                             },
                             confirm: {
                                 label: $(_element).attr('title'),
@@ -139,7 +149,7 @@
                                 callback: function () {
                                     pmUtilLoading.startDialog();
 
-                                    $.get($(_element).attr('href'), {confirmed: true}, function (result) {
+                                    $.get(core.getUri(), {confirmed: true}, function (result) {
                                         if ("" !== result) {
                                             dialog.create(result, onSuccess);
                                         } else {
@@ -167,13 +177,13 @@
                                 className: "btn-success",
                                 callback: function () {
                                     if ('form' === $(_element).data('submit')) {
-                                        $('.pm-bootbox-form-dialog form').attr('action', $(_element).attr('href')).submit();
+                                        $('.pm-bootbox-form-dialog form').attr('action', core.getUri()).submit();
 
                                         return;
                                     }
 
                                     var form = $('.pm-bootbox-form-dialog').find('form');
-                                    var uri = $(_element).attr('href');
+                                    var uri = core.getUri();
 
                                     if (true === settings.use_form_action && 0 < form.attr('action').length) {
                                         uri = form.attr('action');
@@ -221,7 +231,7 @@
             /**
              * Core
              *
-             * @type {{debug, init, getTitle, getSize}}
+             * @type {{debug, init, getTitle, getSize, getUri}}
              */
             var core = function () {
                 "use strict";
@@ -249,7 +259,7 @@
                             return false;
                         });
 
-                        var hiddenClass = 'hidden';
+                        var hiddenClass = 'invisible';
                         if ($(_element).data('hidden')) {
                             hiddenClass = $(_element).data('hidden');
                         }
@@ -281,6 +291,21 @@
                         }
 
                         return null;
+                    },
+                    /**
+                     * Get Uri
+                     * @returns {*|HTMLElement}
+                     */
+                    getUri: function () {
+                        if ($(_element).attr('href')) {
+                            return $(_element).attr('href');
+                        }
+
+                        if ($(_element).data('bootbox')) {
+                            return $(_element).data('bootbox');
+                        }
+
+                        bootbox.alert('Missing uri!');
                     }
                 };
             }();

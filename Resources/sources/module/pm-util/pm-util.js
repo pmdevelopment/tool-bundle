@@ -1,7 +1,7 @@
 /**
  * Loading
  *
- * @type {{config, count, getSpinner, start, stop, startInline, startDialog}}
+ * @type {{config, count, getSpinner, start, stop, startInline, startDialog, stopDialog}}
  */
 var pmUtilLoading = function () {
     "use strict";
@@ -111,6 +111,12 @@ var pmUtilLoading = function () {
             });
 
             this.startInline(element);
+        },
+        /**
+         * Stop Dialog
+         */
+        stopDialog: function () {
+            bootbox.hideAll();
         }
     }
 }();
