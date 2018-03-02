@@ -17,7 +17,6 @@ use Symfony\Component\HttpKernel\Kernel;
 /**
  * Class PMKernel
  *
- *  - Fixes the "scope" error for route voter.
  *  - Get different cache and log dir to improve
  *    speed when using a SMB share.
  *
