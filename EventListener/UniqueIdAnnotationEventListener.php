@@ -11,7 +11,7 @@ namespace PM\Bundle\ToolBundle\EventListener;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use PM\Bundle\ToolBundle\Framework\Annotations\UniqueId;
-use PM\Bundle\ToolBundle\Framework\Interfaces\UniqueIdEntityInterface;
+use PM\Bundle\ToolBundle\Framework\Interfaces\HasUniqueIdEntityInterface;
 
 /**
  * Class UniqueIdAnnotationEventListener
@@ -54,7 +54,7 @@ class UniqueIdAnnotationEventListener
         $entity = $args->getEntity();
         $entityClass = get_class($entity);
 
-        if (false === ($entity instanceof UniqueIdEntityInterface)) {
+        if (false === ($entity instanceof HasUniqueIdEntityInterface)) {
             return false;
         }
 

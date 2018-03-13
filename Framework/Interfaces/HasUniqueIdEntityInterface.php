@@ -9,11 +9,11 @@
 namespace PM\Bundle\ToolBundle\Framework\Interfaces;
 
 /**
- * Class UniqueIdEntityInterface
+ * Class HasUniqueIdEntityInterface
  *
  * @package PM\Bundle\ToolBundle\Framework\Interfaces
  */
-interface UniqueIdEntityInterface
+interface HasUniqueIdEntityInterface
 {
 
 }

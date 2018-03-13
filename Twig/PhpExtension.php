@@ -76,6 +76,13 @@ class PhpExtension extends Twig_Extension
                     'getArrayReverse',
                 ]
             ),
+            new \Twig_SimpleFilter(
+                'json_decode',
+                [
+                    $this,
+                    'getJsonDecode'
+                ]
+            ),
         ];
     }
 
@@ -149,5 +156,17 @@ class PhpExtension extends Twig_Extension
     public function getArrayReverse($array, $preserveKeys = false)
     {
         return array_reverse($array, $preserveKeys);
+    }
+
+    /**
+     * Get JSON Decode
+     *
+     * @param mixed $input
+     *
+     * @return mixed
+     */
+    public function getJsonDecode($input)
+    {
+        return json_decode($input);
     }
 }
