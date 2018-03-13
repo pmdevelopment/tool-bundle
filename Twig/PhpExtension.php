@@ -80,7 +80,14 @@ class PhpExtension extends Twig_Extension
                 'json_decode',
                 [
                     $this,
-                    'getJsonDecode'
+                    'getJsonDecode',
+                ]
+            ),
+            new \Twig_SimpleFilter(
+                'print_r',
+                [
+                    $this,
+                    'getPrintR',
                 ]
             ),
         ];
@@ -167,6 +174,18 @@ class PhpExtension extends Twig_Extension
      */
     public function getJsonDecode($input)
     {
-        return json_decode($input);
+        return json_decode($input, true);
+    }
+
+    /**
+     * Get Print R
+     *
+     * @param mixed $mixed
+     *
+     * @return mixed
+     */
+    public function getPrintR($mixed)
+    {
+        return print_r($mixed, true);
     }
 }
