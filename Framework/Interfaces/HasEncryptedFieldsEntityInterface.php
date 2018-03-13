@@ -9,11 +9,11 @@
 namespace PM\Bundle\ToolBundle\Framework\Interfaces;
 
 /**
- * Interface EncryptedEntityInterface
+ * Interface HasEncryptedFieldsEntityInterface
  *
  * @package PM\Bundle\ToolBundle\Framework\Interfaces
  */
-interface EncryptedEntityInterface
+interface HasEncryptedFieldsEntityInterface
 {
     /**
      * Is Encrypted?
