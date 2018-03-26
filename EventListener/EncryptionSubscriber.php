@@ -16,7 +16,7 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\Proxy\Proxy;
 use PM\Bundle\ToolBundle\Components\Helper\DoctrineHelper;
 use PM\Bundle\ToolBundle\Framework\Annotations\Encrypted;
-use PM\Bundle\ToolBundle\Framework\Interfaces\EncryptedEntityInterface;
+use PM\Bundle\ToolBundle\Framework\Interfaces\HasEncryptedFieldsEntityInterface;
 use PM\Bundle\ToolBundle\Framework\Utilities\CryptUtility;
 use ReflectionClass;
 use ReflectionProperty;
@@ -99,7 +99,7 @@ class EncryptionSubscriber implements EventSubscriber
     {
         $entity = $args->getEntity();
 
-        if (false === ($entity instanceof EncryptedEntityInterface)) {
+        if (false === ($entity instanceof HasEncryptedFieldsEntityInterface)) {
             return false;
         }
 
@@ -132,7 +132,7 @@ class EncryptionSubscriber implements EventSubscriber
         );
 
         foreach ($related as $entity) {
-            if (false === ($entity instanceof EncryptedEntityInterface)) {
+            if (false === ($entity instanceof HasEncryptedFieldsEntityInterface)) {
                 continue;
             }
 
