@@ -11,6 +11,7 @@ namespace PM\Bundle\ToolBundle\EventListener;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use PM\Bundle\ToolBundle\Framework\Annotations\UniqueId;
+use PM\Bundle\ToolBundle\Framework\Interfaces\HasUniqueIdEntityInterface;
 use PM\Bundle\ToolBundle\Framework\Interfaces\UniqueIdEntityInterface;
 
 /**
@@ -54,8 +55,12 @@ class UniqueIdAnnotationEventListener
         $entity = $args->getEntity();
         $entityClass = get_class($entity);
 
-        if (false === ($entity instanceof UniqueIdEntityInterface)) {
+        if (false === ($entity instanceof UniqueIdEntityInterface) && false === ($entity instanceof HasUniqueIdEntityInterface)) {
             return false;
+        }
+
+        if ($entity instanceof UniqueIdEntityInterface) {
+            @trigger_error(sprintf('UniqueIdEntityInterface is deprecated and will be removed in 2.0. Use HasUniqueIdEntityInterface instead'), E_USER_DEPRECATED);
         }
 
         $reflectionClass = new \ReflectionClass($entityClass);

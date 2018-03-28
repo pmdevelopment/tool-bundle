@@ -12,10 +12,8 @@ namespace PM\Bundle\ToolBundle\Framework\Interfaces;
  * Class UniqueIdEntityInterface
  *
  * @package PM\Bundle\ToolBundle\Framework\Interfaces
- *
- * @deprecated
  */
-interface UniqueIdEntityInterface
+interface HasUniqueIdEntityInterface
 {
 
 }
