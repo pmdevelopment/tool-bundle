@@ -185,7 +185,7 @@
                                     var form = $('.pm-bootbox-form-dialog').find('form');
                                     var uri = core.getUri();
 
-                                    if (true === settings.use_form_action && 0 < form.attr('action').length) {
+                                    if (true === settings.use_form_action && 'undefined' !== typeof form.attr('action')) {
                                         uri = form.attr('action');
                                     }
 

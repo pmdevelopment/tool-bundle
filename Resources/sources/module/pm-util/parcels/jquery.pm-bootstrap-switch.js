@@ -74,7 +74,7 @@
                             /* Bootbox */
                             if ($(_element).data('bootbox')) {
                                 $(_element).on('switchChange.bootstrapSwitch', function (event, state) {
-                                    if (!$(_element).data('initalized')) {
+                                    if (!$(_element).data('initalized-bootbox')) {
                                         var callbals =
                                             $(_element).pmBootbox(
                                                 {
@@ -94,7 +94,7 @@
                                                 }
                                             );
 
-                                        $(_element).data('initalized', true);
+                                        $(_element).data('initalized-bootbox', true);
                                     }
 
                                     $(_element).click();
@@ -106,7 +106,14 @@
                     };
                 }();
 
+                /* Init if not already initalized */
+                if (true === _element.data('initalized')) {
+                    return;
+                }
+
                 core.init();
+
+                _element.data('initalized', true);
             });
         };
 
