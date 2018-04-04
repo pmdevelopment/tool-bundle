@@ -1,6 +1,19 @@
 (function ($) {
     $.fn.pmBootbox = function (options) {
 
+        var language = {
+            de: {
+                save: 'Speichern',
+                cancel: 'Abbrechen',
+                close: 'Schließen'
+            },
+            en: {
+                save: 'Save',
+                cancel: 'Cancel',
+                close: 'Close'
+            }
+        }
+
         var settings = {
             version: 170828,
             callback: {
@@ -28,16 +41,12 @@
                     pmUtil.debug('{pmBootbox} settings.callback.init() default');
                 }
             },
-            text: {
-                save: 'Speichern',
-                cancel: 'Abbrechen',
-                close: 'Schließen'
-            },
             use_form_action: true,
             use_pm_markdown: false,
             disable_buttons: false,
             recursive: null,
-            animate: true
+            animate: true,
+            language: 'de'
         };
 
         settings = $.extend({}, settings, options);
@@ -124,7 +133,7 @@
 
                         return {
                             close: {
-                                label: settings.text.close,
+                                label: language[settings.language].close,
                                 className: 'btn-success'
                             }
                         };
@@ -138,11 +147,6 @@
                      */
                     getButtonsConfirm: function (onSuccess, onCancel) {
                         return {
-                            cancel: {
-                                label: 'Abbrechen',
-                                className: 'btn-default',
-                                callback: onCancel
-                            },
                             confirm: {
                                 label: $(_element).attr('title'),
                                 className: 'btn-success',
@@ -157,7 +161,12 @@
                                         }
                                     });
                                 }
-                            }
+                            },
+                            cancel: {
+                                label: language[settings.language].cancel,
+                                className: 'btn-default',
+                                callback: onCancel
+                            },
                         }
                     },
                     /**
@@ -168,7 +177,7 @@
                     getButtonsForm: function (onSuccess) {
                         var labelSubmit = $(_element).data('button-submit');
                         if (undefined === labelSubmit) {
-                            labelSubmit = settings.text.save;
+                            labelSubmit = language[settings.language].save;
                         }
 
                         return {
@@ -220,7 +229,7 @@
                                 }
                             },
                             close: {
-                                label: settings.text.cancel,
+                                label: language[settings.language].cancel,
                                 className: "btn-default"
                             }
                         };
