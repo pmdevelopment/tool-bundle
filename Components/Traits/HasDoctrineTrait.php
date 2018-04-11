@@ -13,6 +13,11 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
+/**
+ * Trait HasDoctrineTrait
+ *
+ * @package PM\Bundle\ToolBundle\Components\Traits
+ */
 trait HasDoctrineTrait
 {
     /**

@@ -2,22 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: sjoder
- * Date: 16.11.2016
- * Time: 09:31
+ * Date: 11.04.2018
+ * Time: 16:38
  */
 
-namespace PM\Bundle\ToolBundle\Framework\Traits\Services;
+namespace PM\Bundle\ToolBundle\Components\Traits;
 
-use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
- * Class HasLoggerServiceTrait
+ * Trait HasLoggerTrait
  *
- * @package PM\Bundle\ToolBundle\Framework\Traits\Services
- *
- * @deprecated Use HasLoggerTrait instead
+ * @package PM\Bundle\ToolBundle\Components\Traits
  */
-trait HasLoggerServiceTrait
+trait HasLoggerTrait
 {
     /**
      * @var Logger
@@ -29,6 +27,10 @@ trait HasLoggerServiceTrait
      */
     public function getLogger()
     {
+        if ($this instanceof ContainerAwareInterface) {
+            return $this->get('logger');
+        }
+
         if (null === $this->logger) {
             throw new \RuntimeException('Logger not found. Setter not called?');
         }
@@ -47,5 +49,4 @@ trait HasLoggerServiceTrait
 
         return $this;
     }
-
 }
