@@ -14,6 +14,8 @@ use Doctrine\ORM\EntityManager;
  * Class DoctrineTrait
  *
  * @package PM\Bundle\ToolBundle\Framework\Traits\Controller
+ *
+ * @deprecated Use HasDoctrineTrait instead
  */
 trait HasDoctrineControllerTrait
 {
