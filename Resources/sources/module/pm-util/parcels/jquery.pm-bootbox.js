@@ -72,7 +72,10 @@
                         var uri = core.getUri();
                         if (null === uri) {
                             pmUtilLoading.stopDialog();
-                            bootbox.alert(core.getTitle());
+                            bootbox.alert({
+                                title: core.getTitle(),
+                                message: $(_element).data('title')
+                            });
 
                             return false;
                         }
