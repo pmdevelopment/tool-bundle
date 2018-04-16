@@ -81,12 +81,6 @@ var pmUtilLoading = function () {
          * @param text
          */
         startInline: function (target, size) {
-            if (false === this.config.inline.init) {
-                this.config.inline.init = true;
-
-                $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', '/bundles/pmtool/module/pm-util/css/loading.css?v=1.0.1'));
-            }
-
             var divClass = 'pm-util-loading-inline';
             var text = this.config.text.loading;
             var style = 'width:80px;margin: 60px auto;height:80px;';

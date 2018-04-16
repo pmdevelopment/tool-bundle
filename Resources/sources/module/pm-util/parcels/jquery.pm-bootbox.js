@@ -69,6 +69,14 @@
                     init: function (onSuccess, onCancel) {
                         core.debug('dialog.init()');
 
+                        var uri = core.getUri();
+                        if (null === uri) {
+                            pmUtilLoading.stopDialog();
+                            bootbox.alert(core.getTitle());
+
+                            return false;
+                        }
+
                         $.get(core.getUri(), {}, function (result) {
                             if ('' === result) {
                                 onSuccess = onSuccess || settings.callback.success;
@@ -314,7 +322,7 @@
                             return $(_element).data('bootbox');
                         }
 
-                        bootbox.alert('Missing uri!');
+                        return null;
                     }
                 };
             }();
