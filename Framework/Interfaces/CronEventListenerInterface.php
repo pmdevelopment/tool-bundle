@@ -13,6 +13,8 @@ namespace PM\Bundle\ToolBundle\Framework\Interfaces;
  * interface CronEventListenerInterface
  *
  * @package PM\Bundle\ToolBundle\Framework\Interfaces
+ *
+ * @deprecated Use ConjobBundle instead!
  */
 interface CronEventListenerInterface
 {

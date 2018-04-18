@@ -17,7 +17,9 @@ use Symfony\Component\EventDispatcher\Event;
 /**
  * Class CronEvent
  *
- * @package PM\Bundle\ToolBundle\Framework\Events
+ * @package    PM\Bundle\ToolBundle\Framework\Events
+ *
+ * @deprecated Use ConjobBundle instead!
  */
 class CronEvent extends Event
 {
