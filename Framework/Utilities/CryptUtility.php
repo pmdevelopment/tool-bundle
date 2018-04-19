@@ -12,6 +12,8 @@ namespace PM\Bundle\ToolBundle\Framework\Utilities;
  * Class CryptUtility
  *
  * @package PM\Bundle\ToolBundle\Framework\Utilities
+ *
+ * @deprecated Uses mcrypt, do not use anymore.
  */
 class CryptUtility
 {

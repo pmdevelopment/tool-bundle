@@ -2,24 +2,29 @@
 /**
  * Created by PhpStorm.
  * User: sjoder
- * Date: 23.03.2017
- * Time: 12:29
+ * Date: 19.04.2018
+ * Time: 09:39
  */
 
 namespace PM\Bundle\ToolBundle\Framework\Annotations;
 
 use Doctrine\Common\Annotations\Annotation;
+use PM\Bundle\ToolBundle\Components\Helper\OpenSSLHelper;
 
 /**
- * Class Encrypted
+ * Class Encryption
  *
  * @package PM\Bundle\ToolBundle\Framework\Annotations
- *
- * @deprecated Use "Encryption" Annotation instead. Warning: not compatible!
  *
  * @Annotation
  * @Annotation\Target({"PROPERTY"})
  */
-final class Encrypted extends Annotation
+final class Encryption extends Annotation
 {
+    /**
+     * Cipher
+     *
+     * @var string
+     */
+    public $cipher = OpenSSLHelper::CIPHER_AES_256_CBC;
 }

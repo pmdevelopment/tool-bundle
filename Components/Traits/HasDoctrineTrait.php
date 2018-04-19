@@ -11,6 +11,7 @@ namespace PM\Bundle\ToolBundle\Components\Traits;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -91,6 +92,10 @@ trait HasDoctrineTrait
     public function getDoctrine()
     {
         if ($this instanceof ContainerAwareInterface) {
+            if ($this instanceof ContainerAwareCommand) {
+                return $this->getContainer()->get('doctrine');
+            }
+
             return $this->get('doctrine');
         }
 

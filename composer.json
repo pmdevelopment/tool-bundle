@@ -9,12 +9,9 @@
         }
     ],
     "require": {
-        "php": "^5.5||^7.0",
-        "twig/extensions": "^1.4.1",
-        "symfony/assetic-bundle": "^2.8.0",
-        "knplabs/knp-paginator-bundle": "^2.5.3",
-        "knplabs/knp-menu-bundle": "^2.1.1",
-        "jms/serializer": "^1.1.0"
+        "php": "^7.1",
+        "twig/extensions": "^1.5.1",
+        "ext-openssl": "*"
     },
     "suggest": {
         "erusev/parsedown": "Use the markdown twig extension",
