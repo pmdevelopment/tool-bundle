@@ -37,24 +37,10 @@
                     }
 
                     $(_elements).each(function () {
-                        var div = $('<div class="pm-markdown-loading"></div>');
-                        $(this).parent().append(div);
-
-                        pmUtilLoading.startInline(div);
-                    });
-
-                    var basePath = '/bundles/pmtool/vendor/simplemde/' + pmUtil.config.module.simpleMde.version;
-                    $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', basePath + '/simplemde.min.css'));
-
-                    $.getScript(basePath + '/simplemde.min.js', function () {
-                        $(_elements).each(function () {
-                            new SimpleMDE({
-                                element: $(this)[0],
-                                spellChecker: false,
-                                forceSync: settings.forceSync
-                            });
-
-                            $(this).parent().find('.pm-markdown-loading').remove();
+                        new SimpleMDE({
+                            element: $(this)[0],
+                            spellChecker: false,
+                            forceSync: settings.forceSync
                         });
                     });
                 }
