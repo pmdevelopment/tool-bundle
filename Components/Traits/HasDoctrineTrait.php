@@ -8,9 +8,8 @@
 
 namespace PM\Bundle\ToolBundle\Components\Traits;
 
-
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -22,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 trait HasDoctrineTrait
 {
     /**
-     * @var Registry
+     * @var RegistryInterface
      */
     private $doctrine;
 
@@ -87,7 +86,7 @@ trait HasDoctrineTrait
     }
 
     /**
-     * @return Registry
+     * @return RegistryInterface
      */
     public function getDoctrine()
     {
@@ -103,7 +102,7 @@ trait HasDoctrineTrait
     }
 
     /**
-     * @param Registry $doctrine
+     * @param RegistryInterface $doctrine
      *
      * @return HasDoctrineTrait
      */
