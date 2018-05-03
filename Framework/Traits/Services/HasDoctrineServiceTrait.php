@@ -16,6 +16,8 @@ use Doctrine\Common\Persistence\ObjectManager;
  * Class HasDoctrineTrait
  *
  * @package PM\CoreBundle\Component\Traits
+ *
+ * @deprecated Use HasDoctrineTrait instead.
  */
 trait HasDoctrineServiceTrait
 {
