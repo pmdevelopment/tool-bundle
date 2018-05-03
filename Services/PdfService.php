@@ -9,11 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
  * Description of PdfService
  *
  * @author sjoder
+ *
+ * @deprecated Use current dompdf without any service, the config include is not needed anymore!
  */
 class PdfService {
 
    /**
-    * 
+    *
     * @param string $kerneldir
     */
    private $kerneldir;
@@ -36,7 +38,7 @@ class PdfService {
    }
 
    /**
-    * 
+    *
     * @param string $key
     * @param string $value
     */
@@ -46,7 +48,7 @@ class PdfService {
 
    /**
     * Get PDF By HTML
-    * 
+    *
     * @param string $html
     * @return Response
     */
