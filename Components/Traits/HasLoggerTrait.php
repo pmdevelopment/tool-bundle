@@ -8,6 +8,7 @@
 
 namespace PM\Bundle\ToolBundle\Components\Traits;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -18,12 +19,12 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 trait HasLoggerTrait
 {
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @return Logger
+     * @return LoggerInterface
      */
     public function getLogger()
     {
@@ -39,7 +40,7 @@ trait HasLoggerTrait
     }
 
     /**
-     * @param Logger $logger
+     * @param LoggerInterface $logger
      *
      * @return HasLoggerServiceTrait
      */
