@@ -14,6 +14,8 @@ use JMS\Serializer\Serializer;
  * Class HasSerializerTrait
  *
  * @package PM\CoreBundle\Component\Traits
+ *
+ * @deprecated Use HasSerializerTrait instead.
  */
 trait HasSerializerServiceTrait
 {
