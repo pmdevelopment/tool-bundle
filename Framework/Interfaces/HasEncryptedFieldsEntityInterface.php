@@ -9,13 +9,11 @@
 namespace PM\Bundle\ToolBundle\Framework\Interfaces;
 
 /**
- * Interface EncryptedEntityInterface
+ * Interface HasEncryptedFieldsEntityInterface
  *
  * @package PM\Bundle\ToolBundle\Framework\Interfaces
- *
- * @deprecated Convert to new Encryption annotation with HasEncryptedFieldsEntityInterface
  */
-interface EncryptedEntityInterface
+interface HasEncryptedFieldsEntityInterface
 {
     /**
      * Is Encrypted?

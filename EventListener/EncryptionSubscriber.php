@@ -15,10 +15,12 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Proxy\Proxy;
 use PM\Bundle\ToolBundle\Components\Helper\DoctrineHelper;
+use PM\Bundle\ToolBundle\Components\Helper\OpenSSLHelper;
 use PM\Bundle\ToolBundle\Framework\Annotations\Encrypted;
+use PM\Bundle\ToolBundle\Framework\Annotations\Encryption;
 use PM\Bundle\ToolBundle\Framework\Interfaces\EncryptedEntityInterface;
+use PM\Bundle\ToolBundle\Framework\Interfaces\HasEncryptedFieldsEntityInterface;
 use PM\Bundle\ToolBundle\Framework\Utilities\CryptUtility;
-use ReflectionClass;
 use ReflectionProperty;
 
 /**
@@ -99,18 +101,37 @@ class EncryptionSubscriber implements EventSubscriber
     {
         $entity = $args->getEntity();
 
-        if (false === ($entity instanceof EncryptedEntityInterface)) {
+        if (false === ($entity instanceof HasEncryptedFieldsEntityInterface) && false === ($entity instanceof EncryptedEntityInterface)) {
             return false;
         }
 
-        foreach ($this->getEntityEncryptedReflectionProperties($entity) as $property) {
+        $properties = $this->getEntityEncryptionReflectionProperties($entity);
+        foreach ($properties as $property) {
             $fieldValue = $property->getValue($entity);
 
             if (null === $fieldValue || true === empty($fieldValue)) {
                 continue;
             }
 
-            $property->setValue($entity, CryptUtility::decrypt($fieldValue, $this->getEncryptionKey()));
+            /** @var Encryption $annotation */
+            $annotation = DoctrineHelper::getPropertyAnnotation($property, Encryption::class, $this->getReader());
+
+            $property->setValue($entity, OpenSSLHelper::decrypt($fieldValue, $this->getEncryptionKey(), $annotation->cipher));
+        }
+
+        /*
+         * Deprecated usage
+         */
+        if (0 === count($properties)) {
+            foreach ($this->getEntityEncryptedReflectionProperties($entity) as $property) {
+                $fieldValue = $property->getValue($entity);
+
+                if (null === $fieldValue || true === empty($fieldValue)) {
+                    continue;
+                }
+
+                $property->setValue($entity, CryptUtility::decrypt($fieldValue, $this->getEncryptionKey()));
+            }
         }
 
         return true;
@@ -132,11 +153,18 @@ class EncryptionSubscriber implements EventSubscriber
         );
 
         foreach ($related as $entity) {
-            if (false === ($entity instanceof EncryptedEntityInterface)) {
+            if (false === ($entity instanceof HasEncryptedFieldsEntityInterface) && false === ($entity instanceof EncryptedEntityInterface)) {
                 continue;
             }
 
-            $properties = $this->getEntityEncryptedReflectionProperties($entity);
+            $deprecated = false;
+            $properties = $this->getEntityEncryptionReflectionProperties($entity);
+
+            if (0 === count($properties)) {
+                $deprecated = true;
+                $properties = $this->getEntityEncryptedReflectionProperties($entity);
+            }
+
             $changeSet = $unitOfWork->getEntityChangeSet($entity);
 
             if (0 === count($properties)) {
@@ -148,7 +176,15 @@ class EncryptionSubscriber implements EventSubscriber
                     continue;
                 }
 
-                $encryptedValue = CryptUtility::encrypt($changeSet[$property->getName()][1], $this->getEncryptionKey());
+                if (true === $deprecated) {
+                    $encryptedValue = CryptUtility::encrypt($changeSet[$property->getName()][1], $this->getEncryptionKey());
+                } else {
+                    /** @var Encryption $annotation */
+                    $annotation = DoctrineHelper::getPropertyAnnotation($property, Encryption::class, $this->getReader());
+
+                    $encryptedValue = OpenSSLHelper::encrypt($changeSet[$property->getName()][1], $this->getEncryptionKey(), $annotation->cipher);
+                }
+
 
                 if ($encryptedValue === $changeSet[$property->getName()][0]) {
                     unset($changeSet[$property->getName()]);
@@ -168,29 +204,17 @@ class EncryptionSubscriber implements EventSubscriber
      */
     private function getEntityEncryptedReflectionProperties($entity)
     {
-        $properties = [];
+        return DoctrineHelper::getPropertiesByAnnotation($this->getClassName($entity), Encrypted::class, $this->getReader());
+    }
 
-        if (true === ($entity instanceof Proxy)) {
-            $entityClass = get_parent_class($entity);
-        } else {
-            $entityClass = get_class($entity);
-        }
-
-        $reflectionClass = new ReflectionClass($entityClass);
-        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-
-            /** @var Encrypted $propertyAnnotation */
-            $propertyAnnotation = $this->getReader()->getPropertyAnnotation($reflectionProperty, Encrypted::class);
-            if (null === $propertyAnnotation) {
-                continue;
-            }
-
-            $reflectionProperty->setAccessible(true);
-
-            $properties[] = $reflectionProperty;
-        }
-
-        return $properties;
+    /**
+     * @param object|mixed $entity
+     *
+     * @return array|ReflectionProperty[]
+     */
+    private function getEntityEncryptionReflectionProperties($entity)
+    {
+        return DoctrineHelper::getPropertiesByAnnotation($this->getClassName($entity), Encryption::class, $this->getReader());
     }
 
     /**
@@ -203,5 +227,20 @@ class EncryptionSubscriber implements EventSubscriber
         return substr(hash('sha256', $this->getSecret()), 1, 32);
     }
 
+    /**
+     * Get Class Name
+     *
+     * @param string $entity
+     *
+     * @return string
+     */
+    private function getClassName($entity)
+    {
+        if (true === ($entity instanceof Proxy)) {
+            return get_parent_class($entity);
+        }
+
+        return get_class($entity);
+    }
 
 }
