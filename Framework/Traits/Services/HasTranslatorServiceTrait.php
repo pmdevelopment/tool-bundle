@@ -13,7 +13,9 @@ use Symfony\Component\Translation\IdentityTranslator;
 /**
  * Class HasTranslatorServiceTrait
  *
- * @package PM\Bundle\ToolBundle\Framework\Traits\Services
+ * @package    PM\Bundle\ToolBundle\Framework\Traits\Services
+ *
+ * @deprecated Use PM\Bundle\ToolBundle\Components\Traits\HasTranslatorTrait instead
  */
 trait HasTranslatorServiceTrait
 {

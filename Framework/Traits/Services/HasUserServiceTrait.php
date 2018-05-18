@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
  * Class HasUserServiceTrait
  *
  * @package PM\Bundle\ToolBundle\Framework\Traits\Services
+ * @deprecated Use PM\Bundle\ToolBundle\Components\Traits\HasUserTrait instead.
  */
 trait HasUserServiceTrait
 {
