@@ -27,7 +27,7 @@ class OpenSSLHelper
      *
      * @return string
      */
-    public static function encrypt($plainText, $key, $cipher)
+    public static function encrypt($plainText, $key, $cipher = self::CIPHER_AES_256_CBC)
     {
         if (false === in_array($cipher, openssl_get_cipher_methods())) {
             throw new \LogicException(sprintf('Cipher %s not supported', $cipher));
@@ -51,7 +51,7 @@ class OpenSSLHelper
      *
      * @return string
      */
-    public static function decrypt($encryptedText, $key, $cipher)
+    public static function decrypt($encryptedText, $key, $cipher = self::CIPHER_AES_256_CBC)
     {
         if (false === in_array($cipher, openssl_get_cipher_methods())) {
             throw new \LogicException(sprintf('Cipher %s not supported', $cipher));
