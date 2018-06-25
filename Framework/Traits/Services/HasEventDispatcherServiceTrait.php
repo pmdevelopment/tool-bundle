@@ -14,6 +14,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * Class HasEventDispatcherServiceTrait
  *
  * @package PM\Bundle\ToolBundle\Framework\Traits\Services
+ *
+ * @deprecated Use HasEventDispatcherTrait instead
  */
 trait HasEventDispatcherServiceTrait
 {
