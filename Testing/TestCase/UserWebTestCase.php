@@ -24,12 +24,12 @@ class UserWebTestCase extends AnonymousWebTestCase
      * Add Tests for status code
      *
      * @param int          $statusCode
-     * @param string       $role
+     * @param string       $username
      * @param array|string $routes
      */
-    public function addTestsForStatusCode($statusCode, $role, $routes)
+    public function addTestsForStatusCode($statusCode, $username, $routes)
     {
-        $client = self::logIn(UserTestHelper::createUserName($role));
+        $client = self::logIn($role);
 
         if (false === is_array($routes)) {
             $routes = [
