@@ -8,8 +8,10 @@
 
 namespace PM\Bundle\ToolBundle\Testing\TestCase;
 
+use PM\Core\UserBundle\Component\Testing\UserTestHelper;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class UserWebTestCase
@@ -18,6 +20,29 @@ use Symfony\Component\BrowserKit\Cookie;
  */
 class UserWebTestCase extends AnonymousWebTestCase
 {
+    /**
+     * Add Tests for status code
+     *
+     * @param int          $statusCode
+     * @param string       $role
+     * @param array|string $routes
+     */
+    public function addTestsForStatusCode($statusCode, $role, $routes)
+    {
+        $client = self::logIn(UserTestHelper::createUserName($role));
+
+        if (false === is_array($routes)) {
+            $routes = [
+                $routes,
+            ];
+        }
+
+        foreach ($routes as $route) {
+            $client->request(Request::METHOD_GET, $route);
+            $this->assertEquals($statusCode, $client->getResponse()->getStatusCode(), sprintf('Role %s; Path %s', $role, $route));
+        }
+    }
+
     /**
      * Create Logged In Client
      *
@@ -62,4 +87,5 @@ class UserWebTestCase extends AnonymousWebTestCase
     {
         return $client->getContainer()->get('fos_user.user_manager')->findUserByUsername($userName);
     }
+
 }
