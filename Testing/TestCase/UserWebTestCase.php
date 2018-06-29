@@ -8,7 +8,6 @@
 
 namespace PM\Bundle\ToolBundle\Testing\TestCase;
 
-use PM\Core\UserBundle\Component\Testing\UserTestHelper;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +28,7 @@ class UserWebTestCase extends AnonymousWebTestCase
      */
     public function addTestsForStatusCode($statusCode, $username, $routes)
     {
-        $client = self::logIn($role);
+        $client = self::logIn($username);
 
         if (false === is_array($routes)) {
             $routes = [
@@ -39,7 +38,7 @@ class UserWebTestCase extends AnonymousWebTestCase
 
         foreach ($routes as $route) {
             $client->request(Request::METHOD_GET, $route);
-            $this->assertEquals($statusCode, $client->getResponse()->getStatusCode(), sprintf('Role %s; Path %s', $role, $route));
+            $this->assertEquals($statusCode, $client->getResponse()->getStatusCode(), sprintf('Role %s; Path %s', $username, $route));
         }
     }
 
