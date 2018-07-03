@@ -21,6 +21,8 @@ use Symfony\Component\HttpKernel\Kernel;
  *    speed when using a SMB share.
  *
  * @package PM\Bundle\ToolBundle\Framework
+ *
+ * @deprecated Use SymfonyHelper
  */
 class PMKernel extends Kernel
 {
