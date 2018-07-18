@@ -34,6 +34,10 @@ class ConfigExtension extends Twig_Extension
                 $this,
                 'getValueByKey',
             ]),
+            new \Twig_SimpleFilter('config_get_entity_by_key', [
+                $this,
+                'getEntityByKey',
+            ]),
         ];
     }
 
@@ -63,6 +67,27 @@ class ConfigExtension extends Twig_Extension
         }
 
         return $result->getValue();
+    }
+
+    /**
+     * Get Entity
+     *
+     * @param string      $key
+     * @param string|null $class
+     *
+     * @return null|object
+     */
+    public function getEntityByKey($key, $class = null)
+    {
+        if (null === $class) {
+            $class = $this->getEntityClass();
+        }
+
+        return $this->getDoctrine()->getRepository($class)->findOneBy(
+            [
+                'key' => $key,
+            ]
+        );
     }
 
     /**
