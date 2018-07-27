@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
  * Class SerializationTrait
  *
  * @package PM\Bundle\ToolBundle\Framework\Traits\Controller
+ *
+ * @deprecated Use SerializeJsonResponse instead.
  */
 trait SerializationTrait
 {
