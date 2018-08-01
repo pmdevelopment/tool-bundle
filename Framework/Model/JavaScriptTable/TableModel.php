@@ -174,6 +174,32 @@ class TableModel
     }
 
     /**
+     * Get Filters Array
+     *
+     * @return array
+     */
+    public function getFiltersArray()
+    {
+        $result = [];
+
+        if (false === is_array($this->getFilters())) {
+            return [];
+        }
+
+        foreach ($this->getFilters() as $filterIndex => $items) {
+            $resultItems = [];
+            foreach ($items as $item) {
+                $resultItems[] = $item->getId();
+            }
+
+            $result[$filterIndex] = implode(',', $resultItems);
+        }
+
+        return $result;
+    }
+
+
+    /**
      * Get Filters as JSON
      *
      * @return string
@@ -183,7 +209,7 @@ class TableModel
         $result = [];
 
         if (false === is_array($this->getFilters())) {
-            return "{}";
+            return '{}';
         }
 
         foreach ($this->getFilters() as $filterIndex => $items) {

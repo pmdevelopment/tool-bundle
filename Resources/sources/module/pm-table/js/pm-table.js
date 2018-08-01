@@ -3,6 +3,7 @@
 
         var settings = {
             version: 170815,
+            bootstrap: 3,
             modules: {
                 action: false,
                 sortable: false,
@@ -44,7 +45,8 @@
                 sorting: {
                     asc: 'fa fa-caret-up text-muted',
                     desc: 'fa fa-caret-down text-muted'
-                }
+                },
+                hide: '<i class="fa fa-times"></i>'
             }
         };
 
@@ -400,14 +402,19 @@
                             filter.getList().parent().removeClass('hidden');
                         }
 
+                        var labelClass = 'label label-default';
+                        if (4 === settings.bootstrap) {
+                            labelClass = 'badge badge-info';
+                        }
+
                         $.each(settings.filter.active, function (key, values) {
                             $.each(values, function (valueKey, valueItem) {
                                 var label = $('<a></a>', {
                                     href: 'javascript:void(0)',
-                                    class: 'label label-default',
+                                    class: labelClass,
                                     dataKey: key,
                                     dataValue: valueItem.id
-                                }).html('<strong>' + titles[key] + ':</strong> ' + valueItem.text + ' <i class="fa fa-times"></i>').on('click', function () {
+                                }).html('<strong>' + titles[key] + ':</strong> ' + valueItem.text + ' ' + settings.icons.hide).on('click', function () {
                                     filter.remove(key, valueItem.id);
                                 });
 
