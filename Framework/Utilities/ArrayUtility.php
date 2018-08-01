@@ -84,4 +84,22 @@ class ArrayUtility
         return reset($array);
     }
 
+    /**
+     * Remove Items Not Numeric
+     *
+     * @param array $array
+     *
+     * @return array
+     */
+    public static function removeItemsNotNumeric($array)
+    {
+        foreach ($array as $index => $value) {
+            if (false === is_numeric($value)) {
+                unset($array[$index]);
+            }
+        }
+
+        return $array;
+    }
+
 }
