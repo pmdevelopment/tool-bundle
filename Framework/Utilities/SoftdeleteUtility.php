@@ -44,7 +44,7 @@ class SoftdeleteUtility
      *
      * @param Collection|mixed[] $objects
      *
-     * @return Collection|mixed[]|null
+     * @return Collection|mixed[]|null|mixed
      */
     public static function getNotDeleted($objects)
     {
