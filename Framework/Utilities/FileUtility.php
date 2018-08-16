@@ -74,8 +74,8 @@ class FileUtility
     /**
      * Get Files and folders
      *
-     * @param array $folder
-     * @param bool  $excludeFolders
+     * @param string $folder
+     * @param bool   $excludeFolders
      *
      * @return array
      */
@@ -218,6 +218,27 @@ class FileUtility
     public static function getCurrentSetupHash($precision = 8)
     {
         return substr(sha1(__DIR__), 0, $precision);
+    }
+
+    /**
+     * Get Folder Size
+     *
+     * @param string $path
+     *
+     * @return int
+     */
+    public static function getFolderSize($path)
+    {
+        $totalBytes = 0;
+        $path = realpath($path);
+
+        if (false !== $path && false === empty($path) && true === file_exists($path)) {
+            foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)) as $object) {
+                $totalBytes += $object->getSize();
+            }
+        }
+
+        return $totalBytes;
     }
 
     /**
