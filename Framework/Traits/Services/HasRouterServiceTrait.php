@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
  * Class HasRouterServiceTrait
  *
  * @package PM\Bundle\ToolBundle\Framework\Traits\Services
+ *
+ * @deprecated Use HasRouterTrait
  */
 trait HasRouterServiceTrait
 {

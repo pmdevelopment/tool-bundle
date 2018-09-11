@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Description of PMController
  *
- * @author sjoder
+ * @author     sjoder
+ *
+ * @deprecated Use ResponseService instead.
  */
 class PMController extends Controller
 {
