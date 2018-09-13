@@ -2,22 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: sjoder
- * Date: 02.12.2016
- * Time: 10:48
+ * Date: 12.09.2018
+ * Time: 14:24
  */
 
-namespace PM\Bundle\ToolBundle\Framework\Traits\Services;
+namespace PM\Bundle\ToolBundle\Components\Traits;
 
-use Twig_Environment;
+use \Twig_Environment;
 
 /**
- * Class HasTwigServiceTrait
+ * Trait HasTwigTrait
  *
- * @package PM\Bundle\ToolBundle\Framework\Traits\Services
- *
- * @deprecated Use HasTwigTrait instead
+ * @package PM\Bundle\ToolBundle\Components\Traits
  */
-trait HasTwigServiceTrait
+trait HasTwigTrait
 {
     /**
      * @var Twig_Environment
@@ -29,6 +27,10 @@ trait HasTwigServiceTrait
      */
     public function getTwig()
     {
+        if (null === $this->twig) {
+            throw new \LogicException('Twig not found. Setter not called?');
+        }
+
         return $this->twig;
     }
 
@@ -43,6 +45,4 @@ trait HasTwigServiceTrait
 
         return $this;
     }
-
-
 }

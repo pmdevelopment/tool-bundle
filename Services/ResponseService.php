@@ -9,36 +9,69 @@
 namespace PM\Bundle\ToolBundle\Services;
 
 
+use PM\Bundle\ToolBundle\Components\Interfaces\ResponseServiceInterface;
 use PM\Bundle\ToolBundle\Components\Traits\HasRouterTrait;
 use PM\Bundle\ToolBundle\Components\Traits\HasSessionTrait;
 use PM\Bundle\ToolBundle\Components\Traits\HasTranslatorTrait;
+use PM\Bundle\ToolBundle\Components\Traits\HasTwigTrait;
 use PM\Bundle\ToolBundle\Constants\Bootstrap4;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment;
 
 /**
  * Class ResponseService
  *
  * @package PM\Bundle\ToolBundle\Services
  */
-class ResponseService
+class ResponseService implements ResponseServiceInterface
 {
     use HasTranslatorTrait;
     use HasRouterTrait;
     use HasSessionTrait;
+    use HasTwigTrait;
+
+    /**
+     * @var string
+     */
+    private $kernelEnvironment;
 
     /**
      * ResponseService constructor.
      */
-    public function __construct(TranslatorInterface $translator, RouterInterface $router, SessionInterface $session)
+    public function __construct(TranslatorInterface $translator, RouterInterface $router, SessionInterface $session, Environment $twig, $kernelEnvironment)
     {
         $this->setTranslator($translator);
         $this->setRouter($router);
         $this->setSession($session);
+        $this->setTwig($twig);
+
+        $this->kernelEnvironment = $kernelEnvironment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKernelEnvironment()
+    {
+        return $this->kernelEnvironment;
+    }
+
+    /**
+     * @param string $kernelEnvironment
+     *
+     * @return ResponseService
+     */
+    public function setKernelEnvironment($kernelEnvironment)
+    {
+        $this->kernelEnvironment = $kernelEnvironment;
+
+        return $this;
     }
 
     /**
@@ -86,6 +119,42 @@ class ResponseService
     public function getRedirectToRoute($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH, $status = Response::HTTP_FOUND)
     {
         return new RedirectResponse($this->getRouter()->generate($route, $parameters, $referenceType), $status);
+    }
+
+    /**
+     * Get Response From Template
+     * replaces old $this->render() in controller
+     *
+     * @param string        $template
+     * @param array         $context
+     * @param Response|null $response
+     *
+     * @return Response
+     */
+    public function getResponseFromTemplate($template, $context = [], $response = null)
+    {
+        if (null === $response) {
+            $response = new Response();
+        }
+
+        try {
+            $html = $this->getTwig()->render($template, $context);
+        } catch (\Twig_Error $twigError) {
+            if (\PM\Bundle\ToolBundle\Constants\Environment::DEV === $this->getKernelEnvironment()) {
+                dump($twigError);
+            }
+
+            /* Throw previous if it was a http exception */
+            if($twigError->getPrevious() instanceof HttpException){
+                throw $twigError->getPrevious();
+            }
+
+            $html = '<html><body>Unable to render template.</body></html>';
+        }
+
+        $response->setContent($html);
+
+        return $response;
     }
 
     /**
