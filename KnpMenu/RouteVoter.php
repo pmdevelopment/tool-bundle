@@ -58,7 +58,6 @@ class RouteVoter implements VoterInterface
             return null;
         }
 
-
         $routes = $item->getExtra('routes', []);
         if (false === is_array($routes)) {
             return null;
