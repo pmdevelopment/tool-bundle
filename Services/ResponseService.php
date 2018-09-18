@@ -86,7 +86,7 @@ class ResponseService implements ResponseServiceInterface
      */
     public function getSavedRedirect($route, $message = 'flash_bag.success.default', $routeParameters = [], $routeFragment = null)
     {
-        $this->addSessionFlashBagMessage($message);
+        $this->addSessionFlashBagMessage($message, Bootstrap4::STATE_SUCCESS);
 
         return $this->getRedirectToRoute($route, $routeParameters);
     }
@@ -101,7 +101,7 @@ class ResponseService implements ResponseServiceInterface
      */
     public function getSavedResponse($body = '', $message = 'flash_bag.success.default')
     {
-        $this->addSessionFlashBagMessage(Bootstrap4::STATE_SUCCESS, $message);
+        $this->addSessionFlashBagMessage($message, Bootstrap4::STATE_SUCCESS);
 
         return new Response($body);
     }
@@ -145,7 +145,7 @@ class ResponseService implements ResponseServiceInterface
             }
 
             /* Throw previous if it was a http exception */
-            if($twigError->getPrevious() instanceof HttpException){
+            if ($twigError->getPrevious() instanceof HttpException) {
                 throw $twigError->getPrevious();
             }
 
