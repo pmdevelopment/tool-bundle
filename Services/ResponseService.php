@@ -92,6 +92,23 @@ class ResponseService implements ResponseServiceInterface
     }
 
     /**
+     * Get redirect with fail message
+     *
+     * @param string      $route
+     * @param string      $message
+     * @param array       $routeParameters
+     * @param string|null $routeFragment
+     *
+     * @return RedirectResponse
+     */
+    public function getFailedRedirect($route, $message = 'flash_bag.error.default', $routeParameters = [], $routeFragment = null)
+    {
+        $this->addSessionFlashBagMessage($message, Bootstrap4::STATE_DANGER);
+
+        return $this->getRedirectToRoute($route, $routeParameters);
+    }
+
+    /**
      * Get response with saved message
      *
      * @param string $body
