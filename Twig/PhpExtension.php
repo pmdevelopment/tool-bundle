@@ -90,6 +90,32 @@ class PhpExtension extends Twig_Extension
                     'getPrintR',
                 ]
             ),
+            new \Twig_SimpleFilter(
+                'ini_get',
+                function ($varname) {
+                    return ini_get($varname);
+                }
+            ),
+        ];
+    }
+
+    /**
+     * Get Functions
+     *
+     * @return array|\Twig_Function[]
+     */
+    public function getFunctions()
+    {
+        return [
+
+            new \Twig_SimpleFunction(
+                'phpversion',
+                function () {
+                    $version = explode('-', phpversion());
+
+                    return reset($version);
+                }
+            ),
         ];
     }
 
