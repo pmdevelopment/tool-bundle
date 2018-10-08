@@ -187,6 +187,13 @@ class ConvertExtension extends Twig_Extension
             return $this->getTranslator()->trans('time.last_month');
         }
 
+        /* Months ago */
+        if (356 > $diffDays) {
+            return $this->getTranslator()->trans('time.months_ago', [
+                '{months}' => floor($diffDays / 30),
+            ]);
+        }
+
         if ($date->format('Y') === ($dateNow->format('Y') - 1)) {
             return $this->getTranslator()->trans('time.last_year');
         }

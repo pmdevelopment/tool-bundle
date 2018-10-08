@@ -18,26 +18,28 @@ interface ResponseServiceInterface
     /**
      * Get redirect with saved message
      *
-     * @param string      $route
-     * @param string      $message
-     * @param array       $routeParameters
-     * @param string|null $routeFragment
+     * @param string            $route
+     * @param string            $message
+     * @param array             $routeParameters
+     * @param string|null       $routeFragment
+     * @param string|null|false $translationDomain
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function getSavedRedirect($route, $message = 'flash_bag.success.default', $routeParameters = [], $routeFragment = null);
+    public function getSavedRedirect($route, $message = 'flash_bag.success.default', $routeParameters = [], $routeFragment = null, $translationDomain = null);
 
     /**
      * Get redirect with fail message
      *
-     * @param string      $route
-     * @param string      $message
-     * @param array       $routeParameters
-     * @param string|null $routeFragment
+     * @param string            $route
+     * @param string            $message
+     * @param array             $routeParameters
+     * @param string|null       $routeFragment
+     * @param string|null|false $translationDomain
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function getFailedRedirect($route, $message = 'flash_bag.error.default', $routeParameters = [], $routeFragment = null);
+    public function getFailedRedirect($route, $message = 'flash_bag.error.default', $routeParameters = [], $routeFragment = null, $translationDomain = null);
 
     /**
      * Get response with saved message

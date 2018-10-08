@@ -77,16 +77,17 @@ class ResponseService implements ResponseServiceInterface
     /**
      * Get redirect with saved message
      *
-     * @param string      $route
-     * @param string      $message
-     * @param array       $routeParameters
-     * @param string|null $routeFragment
+     * @param string            $route
+     * @param string            $message
+     * @param array             $routeParameters
+     * @param string|null       $routeFragment
+     * @param string|null|false $translationDomain
      *
      * @return RedirectResponse
      */
-    public function getSavedRedirect($route, $message = 'flash_bag.success.default', $routeParameters = [], $routeFragment = null)
+    public function getSavedRedirect($route, $message = 'flash_bag.success.default', $routeParameters = [], $routeFragment = null, $translationDomain = null)
     {
-        $this->addSessionFlashBagMessage($message, Bootstrap4::STATE_SUCCESS);
+        $this->addSessionFlashBagMessage($message, Bootstrap4::STATE_SUCCESS, $translationDomain);
 
         return $this->getRedirectToRoute($route, $routeParameters);
     }
@@ -94,16 +95,17 @@ class ResponseService implements ResponseServiceInterface
     /**
      * Get redirect with fail message
      *
-     * @param string      $route
-     * @param string      $message
-     * @param array       $routeParameters
-     * @param string|null $routeFragment
+     * @param string            $route
+     * @param string            $message
+     * @param array             $routeParameters
+     * @param string|null       $routeFragment
+     * @param string|null|false $translationDomain
      *
      * @return RedirectResponse
      */
-    public function getFailedRedirect($route, $message = 'flash_bag.error.default', $routeParameters = [], $routeFragment = null)
+    public function getFailedRedirect($route, $message = 'flash_bag.error.default', $routeParameters = [], $routeFragment = null, $translationDomain = null)
     {
-        $this->addSessionFlashBagMessage($message, Bootstrap4::STATE_DANGER);
+        $this->addSessionFlashBagMessage($message, Bootstrap4::STATE_DANGER, $translationDomain);
 
         return $this->getRedirectToRoute($route, $routeParameters);
     }
@@ -177,11 +179,11 @@ class ResponseService implements ResponseServiceInterface
     /**
      * Add Session Flash Bag Message
      *
-     * @param string $message
-     * @param string $type
-     * @param string $translationDomain
+     * @param string            $message
+     * @param string            $type
+     * @param null|string|false $translationDomain
      */
-    private function addSessionFlashBagMessage($message, $type = Bootstrap4::STATE_SUCCESS, $translationDomain = 'messages')
+    private function addSessionFlashBagMessage($message, $type = Bootstrap4::STATE_SUCCESS, $translationDomain = null)
     {
         if (false !== $translationDomain) {
             $message = $this->getTranslator()->trans($message, [], $translationDomain);
