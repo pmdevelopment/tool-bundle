@@ -9,24 +9,24 @@ services:
         arguments: ["@request_stack"]
         tags:
         - { name: knp_menu.voter }
-
+    
     pm.pdf:
         class: PM\Bundle\ToolBundle\Services\PdfService
         public: true
         arguments: ["%kernel.root_dir%"]
-
+    
     pm.image:
         class: PM\Bundle\ToolBundle\Services\ImageService
         public: true
-
+    
     pm.cronjob:
         class: PM\Bundle\ToolBundle\Services\CronjobService
         public: true
         calls:
         - [setLogger, ['@logger']]
         - [setEventDispatcher, ['@event_dispatcher']]
-
+    
     PM\Bundle\ToolBundle\Services\ResponseService:
-        arguments: ['@translator', '@router.default', '@session','@twig','%kernel.environment%']
-
+        arguments: ['@translator', '@router.default', '@session','@twig','%kernel.environment%','%kernel.root_dir%']
+    
     PM\Bundle\ToolBundle\Components\Interfaces\ResponseServiceInterface: '@PM\Bundle\ToolBundle\Services\ResponseService'

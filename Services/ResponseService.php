@@ -42,9 +42,14 @@ class ResponseService implements ResponseServiceInterface
     private $kernelEnvironment;
 
     /**
+     * @var string
+     */
+    private $kernelRootDir;
+
+    /**
      * ResponseService constructor.
      */
-    public function __construct(TranslatorInterface $translator, RouterInterface $router, SessionInterface $session, Environment $twig, $kernelEnvironment)
+    public function __construct(TranslatorInterface $translator, RouterInterface $router, SessionInterface $session, Environment $twig, $kernelEnvironment, $kernelRootDir)
     {
         $this->setTranslator($translator);
         $this->setRouter($router);
@@ -63,15 +68,11 @@ class ResponseService implements ResponseServiceInterface
     }
 
     /**
-     * @param string $kernelEnvironment
-     *
-     * @return ResponseService
+     * @return string
      */
-    public function setKernelEnvironment($kernelEnvironment)
+    public function getKernelRootDir()
     {
-        $this->kernelEnvironment = $kernelEnvironment;
-
-        return $this;
+        return $this->kernelRootDir;
     }
 
     /**

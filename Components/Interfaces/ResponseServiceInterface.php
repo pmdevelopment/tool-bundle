@@ -15,6 +15,21 @@ namespace PM\Bundle\ToolBundle\Components\Interfaces;
  */
 interface ResponseServiceInterface
 {
+
+    /**
+     * Get Kernel Root Dir
+     *
+     * @return string
+     */
+    public function getKernelRootDir();
+
+    /**
+     * Get Kernel Environment
+     *
+     * @return string
+     */
+    public function getKernelEnvironment();
+
     /**
      * Get redirect with saved message
      *
