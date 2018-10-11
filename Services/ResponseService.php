@@ -57,6 +57,7 @@ class ResponseService implements ResponseServiceInterface
         $this->setTwig($twig);
 
         $this->kernelEnvironment = $kernelEnvironment;
+        $this->kernelRootDir = $kernelRootDir;
     }
 
     /**
