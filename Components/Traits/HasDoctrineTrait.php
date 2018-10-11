@@ -8,7 +8,9 @@
 
 namespace PM\Bundle\ToolBundle\Components\Traits;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -78,7 +80,7 @@ trait HasDoctrineTrait
 
 
     /**
-     * @return EntityManager
+     * @return ObjectManager
      */
     public function getDoctrineManager()
     {
