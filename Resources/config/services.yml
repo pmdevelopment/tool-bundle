@@ -25,3 +25,11 @@ services:
         calls:
             - [setLogger, ['@logger']]
             - [setEventDispatcher, ['@event_dispatcher']]
+            
+    PM\Bundle\ToolBundle\Services\ResponseService:
+        autowire: true
+        arguments:
+            $kernelEnvironment:  '%kernel.environment%'
+            $kernelRootDir: '%kernel.root_dir%'
+        
+    PM\Bundle\ToolBundle\Components\Interfaces\ResponseServiceInterface: '@PM\Bundle\ToolBundle\Services\ResponseService'
