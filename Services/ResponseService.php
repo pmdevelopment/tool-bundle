@@ -171,6 +171,8 @@ class ResponseService implements ResponseServiceInterface
             if ($twigError->getPrevious() instanceof HttpException) {
                 throw $twigError->getPrevious();
             }
+
+            $html = '<html><body>Unable to render template.</body></html>';
         }
 
         $response->setContent($html);
