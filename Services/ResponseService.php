@@ -163,14 +163,14 @@ class ResponseService implements ResponseServiceInterface
         } catch (\Twig_Error $twigError) {
             if (\PM\Bundle\ToolBundle\Constants\Environment::DEV === $this->getKernelEnvironment()) {
                 dump($twigError);
+            } else {
+                throw $twigError;
             }
 
             /* Throw previous if it was a http exception */
             if ($twigError->getPrevious() instanceof HttpException) {
                 throw $twigError->getPrevious();
             }
-
-            $html = '<html><body>Unable to render template.</body></html>';
         }
 
         $response->setContent($html);
