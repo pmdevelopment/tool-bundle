@@ -2,8 +2,9 @@
     $.fn.pmTable = function (options) {
 
         var settings = {
-            version: 170815,
+            version: 181106,
             bootstrap: 3,
+            class_hidden: 'hidden',
             modules: {
                 action: false,
                 sortable: false,
@@ -399,7 +400,7 @@
                         });
 
                         if (0 < filterCount) {
-                            filter.getList().parent().removeClass('hidden');
+                            filter.getList().parent().removeClass(settings.class_hidden);
                         }
 
                         var labelClass = 'label label-default';
@@ -455,7 +456,7 @@
 
                         this.getInput().on('change', function () {
                             core.reload();
-                        }).parent().removeClass('hidden');
+                        }).parent().removeClass(settings.class_hidden);
 
                     }
                 }
@@ -527,6 +528,27 @@
                             cache: true
                         });
 
+                        /* Inline settings */
+                        if (undefined !== $(_element).data('bootstrap')) {
+                            settings.bootstrap = $(_element).data('bootstrap');
+                        }
+
+                        if (undefined !== $(_element).data('module-search')) {
+                            settings.modules.search = true;
+                            settings.search.selectors.input = $(_element).data('module-search');
+                        }
+
+                        /* Bootstrap 4 manipulation */
+                        if(4 === settings.bootstrap && 'hidden' === settings.class_hidden){
+                            settings.class_hidden = 'invisible';
+                        }
+
+                        this.initModules();
+                    },
+                    /**
+                     * Init Modules
+                     */
+                    initModules: function () {
                         if (true === settings.modules.action) {
                             $(_element).pmTableAction(settings.action);
                         }
