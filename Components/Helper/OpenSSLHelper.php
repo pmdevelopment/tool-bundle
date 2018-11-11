@@ -28,6 +28,8 @@ class OpenSSLHelper
      */
     public static function encrypt($plainText, $key, $cipher)
     {
+        $cipher = strtolower($cipher);
+
         if (false === in_array($cipher, openssl_get_cipher_methods())) {
             throw new \LogicException(sprintf('Cipher %s not supported', $cipher));
         }
@@ -52,6 +54,8 @@ class OpenSSLHelper
      */
     public static function decrypt($encryptedText, $key, $cipher)
     {
+        $cipher = strtolower($cipher);
+
         if (false === in_array($cipher, openssl_get_cipher_methods())) {
             throw new \LogicException(sprintf('Cipher %s not supported', $cipher));
         }
