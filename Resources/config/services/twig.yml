@@ -1,72 +1,74 @@
 services:
-  pm.twig.cssversion:
-    class: PM\Bundle\ToolBundle\Twig\CssVersionExtension
-    arguments: ["%kernel.root_dir%"]
-    tags:
-      - { name: twig.extension }
-
-  pm.twig.hash:
-    class: PM\Bundle\ToolBundle\Twig\HashExtension
-    tags:
-      - { name: twig.extension }
-
-  pm.twig.icon:
-    class: PM\Bundle\ToolBundle\Twig\IconExtension
-    tags:
-      - { name: twig.extension }
-
-  pm.twig.flag:
-    class: PM\Bundle\ToolBundle\Twig\FlagExtension
-    tags:
-      - { name: twig.extension }
-
-  pm.twig.fos_user:
-    class: PM\Bundle\ToolBundle\Twig\FOSUserExtension
-    calls:
-        - [setDoctrine, ['@doctrine']]
-        - [setRoleHierarchyRoles, ['%security.role_hierarchy.roles%']]
-    tags:
+    # Vendor
+    PM\Bundle\ToolBundle\Twig\Vendor\EndroidQrCodeExtension:
+        tags: [ { name: twig.extension } ]
+        
+    PM\Bundle\ToolBundle\Twig\Vendor\FOSUserExtension:
+        arguments: ['@doctrine', '%security.role_hierarchy.roles%']
+        tags: [ { name: twig.extension } ]
+        
+    
+    # Own
+    pm.twig.cssversion:
+        class: PM\Bundle\ToolBundle\Twig\CssVersionExtension
+        arguments: ["%kernel.root_dir%"]
+        tags:
         - { name: twig.extension }
-
-  pm.twig.country:
-    class: PM\Bundle\ToolBundle\Twig\CountryExtension
-    tags:
-      - { name: twig.extension }
-
-  pm.twig.seo:
-      class: PM\Bundle\ToolBundle\Twig\SeoExtension
-      tags:
+    
+    pm.twig.hash:
+        class: PM\Bundle\ToolBundle\Twig\HashExtension
+        tags:
         - { name: twig.extension }
-
-  pm.twig.time:
-      class: PM\Bundle\ToolBundle\Twig\TimeExtension
-      calls:
+    
+    pm.twig.icon:
+        class: PM\Bundle\ToolBundle\Twig\IconExtension
+        tags:
+        - { name: twig.extension }
+    
+    pm.twig.flag:
+        class: PM\Bundle\ToolBundle\Twig\FlagExtension
+        tags:
+        - { name: twig.extension }
+    
+    pm.twig.country:
+        class: PM\Bundle\ToolBundle\Twig\CountryExtension
+        tags:
+        - { name: twig.extension }
+    
+    pm.twig.seo:
+        class: PM\Bundle\ToolBundle\Twig\SeoExtension
+        tags:
+        - { name: twig.extension }
+    
+    pm.twig.time:
+        class: PM\Bundle\ToolBundle\Twig\TimeExtension
+        calls:
         - [setTranslator, ['@translator']]
-      tags:
+        tags:
         - { name: twig.extension }
-
-  pm.twig.json:
-    class: PM\Bundle\ToolBundle\Twig\JsonExtension
-    tags:
+    
+    pm.twig.json:
+        class: PM\Bundle\ToolBundle\Twig\JsonExtension
+        tags:
         - { name: twig.extension }
-
-  # Convert
-  pm.twig.convert:
-    class: PM\Bundle\ToolBundle\Twig\ConvertExtension
-    calls:
+    
+    # Convert
+    pm.twig.convert:
+        class: PM\Bundle\ToolBundle\Twig\ConvertExtension
+        calls:
         - [setTranslator, ['@translator']]
         - [setParameterParseDownBreaksEnabled, ['%pm__tool.configuration.twig.parse_down.breaks_enabled%']]
-    tags:
+        tags:
         - { name: twig.extension }
-
-  pm.twig.config:
-    class: PM\Bundle\ToolBundle\Twig\ConfigExtension
-    calls:
+    
+    pm.twig.config:
+        class: PM\Bundle\ToolBundle\Twig\ConfigExtension
+        calls:
         - [setDoctrine, ['@doctrine']]
-    tags:
+        tags:
         - { name: twig.extension }
-
-  pm.twig.php:
-    class: PM\Bundle\ToolBundle\Twig\PhpExtension
-    tags:
+    
+    pm.twig.php:
+        class: PM\Bundle\ToolBundle\Twig\PhpExtension
+        tags:
         - { name: twig.extension }

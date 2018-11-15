@@ -6,11 +6,12 @@
  * Time: 14:50
  */
 
-namespace PM\Bundle\ToolBundle\Twig;
+namespace PM\Bundle\ToolBundle\Twig\Vendor;
 
 use FOS\UserBundle\Model\User;
 use PM\Bundle\ToolBundle\Framework\Traits\Services\HasDoctrineServiceTrait;
 use PM\Bundle\ToolBundle\Framework\Utilities\CollectionUtility;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 
@@ -29,23 +30,23 @@ class FOSUserExtension extends \Twig_Extension
     private $roleHierarchyRoles;
 
     /**
+     * FOSUserExtension constructor.
+     *
+     * @param array $roleHierarchyRoles
+     */
+    public function __construct(RegistryInterface $registry, $roleHierarchyRoles)
+    {
+        $this->setDoctrine($registry);
+
+        $this->roleHierarchyRoles = $roleHierarchyRoles;
+    }
+
+    /**
      * @return array
      */
     public function getRoleHierarchyRoles()
     {
         return $this->roleHierarchyRoles;
-    }
-
-    /**
-     * @param array $roleHierarchyRoles
-     *
-     * @return FOSUserExtension
-     */
-    public function setRoleHierarchyRoles($roleHierarchyRoles)
-    {
-        $this->roleHierarchyRoles = $roleHierarchyRoles;
-
-        return $this;
     }
 
     /**
@@ -63,14 +64,6 @@ class FOSUserExtension extends \Twig_Extension
                 'isGranted',
             ]),
         ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getName()
-    {
-        return "pm.twig.fos_user";
     }
 
     /**
