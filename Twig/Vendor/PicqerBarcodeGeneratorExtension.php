@@ -30,6 +30,10 @@ class PicqerBarcodeGeneratorExtension extends \Twig_Extension
                 $this,
                 'getHtml128',
             ]),
+            new \Twig_SimpleFilter('picqer_barcode_generator_html_ean13', [
+                $this,
+                'getHtmlEan13',
+            ]),
         ];
     }
 
@@ -45,6 +49,20 @@ class PicqerBarcodeGeneratorExtension extends \Twig_Extension
         $generator = new BarcodeGeneratorHTML();
 
         return $generator->getBarcode($string, BarcodeGeneratorHTML::TYPE_CODE_128, $pixelPerByte, $height);
+    }
+
+    /**
+     * Get HTML as EAN-13
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public function getHtmlEan13($string, $pixelPerByte = 2, $height = 30)
+    {
+        $generator = new BarcodeGeneratorHTML();
+
+        return $generator->getBarcode($string, BarcodeGeneratorHTML::TYPE_EAN_13, $pixelPerByte, $height);
     }
 
 }
