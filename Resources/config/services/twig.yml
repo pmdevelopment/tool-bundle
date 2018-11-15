@@ -7,6 +7,9 @@ services:
         arguments: ['@doctrine', '%security.role_hierarchy.roles%']
         tags: [ { name: twig.extension } ]
         
+    PM\Bundle\ToolBundle\Twig\Vendor\PicqerBarcodeGeneratorExtension:
+        tags: [ { name: twig.extension } ]
+        
     
     # Own
     pm.twig.cssversion:
