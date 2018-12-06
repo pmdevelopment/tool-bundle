@@ -20,7 +20,8 @@
     "suggest": {
         "endroid/qr-code": "Required to generate QR codes",
         "erusev/parsedown": "Use the markdown twig extension",
-        "guzzlehttp/guzzle": "Required for Google reCAPTCHA"
+        "guzzlehttp/guzzle": "Required for Google reCAPTCHA",
+        "picqer/php-barcode-generator": "Required for barcode generator"
     },
     "autoload": {
         "psr-0": {

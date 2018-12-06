@@ -34,6 +34,10 @@ class PicqerBarcodeGeneratorExtension extends \Twig_Extension
                 $this,
                 'getHtmlEan13',
             ]),
+            new \Twig_SimpleFilter('picqer_barcode_generator_html_upc_a', [
+                $this,
+                'getHtmlUpcA',
+            ]),
         ];
     }
 
@@ -63,6 +67,20 @@ class PicqerBarcodeGeneratorExtension extends \Twig_Extension
         $generator = new BarcodeGeneratorHTML();
 
         return $generator->getBarcode($string, BarcodeGeneratorHTML::TYPE_EAN_13, $pixelPerByte, $height);
+    }
+
+    /**
+     * Get HTML as UPC
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public function getHtmlUpcA($string, $pixelPerByte = 2, $height = 30)
+    {
+        $generator = new BarcodeGeneratorHTML();
+
+        return $generator->getBarcode($string, BarcodeGeneratorHTML::TYPE_UPC_A, $pixelPerByte, $height);
     }
 
 }
