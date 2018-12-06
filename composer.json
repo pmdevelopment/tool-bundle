@@ -18,6 +18,7 @@
         "jms/serializer": "^1.1.0"
     },
     "suggest": {
+        "endroid/qr-code": "Required to generate QR codes",
         "erusev/parsedown": "Use the markdown twig extension",
         "guzzlehttp/guzzle": "Required for Google reCAPTCHA"
     },
