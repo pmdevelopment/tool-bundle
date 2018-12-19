@@ -91,7 +91,7 @@ class ResponseService implements ResponseServiceInterface
     {
         $this->addSessionFlashBagMessage($message, Bootstrap4::STATE_SUCCESS, $translationDomain);
 
-        return $this->getRedirectToRoute($route, $routeParameters);
+        return $this->getRedirectToRoute($route, $routeParameters, UrlGeneratorInterface::ABSOLUTE_PATH, Response::HTTP_FOUND, $routeFragment);
     }
 
     /**
@@ -137,9 +137,14 @@ class ResponseService implements ResponseServiceInterface
      *
      * @return RedirectResponse
      */
-    public function getRedirectToRoute($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH, $status = Response::HTTP_FOUND)
+    public function getRedirectToRoute($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH, $status = Response::HTTP_FOUND, $routeFragment = null)
     {
-        return new RedirectResponse($this->getRouter()->generate($route, $parameters, $referenceType), $status);
+        $url = $this->getRouter()->generate($route, $parameters, $referenceType);
+        if (null !== $routeFragment) {
+            $url = sprintf('%s#%s', $url, $routeFragment);
+        }
+
+        return new RedirectResponse($url, $status);
     }
 
     /**
