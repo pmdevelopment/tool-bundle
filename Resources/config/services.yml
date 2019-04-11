@@ -1,4 +1,5 @@
 imports:
+    - { resource: "services/commands.yml" }
     - { resource: "services/google.yml" }
     - { resource: "services/listener.yml" }
     - { resource: "services/twig.yml" }

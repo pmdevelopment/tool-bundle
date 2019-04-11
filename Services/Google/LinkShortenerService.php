@@ -12,6 +12,7 @@ namespace PM\Bundle\ToolBundle\Services\Google;
  * Class LinkShortenerService
  *
  * @package PM\Bundle\ToolBundle\Services\Google
+ * @deprecated Google stopped this service. Do not use it anymore.
  */
 class LinkShortenerService
 {

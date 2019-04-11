@@ -1,0 +1,4 @@
+services:
+    PM\Bundle\ToolBundle\Command\DoctrineCommand:
+        autowire: true
+        tags: [{ name: console.command }]

@@ -8,26 +8,41 @@
 
 namespace PM\Bundle\ToolBundle\Command;
 
+use PM\Bundle\ToolBundle\Components\Traits\HasDoctrineTrait;
 use PM\Bundle\ToolBundle\Framework\Traits\Command\HasDoctrineCommandTrait;
 use PM\Bundle\ToolBundle\Framework\Utilities\CommandUtility;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * Class DoctrineCommand
  *
  * @package PM\Bundle\ToolBundle\Command
  */
-class DoctrineCommand extends ContainerAwareCommand
+class DoctrineCommand extends Command
 {
-    use HasDoctrineCommandTrait;
+    use HasDoctrineTrait;
 
     const NAME = 'pm:tool:doctrine';
 
     const ACTION_DATABASE_IMPORT = 'database_import';
+
+    /**
+     * DoctrineCommand constructor.
+     *
+     * @param RegistryInterface $registry
+     */
+    public function __construct(RegistryInterface $registry)
+    {
+        $this->setDoctrine($registry);
+
+        parent::__construct(self::NAME);
+    }
+
 
     /**
      * @inheritDoc
@@ -87,12 +102,20 @@ class DoctrineCommand extends ContainerAwareCommand
      */
     private function actionDatabaseImport(SymfonyStyle $helper)
     {
+        $connectionParameters = $this->getDoctrineManager()->getConnection()->getParams();
+
         $timestamp = date('ymdHi');
-        $databaseName = $this->getDatabaseName();
+        $databaseName = $connectionParameters['dbname'];
+
         /*
          * Select Host
          */
         $remoteHost = $helper->ask('Remote host');
+
+        /*
+         * Select Username
+         */
+        $remoteUser = $helper->ask('Remote user name', 'root');
 
         /*
          * Select external database (default: database_name)
@@ -100,16 +123,18 @@ class DoctrineCommand extends ContainerAwareCommand
         $remoteDatabase = $helper->ask('Remote database', $databaseName);
 
         /*
-         * Select local database (default: database_name)
+         * Local database informations
          */
-        $localDatabase = $helper->ask('New local database', sprintf('%s_%s', $databaseName, $timestamp));
+        $localDatabaseHost = $helper->ask('Local database host', $connectionParameters['host']);
+        $localDatabaseName = $helper->ask('New local database name', sprintf('%s_%s', $connectionParameters['dbname'], $timestamp));
+        $localDatabaseUser = $helper->ask('Local database user', $connectionParameters['user']);
 
         /*
          * mysqldump
          */
         $fileName = sprintf('%s_%s_%s.sql', $remoteDatabase, $timestamp, uniqid());
 
-        $command = sprintf('ssh %s "mysqldump %s > %s"', $remoteHost, $remoteDatabase, $fileName);
+        $command = sprintf('ssh %s@%s "mysqldump %s > %s"', $remoteUser, $remoteHost, $remoteDatabase, $fileName);
         $helper->comment($command);
 
         $process = new Process($command);
@@ -130,7 +155,7 @@ class DoctrineCommand extends ContainerAwareCommand
         /*
          * scp
          */
-        $command = sprintf('scp %s:%s %s/%s', $remoteHost, $fileName, sys_get_temp_dir(), $fileName);
+        $command = sprintf('scp %s@%s:%s %s/%s', $remoteUser, $remoteHost, $fileName, sys_get_temp_dir(), $fileName);
         $helper->comment($command);
 
         $process = new Process($command);
@@ -148,7 +173,7 @@ class DoctrineCommand extends ContainerAwareCommand
          * create database database_name_ymdHis
          * if exists: ask for drop
          */
-        $command = sprintf('mysql -e "CREATE DATABASE %s;"', $localDatabase);
+        $command = sprintf('mysql -h%s -u%s -e "CREATE DATABASE %s;"', $localDatabaseHost, $localDatabaseUser, $localDatabaseName);
         $helper->comment($command);
 
         $process = new Process($command);
@@ -167,7 +192,7 @@ class DoctrineCommand extends ContainerAwareCommand
         /*
          * mysql -D database_name_ymdhis < /backup/y-m-d_H-i-s_unique.sql
          */
-        $command = sprintf('mysql -D %s < %s/%s', $localDatabase, sys_get_temp_dir(), $fileName);
+        $command = sprintf('mysql -h%s -u%s  -D %s < %s/%s', $localDatabaseHost, $localDatabaseUser, $localDatabaseName, sys_get_temp_dir(), $fileName);
         $helper->comment($command);
 
         $process = new Process($command);
@@ -206,29 +231,10 @@ class DoctrineCommand extends ContainerAwareCommand
         $helper->success(
             [
                 'Created new Database',
-                $localDatabase,
+                $localDatabaseName,
             ]
         );
 
         return null;
-    }
-
-    /**
-     * Get DatabaseName
-     *
-     * @return mixed|string
-     */
-    private function getDatabaseName()
-    {
-        $name = $this->getContainer()->getParameter('database_name');
-        $nameExploded = explode('_', $name);
-
-        if (1 === count($nameExploded) || false === is_numeric(end($nameExploded))) {
-            return $name;
-        }
-
-        unset($nameExploded[count($nameExploded) - 1]);
-
-        return implode('_', $nameExploded);
     }
 }
